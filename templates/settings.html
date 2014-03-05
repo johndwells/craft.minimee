@@ -1,0 +1,16 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.checkboxField({
+	label: "Disable?"|t,
+	name: 'disable',
+	checked: settings.disable
+}) }}
+
+{{ forms.textField({
+	label: "Cache Folder (relative to site, e.g. 'cache'):"|t,
+	id: 'cacheFolder',
+	name: 'cacheFolder',
+	value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
+}) }}
+
+
