@@ -52,4 +52,11 @@ class MinimeePlugin extends BasePlugin
             'settings' => $this->getSettings()
         ));
     }
+
+    public function addTwigExtension()
+    {
+        Craft::import('plugins.minimee.twigextensions.MinimeeTwigExtension');
+
+        return new MinimeeTwigExtension();
+    }
 }
