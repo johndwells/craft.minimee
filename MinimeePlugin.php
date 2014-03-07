@@ -40,12 +40,12 @@ class MinimeePlugin extends BasePlugin
 
     public function defineSettings()
     {
-        // use our config model to define settings
-        Craft::import('plugins.minimee.models.Minimee_ConfigModel');
+        // use our settings model to define settings
+        Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 
-        $config = new Minimee_ConfigModel();
+        $settings = new Minimee_SettingsModel();
 
-        return $config->defineAttributes();
+        return $settings->defineAttributes();
     }
 
     public function getSettingsHtml()

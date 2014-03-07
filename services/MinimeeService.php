@@ -20,7 +20,7 @@ class MinimeeService extends BaseApplicationComponent
     protected $_cacheFilename           = '';       // lastmodified value for cache
     protected $_cacheFilenameHash       = '';       // a hash of all asset filenames together
     protected $_cacheFilenameTimestamp  = '';       // eventual filename of cache
-    protected $_config                  = null;
+    protected $_settings                  = null;
 
     // --------------------------
 
@@ -29,7 +29,7 @@ class MinimeeService extends BaseApplicationComponent
         // make sure the rest of the component initialises first
         parent::init();
 
-        $this->setConfig();
+        $this->setSettings();
     }
 
     public function getAssets()
@@ -54,17 +54,17 @@ class MinimeeService extends BaseApplicationComponent
 
     public function getCacheFilenameHashPath()
     {
-        return $this->config->cachePath . $this->cacheFilenameHash;
+        return $this->settings->cachePath . $this->cacheFilenameHash;
     }
 
     public function getCacheFilenamePath()
     {
-        return $this->config->cachePath . $this->cacheFilename;
+        return $this->settings->cachePath . $this->cacheFilename;
     }
 
     public function getCacheFilenameUrl()
     {
-        return $this->config->cacheUrl . $this->cacheFilename;
+        return $this->settings->cacheUrl . $this->cacheFilename;
     }
 
     public function getCacheFilenameTimestamp()
@@ -72,9 +72,9 @@ class MinimeeService extends BaseApplicationComponent
         return ($this->_cacheFilenameTimestamp == 0) ? '0000000000' : $this->_cacheFilenameTimestamp;
     }
 
-    public function getConfig()
+    public function getSettings()
     {
-        return $this->_config;
+        return $this->_settings;
     }
 
     public function getType()
@@ -98,7 +98,7 @@ class MinimeeService extends BaseApplicationComponent
             else
             {
                 $model = array(
-                    'filename' => $this->config->basePath . $asset,
+                    'filename' => $this->settings->basePath . $asset,
                     'type' => $this->type
                 );
 
@@ -125,18 +125,18 @@ class MinimeeService extends BaseApplicationComponent
     /**
      * Configure our service based off the settings in plugin,
      * allowing plugin settings to be overridden at runtime.
-     * @param Array $configOverrides
+     * @param Array $settingsOverrides
      * @return void
      */
-    public function setConfig($configOverrides = array())
+    public function setSettings($settingsOverrides = array())
     {
         $plugin = craft()->plugins->getPlugin('minimee');
 
         $pluginSettings = $plugin->getSettings()->getAttributes();
 
-        $runtimeSettings = (is_array($configOverrides)) ? array_merge($pluginSettings, $configOverrides) : $pluginSettings;
+        $runtimeSettings = (is_array($settingsOverrides)) ? array_merge($pluginSettings, $settingsOverrides) : $pluginSettings;
 
-        $this->_config = Minimee_ConfigModel::populateModel($runtimeSettings);
+        $this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
 
         return $this;
     }
@@ -203,20 +203,20 @@ class MinimeeService extends BaseApplicationComponent
 
     public function flightcheck()
     {
-        if ($this->config === null)
+        if ($this->settings === null)
         {
             throw new Exception(Craft::t('Not installed.'));
         }
 
-        if($this->config->disable)
+        if($this->settings->disable)
         {
-            throw new Exception(Craft::t('Disabled via config.'));
+            throw new Exception(Craft::t('Disabled via settings.'));
         }
 
-        IOHelper::ensureFolderExists($this->config->cachePath);
-        if( ! IOHelper::isWritable($this->config->cachePath))
+        IOHelper::ensureFolderExists($this->settings->cachePath);
+        if( ! IOHelper::isWritable($this->settings->cachePath))
         {
-            throw new Exception(Craft::t('Cache folder is not writable: ' . $this->config->cachePath));
+            throw new Exception(Craft::t('Cache folder is not writable: ' . $this->settings->cachePath));
         }
 
         return $this;
@@ -249,7 +249,7 @@ class MinimeeService extends BaseApplicationComponent
             case 'css':
 
                 craft()->minimee_helper->loadLibrary('css_urirewriter');
-                $contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $this->config->baseUrl);
+                $contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $this->settings->baseUrl);
 
                 craft()->minimee_helper->loadLibrary('minify');
                 $contents = \Minify_CSS::minify($contents);
@@ -291,7 +291,7 @@ class MinimeeService extends BaseApplicationComponent
         // only run cleanup if in devmode...?
         if( ! craft()->config->get('devMode')) return;
 
-        $files = IOHelper::getFiles($this->config->cachePath);
+        $files = IOHelper::getFiles($this->settings->cachePath);
 
         foreach($files as $file)
         {

@@ -16,7 +16,7 @@ class MinimeeVariable
 
     protected function _run($assets, $type, $settings = array())
     {
-		$minified = craft()->minimee->setConfig($settings)->$type($assets);
+		$minified = craft()->minimee->setSettings($settings)->$type($assets);
 
 		// false means we failed, so return original markup
 		if( ! $minified)

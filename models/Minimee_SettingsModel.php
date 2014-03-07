@@ -13,11 +13,11 @@ namespace Craft;
 /**
  * 
  */
-class Minimee_ConfigModel extends BaseModel
+class Minimee_SettingsModel extends BaseModel
 {
 	/*
-	 * These are internal attributes only, not defined by Minimee_ConfigModel::defineAttributes()
-	 * They are read-only, accessiable via magic getters e.g. $config->cachePath
+	 * These are internal attributes only, not defined by Minimee_SettingsModel::defineAttributes()
+	 * They are read-only, accessiable via magic getters e.g. $settings->cachePath
 	 */
     private $_cachePath;
     private $_cacheUrl;
@@ -57,12 +57,12 @@ class Minimee_ConfigModel extends BaseModel
      */
     public static function populateModel($attributes)
     {
-        $config = parent::populateModel($attributes);
+        $settings = parent::populateModel($attributes);
 
         // sanitise our cache folder
-        $config->cacheFolder = trim($config->cacheFolder, " /\\");
+        $settings->cacheFolder = trim($settings->cacheFolder, " /\\");
 
-        return $config;
+        return $settings;
     }
 
     // --------------------
