@@ -31,16 +31,6 @@ class MinimeeService extends BaseApplicationComponent
 
         $this->setConfig();
     }
-
-    public function setConfig()
-    {
-        // configure our service based off the settings in plugin
-        $plugin = craft()->plugins->getPlugin('minimee');
-
-        // this will only be done once
-        $this->_config = Minimee_ConfigModel::populateModel($plugin->getSettings());
-    }
-
     public function getAssets()
     {
         return $this->_assets;
@@ -59,7 +49,91 @@ class MinimeeService extends BaseApplicationComponent
         return $this->_config;
     }
 
-    // --------------------------
+    public function getCacheTimestamp()
+    {
+        return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
+    }
+
+    public function getCacheFilename()
+    {
+        if( ! $this->_cacheFilename)
+        {
+            $this->_cacheFilename = $this->cacheFilenameHash . '.' . $this->cacheTimestamp . '.' . $this->type;
+        }
+
+        return $this->_cacheFilename;
+    }
+
+    public function getCacheFilenameHash()
+    {
+        return sha1($this->_cacheFilenameHash);
+    }
+
+    public function getCacheFilenamePath()
+    {
+        return $this->config->cachePath . $this->cacheFilename;
+    }
+
+    public function getCacheFilenameUrl()
+    {
+        return $this->config->cacheUrl . $this->cacheFilename;
+    }
+
+    public function setConfig()
+    {
+        // configure our service based off the settings in plugin
+        $plugin = craft()->plugins->getPlugin('minimee');
+
+        // this will only be done once
+        $this->_config = Minimee_ConfigModel::populateModel($plugin->getSettings());
+    }
+
+    public function setCacheTimestamp(DateTime $lastTimeModified)
+    {
+        $timestamp = $lastTimeModified->getTimestamp();
+        $this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+    }
+
+    public function setCacheFilenameHash($name)
+    {
+        // remove any cache-busting strings so the cache name doesn't change with every edit.
+        // format: .v.1330213450
+        $this->_cacheFilenameHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function setAssets($assets)
+    {
+        foreach($assets as $asset)
+        {
+            if (craft()->minimee_helper->isUrl($asset))
+            {
+                $model = array(
+                    'filename' => $asset,
+                    'type' => $this->type
+                );
+
+                $this->_assets[] = Minimee_RemoteAssetModel::populateModel($model);
+            }
+            else
+            {
+                $model = array(
+                    'filename' => $this->config->basePath . $asset,
+                    'type' => $this->type
+                );
+
+                $this->_assets[] = Minimee_LocalAssetModel::populateModel($model);
+            }
+        }
+
+        return $this;
+    }
 
     public function run($assets, $type)
     {
@@ -105,42 +179,11 @@ class MinimeeService extends BaseApplicationComponent
 
     public function reset()
     {
-        $this->assets = array();
-        $this->type = '';
-
-        return $this;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    public function setAssets($assets)
-    {
-        foreach($assets as $asset)
-        {
-            if (craft()->minimee_helper->isUrl($asset))
-            {
-                $model = array(
-                    'filename' => $asset,
-                    'type' => $this->type
-                );
-
-                $this->_assets[] = Minimee_RemoteAssetModel::populateModel($model);
-            }
-            else
-            {
-                $model = array(
-                    'filename' => $this->config->basePath . $asset,
-                    'type' => $this->type
-                );
-
-                $this->_assets[] = Minimee_LocalAssetModel::populateModel($model);
-            }
-        }
+        $this->_assets                  = array();
+        $this->_type                    = '';
+        $this->_cacheFilename           = '';
+        $this->_cacheFilenameHash       = '';
+        $this->_cacheTimestamp          = '';
 
         return $this;
     }
@@ -188,44 +231,10 @@ class MinimeeService extends BaseApplicationComponent
     {
         if( ! $this->cacheExists())
         {
-            return $this->createCache();
+            $this->createCache();
         }
 
         return $this->cacheFilenameUrl;
-    }
-
-
-    public function getCacheTimestamp()
-    {
-        return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
-    }
-
-    public function getCacheFilename()
-    {
-        if( ! $this->_cacheFilename)
-        {
-            $this->_cacheFilename = $this->cacheFilenameHash . '.' . $this->cacheTimestamp . '.' . $this->type;
-        }
-
-        return $this->_cacheFilename;
-    }
-
-    public function getCacheFilenameHash()
-    {
-        return sha1($this->_cacheFilenameHash);
-    }
-
-    public function setCacheTimestamp(DateTime $lastTimeModified)
-    {
-        $timestamp = $lastTimeModified->getTimestamp();
-        $this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
-    }
-
-    public function setCacheFilenameHash($name)
-    {
-        // remove any cache-busting strings so the cache name doesn't change with every edit.
-        // format: .v.1330213450
-        $this->_cacheFilenameHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
     }
 
     public function createCache()
@@ -238,11 +247,9 @@ class MinimeeService extends BaseApplicationComponent
             $contents .= craft()->minimee->minify($asset);
         }
 
-        IOHelper::writeToFile($this->config->cachePath . $this->cacheFilename, $contents);
+        IOHelper::writeToFile($this->cacheFilenamePath, $contents);
 
         $this->cleanupCache();
-
-        return $this->config->cacheUrl . $this->cacheFilename;
     }
 
     public function cleanupCache()
@@ -254,29 +261,15 @@ class MinimeeService extends BaseApplicationComponent
 
         foreach($files as $file)
         {
-            $filenamePath = $this->config->cachePath . $this->cacheFilename;
-
             // skip self
-            if ($file === $filenamePath) continue;
+            if ($file === $this->cacheFilenamePath) continue;
 
-            $filenameHashPath = $this->config->cachePath . $this->cacheFilenameHash;
-
-            if (strpos($file, $filenameHashPath) === 0)
+            if (strpos($file, $this->cacheFilenameHashPath) === 0)
             {
                 // suppress errors by passing true as second parameter
                 IOHelper::deleteFile($file, true);
             }
         }
-    }
-
-    public function getCacheFilenamePath()
-    {
-        return $this->config->cachePath . $this->cacheFilename;
-    }
-
-    public function getCacheFilenameUrl()
-    {
-        return $this->config->cacheUrl . $this->cacheFilename;
     }
 
     public function cacheExists()
