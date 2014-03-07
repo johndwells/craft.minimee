@@ -278,7 +278,7 @@ class MinimeeService extends BaseApplicationComponent
         
         foreach($this->assets as $asset)
         {
-            $contents .= craft()->minimee->minifyAsset($asset);
+            $contents .= craft()->minimee->minifyAsset($asset) . "\n";
         }
 
         IOHelper::writeToFile($this->cacheFilenamePath, $contents);
