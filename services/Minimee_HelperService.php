@@ -166,4 +166,30 @@ class Minimee_HelperService extends BaseApplicationComponent
 
         endswitch;
     }
+
+    public function makeTagsByType($assets = array(), $type)
+    {
+        $assets = ( ! is_array($assets)) ? array($assets) : $assets;
+        $tags = '';
+
+        foreach($assets as $asset)
+        {
+            switch ($type)
+            {
+                case ('css') :
+
+                    $tags .= sprintf('<link rel="stylesheet" type="text/css" href="%s"/>', $asset);
+
+                break;
+
+                case ('js') :
+
+                    $tags .= sprintf('<script type="text/javascript" src="%s"></script>', $asset);
+
+                break;
+            }
+        }
+
+        return $tags;
+    }
 }

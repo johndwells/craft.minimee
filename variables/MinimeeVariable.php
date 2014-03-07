@@ -21,11 +21,15 @@ class MinimeeVariable
 		// false means we failed, so return original markup
 		if( ! $minified)
 		{
+            $html = craft()->minimee_helper->makeTagsByType($assets, $type);
+
 			return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
 		}
 
+        $html = craft()->minimee_helper->makeTagsByType($minified, $type);
+
 		// return minified tag(s) as Twig Markup
-		return craft()->minimee_helper->returnHtmlAsTwigMarkup($minified);
+		return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
 
     }
 }
