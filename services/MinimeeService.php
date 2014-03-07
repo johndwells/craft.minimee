@@ -122,13 +122,23 @@ class MinimeeService extends BaseApplicationComponent
         $this->_cacheFilenameHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
     }
 
-    public function setConfig()
+    /**
+     * Configure our service based off the settings in plugin,
+     * allowing plugin settings to be overridden at runtime.
+     * @param Array $configOverrides
+     * @return void
+     */
+    public function setConfig($configOverrides = array())
     {
-        // configure our service based off the settings in plugin
         $plugin = craft()->plugins->getPlugin('minimee');
 
-        // this will only be done once
-        $this->_config = Minimee_ConfigModel::populateModel($plugin->getSettings());
+        $pluginSettings = $plugin->getSettings()->getAttributes();
+
+        $runtimeSettings = (is_array($configOverrides)) ? array_merge($pluginSettings, $configOverrides) : $pluginSettings;
+
+        $this->_config = Minimee_ConfigModel::populateModel($runtimeSettings);
+
+        return $this;
     }
 
     public function setType($type)

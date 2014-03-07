@@ -14,10 +14,10 @@ class MinimeeTwigExtension extends \Twig_Extension
         return array('minimee' => new \Twig_Filter_Method($this, 'minimeeFilter'));
     }
 
-    public function minimeeFilter($html, $type = false)
+    public function minimeeFilter($html, $settings = array())
     {
     	// we need a type to continue
-    	$type = ($type) ?: craft()->minimee_helper->detectType($html);
+    	$type = craft()->minimee_helper->detectType($html);
     	if( ! $type)
     	{
     		Craft::log('Could not determine the type of asset to process.', LogLevel::Warning);
@@ -33,7 +33,8 @@ class MinimeeTwigExtension extends \Twig_Extension
     	}
 
     	// hand off the rest to our service
-		$minified = craft()->minimee->$type($assets);
+        $settings = ( ! is_array($settings)) ? array($settings) : $settings;
+		$minified = craft()->minimee->setConfig($settings)->$type($assets);
 
 		// false means we failed, so return original markup
 		if( ! $minified)
