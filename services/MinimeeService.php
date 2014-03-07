@@ -29,7 +29,8 @@ class MinimeeService extends BaseApplicationComponent
         // make sure the rest of the component initialises first
         parent::init();
 
-        $this->setSettings();
+        // immediately set our settings
+        $this->setSettings(array());
     }
 
     public function getAssets()
@@ -128,7 +129,7 @@ class MinimeeService extends BaseApplicationComponent
      * @param Array $settingsOverrides
      * @return void
      */
-    public function setSettings($settingsOverrides = array())
+    public function setSettings($settingsOverrides)
     {
         $plugin = craft()->plugins->getPlugin('minimee');
 
