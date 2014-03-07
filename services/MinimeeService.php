@@ -19,7 +19,7 @@ class MinimeeService extends BaseApplicationComponent
     protected $_type                    = '';
     protected $_cacheFilename           = '';       // lastmodified value for cache
     protected $_cacheFilenameHash       = '';       // a hash of all asset filenames together
-    protected $_cacheTimestamp          = '';       // eventual filename of cache
+    protected $_cacheFilenameTimestamp  = '';       // eventual filename of cache
     protected $_config                  = null;
 
     // --------------------------
@@ -41,7 +41,7 @@ class MinimeeService extends BaseApplicationComponent
     {
         if( ! $this->_cacheFilename)
         {
-            $this->_cacheFilename = $this->cacheFilenameHash . '.' . $this->cacheTimestamp . '.' . $this->type;
+            $this->_cacheFilename = $this->cacheFilenameHash . '.' . $this->cacheFilenameTimestamp . '.' . $this->type;
         }
 
         return $this->_cacheFilename;
@@ -67,9 +67,9 @@ class MinimeeService extends BaseApplicationComponent
         return $this->config->cacheUrl . $this->cacheFilename;
     }
 
-    public function getCacheTimestamp()
+    public function getCacheFilenameTimestamp()
     {
-        return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
+        return ($this->_cacheFilenameTimestamp == 0) ? '0000000000' : $this->_cacheFilenameTimestamp;
     }
 
     public function getConfig()
@@ -109,10 +109,10 @@ class MinimeeService extends BaseApplicationComponent
         return $this;
     }
 
-    public function setCacheTimestamp(DateTime $lastTimeModified)
+    public function setCacheFilenameTimestamp(DateTime $lastTimeModified)
     {
         $timestamp = $lastTimeModified->getTimestamp();
-        $this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+        $this->_cacheFilenameTimestamp = max($this->cacheFilenameTimestamp, $timestamp);
     }
 
     public function setCacheFilenameHash($name)
@@ -192,11 +192,11 @@ class MinimeeService extends BaseApplicationComponent
 
     public function reset()
     {
-        $this->_assets                  = array();
-        $this->_type                    = '';
-        $this->_cacheFilename           = '';
-        $this->_cacheFilenameHash       = '';
-        $this->_cacheTimestamp          = '';
+        $this->_assets                          = array();
+        $this->_type                            = '';
+        $this->_cacheFilename                   = '';
+        $this->_cacheFilenameHash               = '';
+        $this->_cacheFilenameTimestamp          = '';
 
         return $this;
     }
@@ -311,8 +311,8 @@ class MinimeeService extends BaseApplicationComponent
         // loop through our files once
         foreach ($this->assets as $asset)
         {
-            $this->cacheTimestamp = $asset->lastTimeModified;
-            $this->cacheFilenameHash = $asset->filename;
+            $this->cacheFilenameTimestamp   = $asset->lastTimeModified;
+            $this->cacheFilenameHash        = $asset->filename;
         }
 
         if( ! IOHelper::fileExists($this->cacheFilenamePath))
