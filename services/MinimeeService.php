@@ -227,9 +227,30 @@ class MinimeeService extends BaseApplicationComponent
         return $this;
     }
 
-    public function minify($asset)
+    public function minifyAsset($asset)
     {
-        return $asset->contents;
+        switch ($asset->type) :
+            
+            case 'js':
+
+                craft()->minimee_helper->loadLibrary('jsmin');
+                $contents = \JSMin::minify($asset->contents);
+
+            break;
+            
+            case 'css':
+
+                craft()->minimee_helper->loadLibrary('css_urirewriter');
+                $contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $this->config->baseUrl);
+
+                craft()->minimee_helper->loadLibrary('minify');
+                $contents = \Minify_CSS::minify($contents);
+
+            break;
+
+        endswitch;
+
+        return $contents;
     }
 
     public function cache()
@@ -249,7 +270,7 @@ class MinimeeService extends BaseApplicationComponent
         
         foreach($this->assets as $asset)
         {
-            $contents .= craft()->minimee->minify($asset);
+            $contents .= craft()->minimee->minifyAsset($asset);
         }
 
         IOHelper::writeToFile($this->cacheFilenamePath, $contents);
