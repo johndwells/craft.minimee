@@ -40,10 +40,12 @@ class MinimeePlugin extends BasePlugin
 
     public function defineSettings()
     {
-        return array(
-            'cacheFolder'              => AttributeType::String,
-            'disable'                  => AttributeType::Bool
-        );
+        // use our config model to define settings
+        Craft::import('plugins.minimee.models.Minimee_ConfigModel');
+
+        $config = new Minimee_ConfigModel();
+
+        return $config->defineAttributes();
     }
 
     public function getSettingsHtml()
@@ -58,5 +60,14 @@ class MinimeePlugin extends BasePlugin
         Craft::import('plugins.minimee.twigextensions.MinimeeTwigExtension');
 
         return new MinimeeTwigExtension();
+    }
+
+    public function getResourcePath($path)
+    {
+        // Are they requesting a drink image?
+        if (strncmp($path, 'minimee/', 8) === 0)
+        {
+            return craft()->path->getStoragePath().'minimee/'.substr($path, 8);
+        }
     }
 }

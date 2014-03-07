@@ -7,10 +7,9 @@
 }) }}
 
 {{ forms.textField({
-	label: "Cache Folder (relative to site, e.g. 'cache'):"|t,
+	label: "Cache Folder:"|t,
 	id: 'cacheFolder',
 	name: 'cacheFolder',
+	instructions : "The relative path to the cache folder, e.g. `cache`"|t,
 	value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
 }) }}
-
-
