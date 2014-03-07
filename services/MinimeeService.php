@@ -91,6 +91,8 @@ class MinimeeService extends BaseApplicationComponent
             {
                 $model = array(
                     'filename' => $asset,
+                    'filenameUrl' => $asset,
+                    'filenamePath' => $asset,
                     'type' => $this->type
                 );
 
@@ -99,7 +101,9 @@ class MinimeeService extends BaseApplicationComponent
             else
             {
                 $model = array(
-                    'filename' => $this->settings->basePath . $asset,
+                    'filename' => $asset,
+                    'filenameUrl' => $this->settings->baseUrl . $asset,
+                    'filenamePath' => $this->settings->basePath . $asset,
                     'type' => $this->type
                 );
 
@@ -229,7 +233,7 @@ class MinimeeService extends BaseApplicationComponent
         {
             if( ! $asset->exists())
             {
-                throw new Exception(Craft::t($asset->filename . ' could not be found.'));
+                throw new Exception(Craft::t($asset->filenamePath . ' could not be found.'));
             }
         }
 
@@ -250,7 +254,10 @@ class MinimeeService extends BaseApplicationComponent
             case 'css':
 
                 craft()->minimee_helper->loadLibrary('css_urirewriter');
-                $contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $this->settings->baseUrl);
+
+                $cssPrependUrl = dirname($asset->filenameUrl) . '/';
+
+                $contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
 
                 craft()->minimee_helper->loadLibrary('minify');
                 $contents = \Minify_CSS::minify($contents);

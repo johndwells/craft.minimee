@@ -24,7 +24,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
         if( ! $this->_contents)
         {
             $client = new Client();
-            $request = $client->get($this->filename);
+            $request = $client->get($this->filenameUrl);
             $response = $request->send();
             if ($response->isSuccessful())
             {
@@ -32,7 +32,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
             }
             else
             {
-                throw new Exception('Could not get remote asset: ' . $this->filename);
+                throw new Exception('Could not get remote asset: ' . $this->filenameUrl);
             }
         }
 

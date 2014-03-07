@@ -21,11 +21,11 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
     {
         if( ! $this->_contents)
         {
-        	$this->_contents = IOHelper::getFileContents($this->filename);
+        	$this->_contents = IOHelper::getFileContents($this->filenamePath);
 
             if($this->_contents === false)
             {
-                throw new Exception('Could not get local asset: ' . $this->filename);
+                throw new Exception('Could not get local asset: ' . $this->filenamePath);
             }
         }
 
@@ -41,11 +41,11 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
     {
         if( ! $this->_lastTimeModified)
         {
-            $this->_lastTimeModified = IOHelper::getLastTimeModified($this->filename);
+            $this->_lastTimeModified = IOHelper::getLastTimeModified($this->filenamePath);
 
             if($this->_lastTimeModified === false)
             {
-                throw new Exception('Could not determine modification time of local asset: ' . $this->filename);
+                throw new Exception('Could not determine modification time of local asset: ' . $this->filenamePath);
             }
         }
 
@@ -59,6 +59,6 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
      */
     public function exists()
     {
-        return IOHelper::fileExists($this->filename);
+        return IOHelper::fileExists($this->filenamePath);
     }
 }
