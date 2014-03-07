@@ -91,7 +91,8 @@ class Minimee_CacheModel extends BaseModel
     	{
     		$filenamePath = $this->cachePath . $this->filename;
 
-			if ($file == '.' || $file == '..' || $file === $filenamePath) continue;
+    		// skip self
+			if ($file === $filenamePath) continue;
 
 			$filenameHashPath = $this->cachePath . $this->filenameHash;
 
