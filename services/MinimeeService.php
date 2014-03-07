@@ -109,7 +109,8 @@ class MinimeeService extends BaseApplicationComponent
             if (craft()->minimee_helper->isUrl($asset))
             {
                 $model = array(
-                    'filename' => $asset
+                    'filename' => $asset,
+                    'type' => $this->type
                 );
 
                 $this->assets[] = Minimee_RemoteAssetModel::populateModel($model);
@@ -117,7 +118,8 @@ class MinimeeService extends BaseApplicationComponent
             else
             {
                 $model = array(
-                    'filename' => $this->config->basePath . $asset
+                    'filename' => $this->config->basePath . $asset,
+                    'type' => $this->type
                 );
 
                 $this->assets[] = Minimee_LocalAssetModel::populateModel($model);

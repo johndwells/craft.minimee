@@ -39,7 +39,8 @@ class Minimee_AssetBaseModel extends BaseModel
     public function defineAttributes()
     {
         return array(
-            'filename' => AttributeType::String
+            'filename' => AttributeType::String,
+            'type' => array(AttributeType::Enum, 'values' => "css,js")
         );
     }
 }
