@@ -17,6 +17,8 @@ use Twig_Markup;
  */
 class Minimee_HelperService extends BaseApplicationComponent
 {
+    public static $registeredMinifyLoader;
+
 	/**
      * Determine if string is valid URL
      *
@@ -103,4 +105,65 @@ class Minimee_HelperService extends BaseApplicationComponent
 		return new Twig_Markup($html, $charset);
     }
 
+
+    /**
+     * Loads our requested library
+     *
+     * On first call it will adjust the include_path, for Minify support
+     *
+     * @param   string  Name of library to require
+     * @return  void
+     */
+    public function loadLibrary($which)
+    {
+        if( is_null(self::$registeredMinifyLoader))
+        {
+            // try to bump our memory limits for good measure
+            @ini_set('memory_limit', '12M');
+            @ini_set('memory_limit', '16M');
+            @ini_set('memory_limit', '32M');
+            @ini_set('memory_limit', '64M');
+            @ini_set('memory_limit', '128M');
+            @ini_set('memory_limit', '256M');
+
+            // Latest changes to Minify adopt a "loader" over sprinkled require's
+            require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php');
+            \Minify_Loader::register();
+
+            self::$registeredMinifyLoader = true;
+        }
+
+        // require_once our library of choice
+        switch ($which) :
+
+            case ('minify') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS.php');
+            break;
+
+            case ('cssmin') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/CSSmin.php');
+            break;
+            
+            case ('css_urirewriter') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS/UriRewriter.php');
+            break;
+
+            case ('curl') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/EpiCurl.php');
+            break;
+            
+            case ('jsmin') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMin.php');
+            break;
+            
+            case ('jsminplus') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMinPlus.php');
+            break;
+            
+            case ('html') :
+                require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/HTML.php');
+            break;
+
+        endswitch;
+    }
 }
