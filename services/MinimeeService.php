@@ -69,6 +69,11 @@ class MinimeeService extends BaseApplicationComponent
         return sha1($this->_cacheFilenameHash);
     }
 
+    public function getCacheFilenameHashPath()
+    {
+        return $this->config->cachePath . $this->cacheFilenameHash;
+    }
+
     public function getCacheFilenamePath()
     {
         return $this->config->cachePath . $this->cacheFilename;
