@@ -15,12 +15,12 @@ namespace Craft;
  */
 class MinimeeService extends BaseApplicationComponent
 {
-    protected $_assets = array();
-    protected $_type = '';
+    protected $_assets                  = array();
+    protected $_type                    = '';
     protected $_cacheFilename           = '';       // lastmodified value for cache
     protected $_cacheFilenameHash       = '';       // a hash of all asset filenames together
     protected $_cacheTimestamp          = '';       // eventual filename of cache
-    protected $_config;
+    protected $_config                  = null;
 
     // --------------------------
 
@@ -31,27 +31,10 @@ class MinimeeService extends BaseApplicationComponent
 
         $this->setConfig();
     }
+
     public function getAssets()
     {
         return $this->_assets;
-    }
-
-    public function getType()
-    {
-        return $this->_type;
-    }
-
-    /**
-     * Read-Only config
-     */
-    public function getConfig()
-    {
-        return $this->_config;
-    }
-
-    public function getCacheTimestamp()
-    {
-        return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
     }
 
     public function getCacheFilename()
@@ -84,33 +67,19 @@ class MinimeeService extends BaseApplicationComponent
         return $this->config->cacheUrl . $this->cacheFilename;
     }
 
-    public function setConfig()
+    public function getCacheTimestamp()
     {
-        // configure our service based off the settings in plugin
-        $plugin = craft()->plugins->getPlugin('minimee');
-
-        // this will only be done once
-        $this->_config = Minimee_ConfigModel::populateModel($plugin->getSettings());
+        return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
     }
 
-    public function setCacheTimestamp(DateTime $lastTimeModified)
+    public function getConfig()
     {
-        $timestamp = $lastTimeModified->getTimestamp();
-        $this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+        return $this->_config;
     }
 
-    public function setCacheFilenameHash($name)
+    public function getType()
     {
-        // remove any cache-busting strings so the cache name doesn't change with every edit.
-        // format: .v.1330213450
-        $this->_cacheFilenameHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-
-        return $this;
+        return $this->_type;
     }
 
     public function setAssets($assets)
@@ -136,6 +105,35 @@ class MinimeeService extends BaseApplicationComponent
                 $this->_assets[] = Minimee_LocalAssetModel::populateModel($model);
             }
         }
+
+        return $this;
+    }
+
+    public function setCacheTimestamp(DateTime $lastTimeModified)
+    {
+        $timestamp = $lastTimeModified->getTimestamp();
+        $this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+    }
+
+    public function setCacheFilenameHash($name)
+    {
+        // remove any cache-busting strings so the cache name doesn't change with every edit.
+        // format: .v.1330213450
+        $this->_cacheFilenameHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
+    }
+
+    public function setConfig()
+    {
+        // configure our service based off the settings in plugin
+        $plugin = craft()->plugins->getPlugin('minimee');
+
+        // this will only be done once
+        $this->_config = Minimee_ConfigModel::populateModel($plugin->getSettings());
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
 
         return $this;
     }
