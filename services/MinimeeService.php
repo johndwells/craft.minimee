@@ -28,6 +28,11 @@ class MinimeeService extends BaseApplicationComponent
         // make sure the rest of the component initialises first
         parent::init();
 
+        $this->setConfig();
+    }
+
+    public function setConfig()
+    {
         // configure our service based off the settings in plugin
         $plugin = craft()->plugins->getPlugin('minimee');
 
