@@ -1,15 +1,20 @@
 {% import "_includes/forms" as forms %}
 
-{{ forms.checkboxField({
-	label: "Disable?"|t,
-	name: 'disable',
-	checked: settings.disable
-}) }}
+{{
+	forms.lightswitch({
+		onLabel:	"Off",
+		offLabel:	"On",
+		name:		"enabled",
+		on:			settings.enabled
+	})
+}}
 
-{{ forms.textField({
-	label: "Cache Folder:"|t,
-	id: 'cacheFolder',
-	name: 'cacheFolder',
-	instructions : "The relative path to the cache folder, e.g. __`cache`__. _If left blank, Minimee will use Craft's storage folder._"|t,
-	value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
-}) }}
+{{
+	forms.textField({
+		label: "Cache Folder:"|t,
+		id: 'cacheFolder',
+		name: 'cacheFolder',
+		instructions : "The relative path to the cache folder, e.g. __`cache`__. _If left blank, Minimee will use Craft's storage folder._"|t,
+		value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
+	})
+}}

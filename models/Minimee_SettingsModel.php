@@ -30,7 +30,7 @@ class Minimee_SettingsModel extends BaseModel
      */
     public function __toString()
     {
-        return (string) $this->disable;
+        return (bool) $this->enabled;
     }
 
     // --------------------
@@ -42,7 +42,7 @@ class Minimee_SettingsModel extends BaseModel
     {
         return array(
             'cacheFolder'   => AttributeType::String,
-            'disable'       => AttributeType::Bool,
+            'enabled'       => AttributeType::Bool,
             // 'remoteMode'    => array(AttributeType::Enum, 'values' => "fgc,curl")
         );
     }

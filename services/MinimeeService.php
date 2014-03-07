@@ -182,7 +182,7 @@ class MinimeeService extends BaseApplicationComponent
         Craft::log($e, LogLevel::Warning);
 
         // re-throw the exception if in devMode
-        if(craft()->config->get('devMode'))
+        if(craft()->config->get('devMode') && $this->settings->enabled)
         {
             throw new Exception($e);
         }
@@ -208,7 +208,7 @@ class MinimeeService extends BaseApplicationComponent
             throw new Exception(Craft::t('Not installed.'));
         }
 
-        if($this->settings->disable)
+        if( ! $this->settings->enabled)
         {
             throw new Exception(Craft::t('Disabled via settings.'));
         }
