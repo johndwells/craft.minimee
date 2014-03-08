@@ -33,7 +33,7 @@ class Minimee_SettingsModel extends BaseModel
     {
         return array(
             'cacheFolder'       => AttributeType::String,
-            'enabled'           => AttributeType::Bool,
+            'enabled'           => array(AttributeType::Bool,'default' => true),
             'filesystemPath'    => AttributeType::String,
             // 'remoteMode'    => array(AttributeType::Enum, 'values' => "fgc,curl")
         );
