@@ -11,20 +11,22 @@
 
 {{
 	forms.textField({
-		label: "Filesystem Path:"|t,
+		label: "<strong>File System Path</strong> to your site's index.php:"|t,
 		id: 'filesystemPath',
 		name: 'filesystemPath',
-		instructions : "The filesystem path to your index.php file, e.g. __`/var/www/public/`__.<br>_If left blank, Minimee will use `$_SERVER['DOCUMENT_ROOT']`._"|t,
+		placeholder : '/var/www/public/',
+		instructions : "If left blank, `$_SERVER['DOCUMENT_ROOT']` will be used."|t,
 		value: (settings.filesystemPath is defined ? settings.filesystemPath : null)
 	})
 }}
 
 {{
 	forms.textField({
-		label: "Cache Folder:"|t,
+		label: "<strong>Cache Folder</strong>, relative to File System Path:"|t,
 		id: 'cacheFolder',
 		name: 'cacheFolder',
-		instructions : "The relative path to the cache folder, e.g. __`cache`__.<br>_If left blank, Minimee will use Craft's storage folder._"|t,
+		placeholder : 'cache',
+		instructions : "If left blank, Craft's storage folder will be used."|t,
 		value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
 	})
 }}
