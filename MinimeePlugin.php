@@ -20,7 +20,7 @@ class MinimeePlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.4.6';
+        return '0.5.0';
     }
 
     public function getDeveloper()
@@ -36,6 +36,16 @@ class MinimeePlugin extends BasePlugin
     public function hasCpSection()
     {
         return false;
+    }
+
+    public function init()
+    {
+        craft()->on('minimee.createCache', function(Event $event) {
+            if(craft()->config->get('devMode'))
+            {
+                craft()->minimee->deleteExpiredCache();
+            }
+        });
     }
 
     public function defineSettings()

@@ -291,14 +291,16 @@ class MinimeeService extends BaseApplicationComponent
 
         IOHelper::writeToFile($this->cacheFilenamePath, $contents);
 
-        $this->cleanupCache();
+        $this->onCreateCache(new Event($this));
     }
 
-    public function cleanupCache()
+    public function onCreateCache($event)
     {
-        // only run cleanup if in devmode...?
-        if( ! craft()->config->get('devMode')) return;
+        $this->raiseEvent('onCreateCache', $event);
+    }
 
+    public function deleteExpiredCache()
+    {
         $files = IOHelper::getFiles($this->settings->cachePath);
 
         foreach($files as $file)
