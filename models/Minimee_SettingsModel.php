@@ -75,7 +75,7 @@ class Minimee_SettingsModel extends BaseModel
     {
         if ($this->cacheFolder != '')
         {
-            return $this->baseUrl . '/' . $this->cacheFolder . '/';
+            return $this->baseUrl . $this->cacheFolder . '/';
         }
         else
         {
