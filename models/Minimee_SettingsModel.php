@@ -63,7 +63,7 @@ class Minimee_SettingsModel extends BaseModel
     {
         if ($this->cacheFolder != '')
         {
-            return $this->filesystemPath . '/' . $this->cacheFolder . '/';
+            return $this->filesystemPath . $this->cacheFolder . '/';
         }
         else
         {
