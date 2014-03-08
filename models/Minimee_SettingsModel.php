@@ -93,14 +93,18 @@ class Minimee_SettingsModel extends BaseModel
         return 'fgc';
     }
 
-    public function setAttribute($name, $value)
+    public function getAttribute($name)
     {
         if($name == 'filesystemPath')
         {
-            $value = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'] . '/';
+            // get un-edited attribute value
+            $value = parent::getAttribute($name);
+
+            // parse environment string?
+            return ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'] . '/';
         }
 
-        parent::setAttribute($name, $value);
+        return parent::getAttribute($name);
     }
 
     /**

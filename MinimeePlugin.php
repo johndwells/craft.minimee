@@ -20,7 +20,7 @@ class MinimeePlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.4.4';
+        return '0.4.5';
     }
 
     public function getDeveloper()
