@@ -103,7 +103,7 @@ class MinimeeService extends BaseApplicationComponent
                 $model = array(
                     'filename' => $asset,
                     'filenameUrl' => $this->settings->baseUrl . $asset,
-                    'filenamePath' => $this->settings->basePath . $asset,
+                    'filenamePath' => $this->settings->filesystemPath . $asset,
                     'type' => $this->type
                 );
 

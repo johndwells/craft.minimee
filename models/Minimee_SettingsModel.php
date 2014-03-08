@@ -15,15 +15,6 @@ namespace Craft;
  */
 class Minimee_SettingsModel extends BaseModel
 {
-	/*
-	 * These are internal attributes only, not defined by Minimee_SettingsModel::defineAttributes()
-	 * They are read-only, accessiable via magic getters e.g. $settings->cachePath
-	 */
-    private $_cachePath;
-    private $_cacheUrl;
-    private $_basePath;
-    private $_baseUrl;
-
     /**
      *
      * @return string
@@ -41,8 +32,9 @@ class Minimee_SettingsModel extends BaseModel
     public function defineAttributes()
     {
         return array(
-            'cacheFolder'   => AttributeType::String,
-            'enabled'       => AttributeType::Bool,
+            'cacheFolder'       => AttributeType::String,
+            'enabled'           => AttributeType::Bool,
+            'filesystemPath'    => AttributeType::String,
             // 'remoteMode'    => array(AttributeType::Enum, 'values' => "fgc,curl")
         );
     }
@@ -69,61 +61,46 @@ class Minimee_SettingsModel extends BaseModel
 
     public function getCachePath()
     {
-        if($this->_cachePath === null)
+        if ($this->cacheFolder != '')
         {
-            if ($this->cacheFolder != '')
-            {
-                $this->_cachePath = $this->basePath . '/' . $this->cacheFolder . '/';
-            }
-            else
-            {
-                $this->_cachePath = craft()->path->getStoragePath() . 'minimee/';
-            }
+            return $this->filesystemPath . '/' . $this->cacheFolder . '/';
         }
-
-        return $this->_cachePath;
+        else
+        {
+            return craft()->path->getStoragePath() . 'minimee/';
+        }
     }
     
     public function getCacheUrl()
     {
-        if($this->_cacheUrl === null)
+        if ($this->cacheFolder != '')
         {
-            if ($this->cacheFolder != '')
-            {
-                $this->_cacheUrl = $this->baseUrl . '/' . $this->cacheFolder . '/';
-            }
-            else
-            {
-                $this->_cacheUrl = UrlHelper::getResourceUrl('minimee') . '/';
-            }
+            return $this->baseUrl . '/' . $this->cacheFolder . '/';
         }
-
-        return $this->_cacheUrl;
+        else
+        {
+            return UrlHelper::getResourceUrl('minimee') . '/';
+        }
     }
     
     public function getBaseUrl()
     {
-        if($this->_baseUrl === null)
-        {
-            $this->_baseUrl = craft()->getSiteUrl();
-        }
-
-        return $this->_baseUrl;
-    }
-    
-    public function getBasePath()
-    {
-        if($this->_basePath === null)
-        {
-            $this->_basePath = $_SERVER['DOCUMENT_ROOT'] . '/';
-        }
-
-        return $this->_basePath;
+        return craft()->getSiteUrl();
     }
 
     public function getRemoteMode()
     {
         return 'fgc';
+    }
+
+    public function setAttribute($name, $value)
+    {
+        if($name == 'filesystemPath')
+        {
+            $value = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'] . '/';
+        }
+
+        parent::setAttribute($name, $value);
     }
 
     /**
