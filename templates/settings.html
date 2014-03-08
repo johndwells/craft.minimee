@@ -14,7 +14,7 @@
 		label: "Filesystem Path:"|t,
 		id: 'filesystemPath',
 		name: 'filesystemPath',
-		instructions : "The filesystem path to your index.php file, e.g. __`/var/www/public/`__. _If left blank, Minimee will use `$_SERVER['DOCUMENT_ROOT']`._"|t,
+		instructions : "The filesystem path to your index.php file, e.g. __`/var/www/public/`__.<br>_If left blank, Minimee will use `$_SERVER['DOCUMENT_ROOT']`._"|t,
 		value: (settings.filesystemPath is defined ? settings.filesystemPath : null)
 	})
 }}
@@ -24,7 +24,7 @@
 		label: "Cache Folder:"|t,
 		id: 'cacheFolder',
 		name: 'cacheFolder',
-		instructions : "The relative path to the cache folder, e.g. __`cache`__. _If left blank, Minimee will use Craft's storage folder._"|t,
+		instructions : "The relative path to the cache folder, e.g. __`cache`__.<br>_If left blank, Minimee will use Craft's storage folder._"|t,
 		value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
 	})
 }}
