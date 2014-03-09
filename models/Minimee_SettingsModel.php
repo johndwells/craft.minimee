@@ -34,58 +34,46 @@ class Minimee_SettingsModel extends BaseModel
 		return array(
 			'cacheFolder'       => AttributeType::String,
 			'enabled'           => array(AttributeType::Bool,'default' => true),
-			'filesystemPath'    => AttributeType::String,
-			// 'remoteMode'    => array(AttributeType::Enum, 'values' => "fgc,curl")
+			'filesystemPath'    => AttributeType::String
 		);
 	}
 
-	// --------------------
-
-	/**
-	 *
-	 * @static
-	 * @param mixed $attributes
-	 * @return UserModel
-	 */
-	public static function populateModel($attributes)
+	public function forceTrailingSlash($string)
 	{
-		$settings = parent::populateModel($attributes);
-
-		// sanitise our cache folder
-		$settings->cacheFolder = trim($settings->cacheFolder, " /\\");
-
-		return $settings;
+		return rtrim($string, '/') . '/';
 	}
-
-	// --------------------
 
 	public function getCachePath()
 	{
 		if ($this->cacheFolder != '')
 		{
-			return $this->filesystemPath . $this->cacheFolder . '/';
+			$cachePath = $this->filesystemPath . $this->cacheFolder;
 		}
 		else
 		{
-			return craft()->path->getStoragePath() . 'minimee/';
+			$cachePath = craft()->path->getStoragePath() . 'minimee/';
 		}
+
+		return $this->forceTrailingSlash($cachePath);
 	}
 	
 	public function getCacheUrl()
 	{
 		if ($this->cacheFolder != '')
 		{
-			return $this->baseUrl . $this->cacheFolder . '/';
+			$cacheUrl = $this->baseUrl . $this->cacheFolder;
 		}
 		else
 		{
-			return UrlHelper::getResourceUrl('minimee') . '/';
+			$cacheUrl = UrlHelper::getResourceUrl('minimee');
 		}
+
+		return $this->forceTrailingSlash($cacheUrl);
 	}
 	
 	public function getBaseUrl()
 	{
-		return craft()->getSiteUrl();
+		return $this->forceTrailingSlash(craft()->getSiteUrl());
 	}
 
 	public function getRemoteMode()
@@ -97,11 +85,11 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		if($name == 'filesystemPath')
 		{
-			// get un-edited attribute value
 			$value = parent::getAttribute($name);
 
-			// parse environment string?
-			return ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'] . '/';
+			$filesystemPath = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'];
+
+			return $this->forceTrailingSlash($filesystemPath);
 		}
 
 		return parent::getAttribute($name);
