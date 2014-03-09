@@ -15,34 +15,34 @@ namespace Craft;
  */
 class Minimee_AssetBaseModel extends BaseModel
 {
-    /*
-     * These are internal attributes only, not defined by Minimee_AssetBaseModel::defineAttributes()
-     * They are read-only, accessiable via magic getters e.g. $asset->contents
-     *
-     * Leave as 'protected' so our parent classes can access them
-     */
-    protected $_contents;
-    protected $_lastTimeModified;
+	/*
+	 * These are internal attributes only, not defined by Minimee_AssetBaseModel::defineAttributes()
+	 * They are read-only, accessiable via magic getters e.g. $asset->contents
+	 *
+	 * Leave as 'protected' so our parent classes can access them
+	 */
+	protected $_contents;
+	protected $_lastTimeModified;
 
-    /**
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->filename;
-    }
+	/**
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->filename;
+	}
 
 	/**
 	 * @return Array
 	 */
-    public function defineAttributes()
-    {
-        return array(
-            'filename'      => AttributeType::String,
-            'filenamePath'  => AttributeType::String,
-            'filenameUrl'   => AttributeType::String,
-            'type'          => array(AttributeType::Enum, 'values' => "css,js")
-        );
-    }
+	public function defineAttributes()
+	{
+		return array(
+			'filename'      => AttributeType::String,
+			'filenamePath'  => AttributeType::String,
+			'filenameUrl'   => AttributeType::String,
+			'type'          => array(AttributeType::Enum, 'values' => "css,js")
+		);
+	}
 }

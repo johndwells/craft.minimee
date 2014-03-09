@@ -12,53 +12,53 @@ namespace Craft;
 
 class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 {
-    /**
-     * Set our location based on contents of filename
-     *
-     *@ return String the contents of the asset
-     */
-    public function getContents()
-    {
-        if( ! $this->_contents)
-        {
-        	$this->_contents = IOHelper::getFileContents($this->filenamePath);
+	/**
+	 * Set our location based on contents of filename
+	 *
+	 *@ return String the contents of the asset
+	 */
+	public function getContents()
+	{
+		if( ! $this->_contents)
+		{
+			$this->_contents = IOHelper::getFileContents($this->filenamePath);
 
-            if($this->_contents === false)
-            {
-                throw new Exception('Could not get local asset: ' . $this->filenamePath);
-            }
-        }
+			if($this->_contents === false)
+			{
+				throw new Exception('Could not get local asset: ' . $this->filenamePath);
+			}
+		}
 
-    	return $this->_contents;
-    }
+		return $this->_contents;
+	}
 
-    /**
-     * Calculate the modified time of asset
-     *
-     * @return DateTime file's modification date
-     */
-    public function getLastTimeModified()
-    {
-        if( ! $this->_lastTimeModified)
-        {
-            $this->_lastTimeModified = IOHelper::getLastTimeModified($this->filenamePath);
+	/**
+	 * Calculate the modified time of asset
+	 *
+	 * @return DateTime file's modification date
+	 */
+	public function getLastTimeModified()
+	{
+		if( ! $this->_lastTimeModified)
+		{
+			$this->_lastTimeModified = IOHelper::getLastTimeModified($this->filenamePath);
 
-            if($this->_lastTimeModified === false)
-            {
-                throw new Exception('Could not determine modification time of local asset: ' . $this->filenamePath);
-            }
-        }
+			if($this->_lastTimeModified === false)
+			{
+				throw new Exception('Could not determine modification time of local asset: ' . $this->filenamePath);
+			}
+		}
 
-        return $this->_lastTimeModified;
-    }
+		return $this->_lastTimeModified;
+	}
 
-    /**
-     * Determine if asset exists
-     *
-     * @return Bool whether file exists or not
-     */
-    public function exists()
-    {
-        return IOHelper::fileExists($this->filenamePath);
-    }
+	/**
+	 * Determine if asset exists
+	 *
+	 * @return Bool whether file exists or not
+	 */
+	public function exists()
+	{
+		return IOHelper::fileExists($this->filenamePath);
+	}
 }
