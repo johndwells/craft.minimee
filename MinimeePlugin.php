@@ -1,16 +1,18 @@
 <?php
+namespace Craft;
 
 /**
  * Minimee by John D Wells
  *
  * @package   Minimee
  * @author    John D Wells
- * @copyright Copyright (c) 2012, John D Wells
+ * @copyright Copyright (c) 2014, John D Wells
  * @link      http://johndwells.com
  */
 
-namespace Craft;
-
+/**
+ * 
+ */
 class MinimeePlugin extends BasePlugin
 {
 	public function getName()

@@ -8,10 +8,13 @@ use Guzzle\Http\Client;
  *
  * @package   Minimee
  * @author    John D Wells
- * @copyright Copyright (c) 2012, John D Wells
+ * @copyright Copyright (c) 2014, John D Wells
  * @link      http://johndwells.com
  */
 
+/**
+ * 
+ */
 class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 {
 	/**

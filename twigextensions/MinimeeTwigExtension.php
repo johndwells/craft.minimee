@@ -1,7 +1,18 @@
 <?php
-
 namespace Craft;
 
+/**
+ * Minimee by John D Wells
+ *
+ * @package   Minimee
+ * @author    John D Wells
+ * @copyright Copyright (c) 2014, John D Wells
+ * @link      http://johndwells.com
+ */
+
+/**
+ * 
+ */
 class MinimeeTwigExtension extends \Twig_Extension
 {
 	public function getName()
