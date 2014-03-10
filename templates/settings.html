@@ -1,13 +1,16 @@
 {% import "_includes/forms" as forms %}
 
 {{
-	forms.lightswitch({
+	forms.lightswitchField({
 		onLabel:	"On",
 		offLabel:	"Off",
+		label: "<strong>Minimee Status</strong>"|t,
 		name:		"enabled",
 		on:			settings.enabled
 	})
 }}
+
+<hr>
 
 {{
 	forms.textField({
