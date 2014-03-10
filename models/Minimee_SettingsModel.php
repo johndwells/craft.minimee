@@ -22,7 +22,7 @@ class Minimee_SettingsModel extends BaseModel
 	 */
 	public function __toString()
 	{
-		return (bool) $this->enabled;
+		return ($this->enabled) ? '1' : '0';
 	}
 
 	public function validate($attributes = null, $clearErrors = true)
