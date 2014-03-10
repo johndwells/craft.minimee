@@ -1,4 +1,4 @@
-## Minimee for Craft
+## Minimee for Craft - v0.6.4
 
 A [Craft](http://buildwithcraft.com) CMS port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -9,6 +9,8 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 * [On github](https://github.com/johndwells/Minimee-Craft)
 * [Support](https://github.com/johndwells/Minimee-Craft)
 
+---
+
 ## Installation
 
 1. Download latest copy from [github](https://github.com/johndwells/Minimee-Craft)
@@ -16,6 +18,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 3. Copy `minimee` into your `app/plugins` directory
 4. Log into Craft and go to `Settings > Plugins`
 5. Click `install` for Minimee
+6. Visit Minimee plugin settings, enable plugin, and optionally figure (see below)
 
 ## Configuration
 
@@ -29,9 +32,9 @@ By default, Minimee takes the path to your local asset (e.g. `/asset/css/normali
 
 ![cachePathAndUrl](resources/img/cachePathAndUrl.png)
 
-By default, Minimee stores cached assets in Craft's `app/storage` folder, which likely sits above webroot. The cache is then delivered by Craft itself, via a special "resource" url, e.g. `http://domain.com/resources/minimee/filename.timestamp.ext`.
+By default, Minimee stores cached assets in Craft's `craft/storage` folder, which likely sits above webroot. The cache is then delivered by Craft itself, via a special "resource" url, e.g. `http://domain.com/resources/minimee/filename.timestamp.ext`.
 
-Alternatively, you can specify a cache path & URL which sits _below_ webroot, so that the cached assets are delivered directly by your server.
+Alternatively, you can specify a cache path & URL which sits _below_ webroot, so that the cached assets are delivered directly by your server. This is the recommended setup for optimal performance gains.
 
 > Note that all settings will parse global [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
 
@@ -39,6 +42,8 @@ Alternatively, you can specify a cache path & URL which sits _below_ webroot, so
 ## Debugging
 
 When your site is running in [devMode](http://buildwithcraft.com/docs/config-settings#devMode), Minimee will throw an `Exception` containing any messages which indicate where an error may have occurred.
+
+Also while in devMode, Minimee will continually try to clean your cache folder of what it can safely determine are expired caches.
 
 ## Usage
 
@@ -132,7 +137,6 @@ Minimee can detect which type of asset to process; you may optionally pass an ar
 
 The `filter` will also work in conjunction with Craft's [getFootHtml](http://buildwithcraft.com/docs/templating/functions#getFootHtml) and [getHeadHtml](http://buildwithcraft.com/docs/templating/functions#getHeadHtml) tags.
 
-> **Note that any inline CSS or JS passed via `{% includeJs %}`, `{% includeCss %}` and`{% includeHiResCss %}` is currently not supported.**
 
 	{% includeCssFile "/assets/css/normalize.css" %}
 	{% includeCssFile "/assets/css/app.css" %}
@@ -142,15 +146,22 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 	{% includeJsFile "/assets/js/app.js" %}
     {{ getFootHtml() | minimee }}
 
-## Roadmap - 1.0.0 release
+> **Note that any inline CSS or JS passed via `{% includeJs %}`, `{% includeCss %}` and`{% includeHiResCss %}` is currently not supported.**
 
-* improve abort so that we are using correct levels, and throwing exception during devMode only when there is an "error"
-* translate all messages/instructions
 
-## Roadmap
+## Roadmap - 1.0 release
+
+* default enabled upon install
+* ensure sending 304 headers when serving via resource urls
+* improve/refactor internal abort()
+* all messages/instructions translatable
+
+## Roadmap - post 1.0 release
 
 * support [includeJs](http://buildwithcraft.com/docs/templating/tags#includeJs), [includeCss](http://buildwithcraft.com/docs/templating/tags#includeCss) and [includeHiResCss](http://buildwithcraft.com/docs/templating/tags#includeHiResCss)?
 * make tag template configurable
+* improved logging
+* additional hooks/events
 * option to return cache filename only
 * run validation while saving settings
 * ability to separately enable/disable combining, minifying of JS and CSS
