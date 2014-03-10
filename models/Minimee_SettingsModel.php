@@ -37,8 +37,8 @@ class Minimee_SettingsModel extends BaseModel
 		$cachePath = parent::getAttribute('cachePath');
 		$cacheUrl = parent::getAttribute('cacheUrl');
 
-		$cachePathEmpty = !! $cachePath;
-		$cacheUrlEmpty = !! $cacheUrl;
+		$cachePathEmpty = ! $cachePath;
+		$cacheUrlEmpty = ! $cacheUrl;
 
 		if($cachePathEmpty != $cacheUrlEmpty)
 		{
