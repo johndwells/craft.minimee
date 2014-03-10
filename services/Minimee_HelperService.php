@@ -1,15 +1,16 @@
-<?php
-namespace Craft;
+<?php namespace Craft;
 
 use Twig_Markup;
 
 /**
  * Minimee by John D Wells
  *
- * @package   Minimee
- * @author    John D Wells
- * @copyright Copyright (c) 2014, John D Wells
- * @link      http://johndwells.com
+ * @author     	John D Wells <http://johndwells.com>
+ * @package    	Minimee
+ * @since		Craft 1.3
+ * @copyright 	Copyright (c) 2014, John D Wells
+ * @license 	http://opensource.org/licenses/mit-license.php MIT License
+ * @link       	http://github.com/johndwells/Minimee-Craft
  */
 
 /**
