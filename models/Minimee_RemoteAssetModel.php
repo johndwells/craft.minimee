@@ -62,4 +62,26 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	{
 		return true;
 	}
+
+	/**
+	 * Attribute mutators
+	 *
+	 * @param String $name
+	 * @param Mixed $value
+	 * @param Void
+	 */
+	public function setAttribute($name, $value)
+	{
+		switch ($name) :
+			case ('filenamePath') :
+				$value = craft()->minimee_helper->removeDoubleSlashes($value, true);
+			break;
+
+			case ('filenameUrl') :
+				$value = craft()->minimee_helper->removeDoubleSlashes($value, true);
+			break;
+		endswitch;
+
+		parent::setAttribute($name, $value);
+	}
 }

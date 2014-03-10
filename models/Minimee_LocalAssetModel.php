@@ -63,4 +63,26 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	{
 		return IOHelper::fileExists($this->filenamePath);
 	}
+
+	/**
+	 * Attribute mutators
+	 *
+	 * @param String $name
+	 * @param Mixed $value
+	 * @param Void
+	 */
+	public function setAttribute($name, $value)
+	{
+		switch ($name) :
+			case ('filenamePath') :
+				$value = craft()->minimee_helper->removeDoubleSlashes($value, false);
+			break;
+
+			case ('filenameUrl') :
+				$value = craft()->minimee_helper->removeDoubleSlashes($value, true);
+			break;
+		endswitch;
+
+		parent::setAttribute($name, $value);
+	}
 }
