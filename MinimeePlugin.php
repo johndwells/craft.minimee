@@ -16,11 +16,18 @@
  */
 class MinimeePlugin extends BasePlugin
 {
+
+	/**
+	 * @return String
+	 */
 	public function getName()
 	{
 		return 'Minimee';
 	}
 
+	/**
+	 * @return String
+	 */
 	public function getVersion()
 	{
 		return '0.6.3';
@@ -32,28 +39,44 @@ class MinimeePlugin extends BasePlugin
 	 * @param	array	$settings	The settings array from $_POST provided by Craft
 	 * @return	array
 	 */
-	public function prepare(array $settings=array())
+	public function prepare(array $settings = array())
 	{
+		// always cast to boolean, otherwise validate() actually fails, saying length is too long.
+		// I should mention this to P&T because surely I'm doing something wrong.
 		$settings['enabled']	= (bool) $settings['enabled'];
 
 		return $settings;
 	}
 
+	/**
+	 * @return String
+	 */
 	public function getDeveloper()
 	{
 		return 'John D Wells';
 	}
 
+	/**
+	 * @return String
+	 */
 	public function getDeveloperUrl()
 	{
 		return 'http://johndwells.com';
 	}
 
+	/**
+	 * @return Bool
+	 */
 	public function hasCpSection()
 	{
 		return false;
 	}
 
+	/**
+	 * Hook & Event binding is done during initialisation
+	 * 
+	 * @return Void
+	 */
 	public function init()
 	{
 		craft()->on('minimee.createCache', function(Event $event) {
@@ -64,6 +87,11 @@ class MinimeePlugin extends BasePlugin
 		});
 	}
 
+	/**
+	 * We define our setting attributes by way of our own Minimee_SettingsModel.
+	 * 
+	 * @return Array
+	 */
 	public function defineSettings()
 	{
 		// use our settings model to define settings
@@ -74,6 +102,10 @@ class MinimeePlugin extends BasePlugin
 		return $settings->defineAttributes();
 	}
 
+	/**
+	 * Renders the settings form to configure Minimee
+	 * @return String
+	 */
 	public function getSettingsHtml()
 	{
 		return craft()->templates->render('minimee/settings', array(
@@ -81,6 +113,11 @@ class MinimeePlugin extends BasePlugin
 		));
 	}
 
+	/**
+	 * Register our Twig filter
+	 *
+	 * @return Twig_Extension
+	 **/
 	public function addTwigExtension()
 	{
 		Craft::import('plugins.minimee.twigextensions.MinimeeTwigExtension');
@@ -88,6 +125,11 @@ class MinimeePlugin extends BasePlugin
 		return new MinimeeTwigExtension();
 	}
 
+	/**
+	 * Enable ability to serve cache assets from resources/minimee folder
+	 *
+	 * @return String
+	 */
 	public function getResourcePath($path)
 	{
 		// Are they requesting a drink image?

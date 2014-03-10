@@ -16,21 +16,42 @@
  */
 class MinimeeVariable
 {
+	/**
+	 * Our {{ craft.minimee.css() }} variable tag
+	 *
+	 * @param Array $assets
+	 * @param Array $settings
+	 * @return String
+	 */
 	public function css($assets, $settings = array())
 	{
 		return $this->_run('css', $assets, $settings);
 	}
 
+	/**
+	 * Our {{ craft.minimee.js() }} variable tag
+	 *
+	 * @param Array $assets
+	 * @param Array $settings
+	 * @return String
+	 */
 	public function js($assets, $settings = array())
 	{
 		return $this->_run('js', $assets, $settings);
 	}
 
+	/**
+	 * Internal function to run variable tags
+	 *
+	 * @param String $type
+	 * @param Array $assets
+	 * @param Array $settings
+	 * @return String
+	 */
 	protected function _run($type, $assets, $settings = array())
 	{
 		$minified = craft()->minimee->setSettings($settings)->$type($assets);
 
-		// false means we failed, so return original markup
 		if( ! $minified)
 		{
 			$html = craft()->minimee_helper->makeTagsByType($type, $assets);
@@ -39,6 +60,5 @@ class MinimeeVariable
 
 		$html = craft()->minimee_helper->makeTagsByType($type, $minified);
 		return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
-
 	}
 }

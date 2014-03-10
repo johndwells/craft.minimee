@@ -18,6 +18,9 @@ use Twig_Markup;
  */
 class Minimee_HelperService extends BaseApplicationComponent
 {
+	/**
+	 * Internal flag indicating if we've registered the Minify Loader class
+	 */
 	public static $registeredMinifyLoader;
 
 	/**
@@ -37,13 +40,13 @@ class Minimee_HelperService extends BaseApplicationComponent
 	/**
 	 * Helper function to parse content looking for CSS and JS tags.
 	 * Returns array of links found.
-	 * @param   string  String to search
+	 *
 	 * @param   string  Which type of tags to search for - CSS or JS
+	 * @param   string  String to search
 	 * @return  bool|array   Array of found matches, or false if none
 	 */
 	public function pregMatchAssetsByType($type, $haystack)
 	{
-		// let's find the location of our cache files
 		switch (strtolower($type)) :
 
 			case 'css' :
@@ -65,12 +68,8 @@ class Minimee_HelperService extends BaseApplicationComponent
 			return FALSE;
 		}
 		
-		// free memory where possible
-		unset($pat);
-
 		return $matches[1];
 	}
-
 
 	/**
 	 * Quick string detection to determine type
@@ -95,6 +94,7 @@ class Minimee_HelperService extends BaseApplicationComponent
 
 	/**
 	 * Wrapper for how we must return a twig option rather than raw HTML
+	 *
 	 * @param string
 	 * @return Twig_Markup
 	 */
@@ -105,7 +105,6 @@ class Minimee_HelperService extends BaseApplicationComponent
 		$charset = craft()->templates->getTwig()->getCharset();
 		return new Twig_Markup($html, $charset);
 	}
-
 
 	/**
 	 * Loads our requested library
@@ -127,14 +126,12 @@ class Minimee_HelperService extends BaseApplicationComponent
 			@ini_set('memory_limit', '128M');
 			@ini_set('memory_limit', '256M');
 
-			// Latest changes to Minify adopt a "loader" over sprinkled require's
 			require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php');
 			\Minify_Loader::register();
 
 			self::$registeredMinifyLoader = true;
 		}
 
-		// require_once our library of choice
 		switch ($which) :
 
 			case ('minify') :
@@ -168,6 +165,14 @@ class Minimee_HelperService extends BaseApplicationComponent
 		endswitch;
 	}
 
+	/**
+	 * Generate the HTML tag based on type
+	 * In future this will be configurable.
+	 *
+	 * @param String $type
+	 * @param Array $assets
+	 * @return String
+	 */
 	public function makeTagsByType($type, $assets = array())
 	{
 		$assets = ( ! is_array($assets)) ? array($assets) : $assets;

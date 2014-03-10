@@ -19,7 +19,7 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	/**
 	 * Set our location based on contents of filename
 	 *
-	 *@ return String the contents of the asset
+	 *@ return String
 	 */
 	public function getContents()
 	{
@@ -39,7 +39,7 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	/**
 	 * Calculate the modified time of asset
 	 *
-	 * @return DateTime file's modification date
+	 * @return DateTime
 	 */
 	public function getLastTimeModified()
 	{
@@ -57,9 +57,7 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	}
 
 	/**
-	 * Determine if asset exists
-	 *
-	 * @return Bool whether file exists or not
+	 * @return Bool
 	 */
 	public function exists()
 	{

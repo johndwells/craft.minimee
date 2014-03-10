@@ -26,7 +26,6 @@ class Minimee_AssetBaseModel extends BaseModel
 	protected $_lastTimeModified;
 
 	/**
-	 *
 	 * @return string
 	 */
 	public function __toString()

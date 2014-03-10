@@ -17,7 +17,6 @@
 class Minimee_SettingsModel extends BaseModel
 {
 	/**
-	 *
 	 * @return string
 	 */
 	public function __toString()
@@ -25,6 +24,13 @@ class Minimee_SettingsModel extends BaseModel
 		return ($this->enabled) ? '1' : '0';
 	}
 
+	/**
+	 * Add custom validation rules to routine.
+	 *
+	 * @param Array $attributes
+	 * @param Bool $clearErrors
+	 * @return Bool
+	 */
 	public function validate($attributes = null, $clearErrors = true)
 	{
 		$this->validateCachePathAndUrl();
@@ -32,6 +38,11 @@ class Minimee_SettingsModel extends BaseModel
 		return parent::validate($attributes, false);
 	}
 
+	/**
+	 * Validate that cachePath and cacheUrl are both empty or non-empty.
+	 *
+	 * @return Bool
+	 */
 	public function validateCachePathAndUrl()
 	{
 		$cachePath = parent::getAttribute('cachePath');
@@ -60,11 +71,18 @@ class Minimee_SettingsModel extends BaseModel
 		);
 	}
 
+	/**
+	 * @param String $string
+	 * @return String
+	 */
 	public function forceTrailingSlash($string)
 	{
 		return rtrim($string, '/') . '/';
 	}
 
+	/**
+	 * @return String
+	 */
 	public function getFilesystemPath()
 	{
 		$value = parent::getAttribute('filesystemPath');
@@ -74,6 +92,9 @@ class Minimee_SettingsModel extends BaseModel
 		return $this->forceTrailingSlash($filesystemPath);
 	}
 
+	/**
+	 * @return String
+	 */
 	public function getCachePath()
 	{
 		$value = parent::getAttribute('cachePath');
@@ -83,6 +104,9 @@ class Minimee_SettingsModel extends BaseModel
 		return $this->forceTrailingSlash($cachePath);
 	}
 	
+	/**
+	 * @return String
+	 */
 	public function getCacheUrl()
 	{
 		$value = parent::getAttribute('cacheUrl');
@@ -92,16 +116,20 @@ class Minimee_SettingsModel extends BaseModel
 		return $this->forceTrailingSlash($cacheUrl);
 	}
 	
+	/**
+	 * @return String
+	 */
 	public function getBaseUrl()
 	{
 		return $this->forceTrailingSlash(craft()->getSiteUrl());
 	}
 
-	public function getRemoteMode()
-	{
-		return 'fgc';
-	}
-
+	/**
+	 * Inject our model attribute accessors.
+	 *
+	 * @param String $string
+	 * @return String
+	 */
 	public function getAttribute($name)
 	{
 		switch($name) :
@@ -124,13 +152,10 @@ class Minimee_SettingsModel extends BaseModel
 	}
 
 	/**
-	 * @return Bool whether cache folder exists
+	 * @return Bool
 	 */
 	public function exists()
 	{
 		return IOHelper::folderExists($this->cachePath);
 	}
-
-	// --------------------
-
 }

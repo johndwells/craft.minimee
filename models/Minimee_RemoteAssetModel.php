@@ -21,7 +21,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	/**
 	 * Get the contents of the remote asset.
 	 * 
-	 * @return String the contents of the remote asset
+	 * @return String
 	 */
 	public function getContents()
 	{
@@ -46,7 +46,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	/**
 	 * Return a very old DateTime, since it is too expensive to fetch a remote file's headers
 	 * 
-	 * @return DateTime always will be far in the past
+	 * @return DateTime
 	 */
 	public function getLastTimeModified()
 	{
@@ -56,7 +56,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	/**
 	 * Always will return true, since it is too expensive to fetch a remote file
 	 * 
-	 * @return Bool will always be true
+	 * @return Bool
 	 */
 	public function exists()
 	{

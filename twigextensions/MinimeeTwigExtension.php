@@ -16,16 +16,33 @@
  */
 class MinimeeTwigExtension extends \Twig_Extension
 {
+	/**
+	 * Name of our twig filter
+	 *
+	 * @return String
+	 */
 	public function getName()
 	{
 		return 'minimee';
 	}
 
+	/**
+	 * Return an array of twig filters
+	 *
+	 * @return Array
+	 */
 	public function getFilters()
 	{
 		return array('minimee' => new \Twig_Filter_Method($this, 'minimeeFilter'));
 	}
 
+	/**
+	 * Define our filter
+	 * 
+	 * @param String $html
+	 * @param Array $settings
+	 * @return String
+	 */
 	public function minimeeFilter($html, $settings = array())
 	{
 		// we need a type to continue
