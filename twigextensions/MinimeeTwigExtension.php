@@ -37,7 +37,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		}
 
 		// we need to find some assets in the HTML
-		$assets = craft()->minimee_helper->pregMatchAssetsByType($html, $type);
+		$assets = craft()->minimee_helper->pregMatchAssetsByType($type, $html);
 		if( ! $assets)
 		{
 			Craft::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
@@ -54,7 +54,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 			return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
 		}
 
-		$minifiedAsTags = craft()->minimee_helper->makeTagsByType($minified, $type);
+		$minifiedAsTags = craft()->minimee_helper->makeTagsByType($type, $minified);
 
 		// return minified tag(s) as Twig Markup
 		return craft()->minimee_helper->returnHtmlAsTwigMarkup($minifiedAsTags);

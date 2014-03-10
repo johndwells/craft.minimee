@@ -154,7 +154,7 @@ class MinimeeService extends BaseApplicationComponent
 		return $this;
 	}
 
-	public function run($assets, $type)
+	public function run($type, $assets)
 	{
 		$assets = (is_array($assets)) ? $assets : array($assets);
 
@@ -175,12 +175,12 @@ class MinimeeService extends BaseApplicationComponent
 
 	public function css($assets)
 	{
-		return $this->run($assets, 'css');
+		return $this->run('css', $assets);
 	}
 
 	public function js($assets)
 	{
-		return $this->run($assets, 'js');
+		return $this->run('js', $assets);
 	}
 
 	protected function _abort($e)

@@ -41,7 +41,7 @@ class Minimee_HelperService extends BaseApplicationComponent
 	 * @param   string  Which type of tags to search for - CSS or JS
 	 * @return  bool|array   Array of found matches, or false if none
 	 */
-	public function pregMatchAssetsByType($haystack, $type)
+	public function pregMatchAssetsByType($type, $haystack)
 	{
 		// let's find the location of our cache files
 		switch (strtolower($type)) :
@@ -168,7 +168,7 @@ class Minimee_HelperService extends BaseApplicationComponent
 		endswitch;
 	}
 
-	public function makeTagsByType($assets = array(), $type)
+	public function makeTagsByType($type, $assets = array())
 	{
 		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
 		$tags = '';
