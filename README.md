@@ -144,7 +144,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Roadmap - 1.0.0 release
 
-* comment every method & class
 * improve abort so that we are using correct levels, and throwing exception during devMode only when there is an "error"
 * translate all messages/instructions
 
