@@ -23,7 +23,20 @@ class MinimeePlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '0.5.1';
+		return '0.6.0';
+	}
+
+	/**
+	 * Prepares plugin settings prior to saving them to the db
+	 *
+	 * @param	array	$settings	The settings array from $_POST provided by Craft
+	 * @return	array
+	 */
+	public function prepare(array $settings=array())
+	{
+		$settings['enabled']	= (bool) $settings['enabled'];
+
+		return $settings;
 	}
 
 	public function getDeveloper()

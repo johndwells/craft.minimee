@@ -22,11 +22,22 @@
 
 {{
 	forms.textField({
-		label: "<strong>Cache Folder</strong>, relative to File System Path:"|t,
-		id: 'cacheFolder',
-		name: 'cacheFolder',
-		placeholder : 'cache',
+		label: "<strong>Cache Path</strong>:"|t,
+		id: 'cachePath',
+		name: 'cachePath',
+		placeholder : '/var/www/public/cache/',
 		instructions : "If left blank, Craft's storage folder will be used."|t,
-		value: (settings.cacheFolder is defined ? settings.cacheFolder : null)
+		value: (settings.cachePath is defined ? settings.cachePath : null)
+	})
+}}
+
+{{
+	forms.textField({
+		label: "<strong>Cache Url</strong>:"|t,
+		id: 'cacheUrl',
+		name: 'cacheUrl',
+		placeholder : 'http://domain.com/cache/',
+		instructions : "If left blank, Craft's storage folder will be used."|t,
+		value: (settings.cacheUrl is defined ? settings.cacheUrl : null)
 	})
 }}

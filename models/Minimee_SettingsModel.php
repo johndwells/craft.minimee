@@ -25,7 +25,27 @@ class Minimee_SettingsModel extends BaseModel
 		return (bool) $this->enabled;
 	}
 
-	// --------------------
+	public function validate($attributes = null, $clearErrors = true)
+	{
+		$this->validateCachePathAndUrl();
+
+		return parent::validate($attributes, false);
+	}
+
+	public function validateCachePathAndUrl()
+	{
+		$cachePath = parent::getAttribute('cachePath');
+		$cacheUrl = parent::getAttribute('cacheUrl');
+
+		$cachePathEmpty = !! $cachePath;
+		$cacheUrlEmpty = !! $cacheUrl;
+
+		if($cachePathEmpty != $cacheUrlEmpty)
+		{
+			$choose = ($cacheUrlEmpty) ? 'cachePath' : 'cacheUrl';
+			$this->addError($choose, Craft::t('cachePath and cacheUrl must both either be empty or non-empty.'));
+		}
+	}
 
 	/**
 	 * @return Array
@@ -33,9 +53,10 @@ class Minimee_SettingsModel extends BaseModel
 	public function defineAttributes()
 	{
 		return array(
-			'cacheFolder'       => AttributeType::String,
-			'enabled'           => array(AttributeType::Bool,'default' => true),
-			'filesystemPath'    => AttributeType::String
+			'cachePath'       	=> AttributeType::String,
+			'cacheUrl'       	=> AttributeType::String,
+			'enabled'           => array(AttributeType::Enum, 'values' => "on"),
+			'filesystemPath'    => array(AttributeType::String)
 		);
 	}
 
@@ -44,30 +65,29 @@ class Minimee_SettingsModel extends BaseModel
 		return rtrim($string, '/') . '/';
 	}
 
+	public function getFilesystemPath()
+	{
+		$value = parent::getAttribute('filesystemPath');
+
+		$filesystemPath = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'];
+
+		return $this->forceTrailingSlash($filesystemPath);
+	}
+
 	public function getCachePath()
 	{
-		if ($this->cacheFolder != '')
-		{
-			$cachePath = $this->filesystemPath . $this->cacheFolder;
-		}
-		else
-		{
-			$cachePath = craft()->path->getStoragePath() . 'minimee/';
-		}
+		$value = parent::getAttribute('cachePath');
+
+		$cachePath = ($value) ? craft()->config->parseEnvironmentString($value) : craft()->path->getStoragePath() . 'minimee/';
 
 		return $this->forceTrailingSlash($cachePath);
 	}
 	
 	public function getCacheUrl()
 	{
-		if ($this->cacheFolder != '')
-		{
-			$cacheUrl = $this->baseUrl . $this->cacheFolder;
-		}
-		else
-		{
-			$cacheUrl = UrlHelper::getResourceUrl('minimee');
-		}
+		$value = parent::getAttribute('cacheUrl');
+
+		$cacheUrl = ($value) ? craft()->config->parseEnvironmentString($value) : UrlHelper::getResourceUrl('minimee');
 
 		return $this->forceTrailingSlash($cacheUrl);
 	}
@@ -84,14 +104,21 @@ class Minimee_SettingsModel extends BaseModel
 
 	public function getAttribute($name)
 	{
-		if($name == 'filesystemPath')
-		{
-			$value = parent::getAttribute($name);
+		switch($name) :
 
-			$filesystemPath = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'];
+			case('cachePath') :
+				return $this->getCachePath();			
+			break;
 
-			return $this->forceTrailingSlash($filesystemPath);
-		}
+			case('cacheUrl') :
+				return $this->getCacheUrl();			
+			break;
+
+			case('filesystemPath') :
+				return $this->getFilesystemPath();			
+			break;
+
+		endswitch;
 
 		return parent::getAttribute($name);
 	}

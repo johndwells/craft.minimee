@@ -219,6 +219,17 @@ class MinimeeService extends BaseApplicationComponent
 			throw new Exception(Craft::t('Disabled via settings.'));
 		}
 
+		if( ! $this->settings->validate())
+		{
+			$exceptionErrors = '';
+			foreach($this->settings->getErrors() as $error)
+			{
+				$exceptionErrors .= implode('. ', $error);
+			}
+
+			throw new Exception(Craft::t('Invalid plugin settings: ') . $exceptionErrors);
+		}
+
 		IOHelper::ensureFolderExists($this->settings->cachePath);
 		if( ! IOHelper::isWritable($this->settings->cachePath))
 		{
