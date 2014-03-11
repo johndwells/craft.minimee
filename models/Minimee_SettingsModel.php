@@ -67,7 +67,7 @@ class Minimee_SettingsModel extends BaseModel
 			'cachePath'       	=> AttributeType::String,
 			'cacheUrl'       	=> AttributeType::String,
 			'enabled'           => array(AttributeType::Enum, 'values' => "on"),
-			'filesystemPath'    => array(AttributeType::String)
+			'filesystemPath'    => AttributeType::String
 		);
 	}
 
