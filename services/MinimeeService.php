@@ -319,8 +319,19 @@ class MinimeeService extends BaseApplicationComponent
 
 			throw new Exception(Craft::t('Invalid plugin settings: ') . $exceptionErrors);
 		}
+		
+		if($this->settings->isResourceCache())
+		{
+			IOHelper::ensureFolderExists($this->settings->cachePath);
+		}
+		else
+		{
+			if( ! IOHelper::folderExists($this->settings->cachePath)
+			{
+				throw new Exception(Craft::t('Cache folder does not exist: ' . $this->settings->cachePath));
+			}
+		}
 
-		IOHelper::ensureFolderExists($this->settings->cachePath);
 		if( ! IOHelper::isWritable($this->settings->cachePath))
 		{
 			throw new Exception(Craft::t('Cache folder is not writable: ' . $this->settings->cachePath));
