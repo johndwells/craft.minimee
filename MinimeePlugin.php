@@ -30,22 +30,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.6.6';
-	}
-
-	/**
-	 * Prepares plugin settings prior to saving them to the db
-	 *
-	 * @param	array	$settings	The settings array from $_POST provided by Craft
-	 * @return	array
-	 */
-	public function prepare(array $settings = array())
-	{
-		// always cast to boolean, otherwise validate() actually fails, saying length is too long.
-		// I should mention this to P&T because surely I'm doing something wrong.
-		$settings['enabled']	= (bool) $settings['enabled'];
-
-		return $settings;
+		return '0.6.8';
 	}
 
 	/**
