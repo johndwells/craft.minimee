@@ -115,6 +115,20 @@ class Minimee_SettingsModel extends BaseModel
 
 		return $this->forceTrailingSlash($cacheUrl);
 	}
+
+	/**
+	 * @return Bool
+	 */
+	public function isResourceCache()
+	{
+		$cachePath = parent::getAttribute('cachePath');
+		$cacheUrl = parent::getAttribute('cacheUrl');
+
+		$cachePathEmpty = ! $cachePath;
+		$cacheUrlEmpty = ! $cacheUrl;
+
+		return ($cachePathEmpty && $cacheUrlEmpty);
+	}
 	
 	/**
 	 * @return String

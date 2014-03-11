@@ -18,6 +18,7 @@ class MinimeeService extends BaseApplicationComponent
 {
 	protected $_assets                  = array();	// array of Minimee_AssetBaseModel
 	protected $_type                    = '';		// css or js
+	protected $_cache 					= null; 	// instance of Minimee_CacheBaseModel
 	protected $_cacheFilename           = '';       // lastmodified value for cache
 	protected $_cacheFilenameHash       = '';       // a hash of all asset filenames together
 	protected $_cacheFilenameTimestamp  = '';       // eventual filename of cache
@@ -49,12 +50,12 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function getCacheFilename()
 	{
-		if( ! $this->_cacheFilename)
+		if($this->settings->isResourceCache())
 		{
-			$this->_cacheFilename = $this->cacheFilenameHash . '.' . $this->cacheFilenameTimestamp . '.' . $this->type;
+			return $this->cacheFilenameHash . '.' . $this->type;
 		}
 
-		return $this->_cacheFilename;
+		return $this->cacheFilenameHash . '.' . $this->cacheFilenameTimestamp . '.' . $this->type;
 	}
 
 	/**
@@ -86,6 +87,14 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function getCacheFilenameUrl()
 	{
+		if($this->settings->isResourceCache())
+		{
+			$dateParam = craft()->resources->dateParam;
+			$params[$dateParam] = $this->cacheFilenameTimestamp;
+
+			return UrlHelper::getResourceUrl('minimee/' . $this->cacheFilename, $params);
+		}
+		
 		return $this->settings->cacheUrl . $this->cacheFilename;
 	}
 

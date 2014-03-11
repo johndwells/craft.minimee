@@ -152,7 +152,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 ## Roadmap - 1.0 release
 
 * default enabled upon install
-* ensure sending 304 headers when serving via resource urls
 * improve/refactor internal abort()
 * all messages/instructions translatable
 
