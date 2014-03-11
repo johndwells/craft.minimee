@@ -151,6 +151,7 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Roadmap - 1.0 release
 
+* do not create cache folder if not exist
 * default enabled upon install
 * improve/refactor internal abort()
 * all messages/instructions translatable
