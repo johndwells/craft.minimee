@@ -18,7 +18,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 3. Copy `minimee` into your `app/plugins` directory
 4. Log into Craft and go to `Settings > Plugins`
 5. Click `install` for Minimee
-6. Visit Minimee plugin settings, enable plugin, and optionally figure (see below)
+6. Visit Minimee plugin settings and optionally configure (see below)
 
 ## Configuration
 
