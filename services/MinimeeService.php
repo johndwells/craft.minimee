@@ -326,7 +326,7 @@ class MinimeeService extends BaseApplicationComponent
 		}
 		else
 		{
-			if( ! IOHelper::folderExists($this->settings->cachePath)
+			if( ! IOHelper::folderExists($this->settings->cachePath))
 			{
 				throw new Exception(Craft::t('Cache folder does not exist: ' . $this->settings->cachePath));
 			}
