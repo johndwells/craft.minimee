@@ -89,10 +89,12 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if($this->settings->isResourceCache())
 		{
+			$path = craft()->config->getResourceTrigger() . '/minimee/' . $this->cacheFilename;
+
 			$dateParam = craft()->resources->dateParam;
 			$params[$dateParam] = $this->cacheFilenameTimestamp;
 
-			return UrlHelper::getResourceUrl('minimee/' . $this->cacheFilename, $params);
+			return UrlHelper::getUrl($path, $params);
 		}
 		
 		return $this->settings->cacheUrl . $this->cacheFilename;
