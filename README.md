@@ -1,6 +1,6 @@
 ## Minimee for Craft - v0.7.2
 
-A [Craft](http://buildwithcraft.com) CMS port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
+A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
 ---
 
@@ -70,7 +70,7 @@ Minimee's template variable is attached to Craft's global variable `{{ craft }}`
 			'/assets/css/normalize.css',
 			'/assets/css/app.css'
 		], {
-			'filesystemPath' : '{filesystemPath}'
+			'filesystemPath' : craft.config.environmentVariables['filesystemPath']
 		})
 	}}
 
@@ -88,7 +88,7 @@ Minimee's template variable is attached to Craft's global variable `{{ craft }}`
 			'/assets/js/jquery.js',
 			'/assets/js/app.js'
 		], {
-			'enabled' : false
+			'enabled' : craft.config.environmentVariables['minimeeEnabled']
 		})
 	}}
 
@@ -108,7 +108,7 @@ Minimee can detect which type of asset to process; you may optionally pass an ar
 	
 	{# Optionally pass settings as parameter #}
 	{% set minimeeSettings = {
-		'filesystemPath' : '/Users/Dave/Sites/Craft/public/gb/'
+		'filesystemPath' : craft.config.environmentVariables['filesystemPath']
 	} %}
 
 	{% filter minimee(minimeeSettings) %}
@@ -125,7 +125,7 @@ Minimee can detect which type of asset to process; you may optionally pass an ar
 
 	{# Optionally pass settings as parameter #}
 	{% set minimeeSettings = {
-		'filesystemPath' : '/Users/Dave/Sites/Craft/public/gb/'
+		'filesystemPath' : craft.config.environmentVariables['filesystemPath']
 	} %}
 	
 	{% filter minimee(minimeeSettings) %}
@@ -137,7 +137,6 @@ Minimee can detect which type of asset to process; you may optionally pass an ar
 
 The `filter` will also work in conjunction with Craft's [getFootHtml](http://buildwithcraft.com/docs/templating/functions#getFootHtml) and [getHeadHtml](http://buildwithcraft.com/docs/templating/functions#getHeadHtml) tags.
 
-
 	{% includeCssFile "/assets/css/normalize.css" %}
 	{% includeCssFile "/assets/css/app.css" %}
     {{ getHeadHtml() | minimee }}
@@ -145,6 +144,13 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 	{% includeJsFile "/assets/js/jquery.js" %}
 	{% includeJsFile "/assets/js/app.js" %}
     {{ getFootHtml() | minimee }}
+
+	{# Optionally pass settings as parameter #}
+	{% set minimeeSettings = {
+		'enabled' : craft.config.environmentVariables['minimeeEnabled']
+	} %}
+    {{ getHeadHtml() | minimee(minimeeSettings) }}
+    {{ getFootHtml() | minimee(minimeeSettings) }}
 
 > **Note that any inline CSS or JS passed via `{% includeJs %}`, `{% includeCss %}` and`{% includeHiResCss %}` is currently not supported.**
 
