@@ -52,10 +52,10 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if($this->settings->isResourceCache())
 		{
-			return $this->cacheFilenameHash . '.' . $this->type;
+			return sprintf('%s.%s', $this->cacheFilenameHash, $this->type);
 		}
 
-		return $this->cacheFilenameHash . '.' . $this->cacheFilenameTimestamp . '.' . $this->type;
+		return sprintf('%s.%s.%s', $this->cacheFilenameHash, $this->cacheFilenameTimestamp, $this->type);
 	}
 
 	/**

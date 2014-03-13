@@ -1,4 +1,4 @@
-## Minimee for Craft - v0.6.13
+## Minimee for Craft - v0.6.14
 
 A [Craft](http://buildwithcraft.com) CMS port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
