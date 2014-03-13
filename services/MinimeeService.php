@@ -18,8 +18,6 @@ class MinimeeService extends BaseApplicationComponent
 {
 	protected $_assets                  = array();	// array of Minimee_AssetBaseModel
 	protected $_type                    = '';		// css or js
-	protected $_cache 					= null; 	// instance of Minimee_CacheBaseModel
-	protected $_cacheFilename           = '';       // lastmodified value for cache
 	protected $_cacheFilenameHash       = '';       // a hash of all asset filenames together
 	protected $_cacheFilenameTimestamp  = '';       // eventual filename of cache
 	protected $_settings                = null;		// instance of Minimee_SettingsModel
@@ -287,7 +285,6 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$this->_assets                          = array();
 		$this->_type                            = '';
-		$this->_cacheFilename                   = '';
 		$this->_cacheFilenameHash               = '';
 		$this->_cacheFilenameTimestamp          = '';
 
