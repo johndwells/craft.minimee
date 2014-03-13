@@ -38,40 +38,6 @@ class Minimee_HelperService extends BaseApplicationComponent
 	// ------------------------------------------------------
 
 	/**
-	 * Helper function to parse content looking for CSS and JS tags.
-	 * Returns array of links found.
-	 *
-	 * @param   string  Which type of tags to search for - CSS or JS
-	 * @param   string  String to search
-	 * @return  bool|array   Array of found matches, or false if none
-	 */
-	public function pregMatchAssetsByType($type, $haystack)
-	{
-		switch (strtolower($type)) :
-
-			case 'css' :
-				$pat = "/<link{1}.*?href=['|\"']{1}(.*?)['|\"]{1}[^>]*>/i";
-			break;
-
-			case 'js' :
-				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/i";
-			break;
-
-			default :
-				return FALSE;
-			break;
-
-		endswitch;
-
-		if ( ! preg_match_all($pat, $haystack, $matches, PREG_PATTERN_ORDER))
-		{
-			return FALSE;
-		}
-		
-		return $matches[1];
-	}
-
-	/**
 	 * Loads our requested library
 	 *
 	 * On first call it will adjust the include_path, for Minify support

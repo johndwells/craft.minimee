@@ -54,7 +54,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		}
 
 		// we need to find some assets in the HTML
-		$assets = craft()->minimee_helper->pregMatchAssetsByType($type, $html);
+		$assets = $this->pregMatchAssetsByType($type, $html);
 		if( ! $assets)
 		{
 			Craft::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
@@ -75,6 +75,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		// return minified tag(s) as Twig Markup
 		return craft()->minimee->returnHtmlAsTwigMarkup($minifiedAsTags);
 	}
+
 	/**
 	 * Quick string detection to determine type
 	 *
@@ -96,4 +97,37 @@ class MinimeeTwigExtension extends \Twig_Extension
 		return FALSE;
 	}
 
+	/**
+	 * Helper function to parse content looking for CSS and JS tags.
+	 * Returns array of links found.
+	 *
+	 * @param   string  Which type of tags to search for - CSS or JS
+	 * @param   string  String to search
+	 * @return  bool|array   Array of found matches, or false if none
+	 */
+	protected function pregMatchAssetsByType($type, $haystack)
+	{
+		switch (strtolower($type)) :
+
+			case 'css' :
+				$pat = "/<link{1}.*?href=['|\"']{1}(.*?)['|\"]{1}[^>]*>/i";
+			break;
+
+			case 'js' :
+				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/i";
+			break;
+
+			default :
+				return FALSE;
+			break;
+
+		endswitch;
+
+		if ( ! preg_match_all($pat, $haystack, $matches, PREG_PATTERN_ORDER))
+		{
+			return FALSE;
+		}
+		
+		return $matches[1];
+	}
 }
