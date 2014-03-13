@@ -129,7 +129,7 @@ class MinimeeService extends BaseApplicationComponent
 		// Prevent having to use the |raw filter when calling variable in template
 		// http://pastie.org/6412894#1
 		$charset = craft()->templates->getTwig()->getCharset();
-		return new Twig_Markup($html, $charset);
+		return new \Twig_Markup($html, $charset);
 	}
 
 	/**
