@@ -7,7 +7,7 @@ A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://g
 Minimize, combine & cache your CSS and JS files. Because size (still) DOES matter.
 
 * [On github](https://github.com/johndwells/Minimee-Craft)
-* [Support](https://github.com/johndwells/Minimee-Craft)
+* [Support](https://github.com/johndwells/Minimee-Craft/issues)
 
 ---
 
