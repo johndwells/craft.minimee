@@ -55,10 +55,10 @@ class MinimeeVariable
 		if( ! $minified)
 		{
 			$html = craft()->minimee->makeTagsByType($type, $assets);
-			return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
+			return craft()->minimee->returnHtmlAsTwigMarkup($html);
 		}
 
 		$html = craft()->minimee->makeTagsByType($type, $minified);
-		return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
+		return craft()->minimee->returnHtmlAsTwigMarkup($html);
 	}
 }

@@ -117,6 +117,20 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Wrapper for how we must return a twig option rather than raw HTML
+	 *
+	 * @param string
+	 * @return Twig_Markup
+	 */
+	public function returnHtmlAsTwigMarkup($html)
+	{
+		// Prevent having to use the |raw filter when calling variable in template
+		// http://pastie.org/6412894#1
+		$charset = craft()->templates->getTwig()->getCharset();
+		return new Twig_Markup($html, $charset);
+	}
+
+	/**
 	 * Main service function that encapsulates an entire Minimee run
 	 *
 	 * @param String $type
