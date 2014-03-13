@@ -477,6 +477,16 @@ class MinimeeService extends BaseApplicationComponent
 			return false;
 		}
 
+		if($this->settings->isResourceCache())
+		{
+			$cacheLastTimeModified = IOHelper::getLastTimeModified($this->cacheFilenamePath);
+
+			if($cacheLastTimeModified->getTimestamp() < $this->cacheFilenameTimestamp)
+			{
+				return false;
+			}
+		}
+
 		return true;
 	}
 }

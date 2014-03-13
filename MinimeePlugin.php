@@ -30,7 +30,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.6.12';
+		return '0.6.13';
 	}
 
 	/**
