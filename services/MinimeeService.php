@@ -27,39 +27,6 @@ class MinimeeService extends BaseApplicationComponent
 
 
 	/**
-	 * Fetch or creates cache.
-	 *
-	 * @return String
-	 */
-	public function cache()
-	{
-		if( ! $this->cacheExists())
-		{
-			$this->createCache();
-		}
-
-		return $this->getCacheUrl();
-	}
-
-	/**
-	 * Validate all assets prior to run.
-	 *
-	 * @return this
-	 */
-	public function checkHeaders()
-	{
-		foreach($this->assets as $asset)
-		{
-			if( ! $asset->exists())
-			{
-				throw new Exception(Craft::t($asset->filenamePath . ' could not be found.'));
-			}
-		}
-
-		return $this;
-	}
-
-	/**
 	 * Shorthand function to process CSS
 	 *
 	 * @param Array $assets
@@ -92,54 +59,6 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Perform pre-flight checks to ensure we can run.
-	 *
-	 * @return this
-	 */
-	public function flightcheck()
-	{
-		if ($this->settings === null)
-		{
-			throw new Exception(Craft::t('Not installed.'));
-		}
-
-		if( ! $this->settings->enabled)
-		{
-			throw new Exception(Craft::t('Disabled via settings.'));
-		}
-
-		if( ! $this->settings->validate())
-		{
-			$exceptionErrors = '';
-			foreach($this->settings->getErrors() as $error)
-			{
-				$exceptionErrors .= implode('. ', $error);
-			}
-
-			throw new Exception(Craft::t('Invalid plugin settings: ') . $exceptionErrors);
-		}
-		
-		if($this->settings->useResourceCache())
-		{
-			IOHelper::ensureFolderExists($this->settings->cachePath);
-		}
-		else
-		{
-			if( ! IOHelper::folderExists($this->settings->cachePath))
-			{
-				throw new Exception(Craft::t('Cache folder does not exist: ' . $this->settings->cachePath));
-			}
-		}
-
-		if( ! IOHelper::isWritable($this->settings->cachePath))
-		{
-			throw new Exception(Craft::t('Cache folder is not writable: ' . $this->settings->cachePath));
-		}
-
-		return $this;
-	}
-
-	/**
 	 * During startup, fetch settings from our plugin
 	 *
 	 * @return Void
@@ -161,32 +80,6 @@ class MinimeeService extends BaseApplicationComponent
 	public function js($assets, $settings = array())
 	{
 		return $this->run('js', $assets, $settings);
-	}
-
-	/**
-	 * Raise our 'onCreateCache' event
-	 *
-	 * @return Void
-	 */
-	public function onCreateCache($event)
-	{
-		$this->raiseEvent('onCreateCache', $event);
-	}
-
-	/**
-	 * Safely resets service to prepare for a clean run.
-	 *
-	 * @return this
-	 */
-	public function reset()
-	{
-		$this->_assets                  = array();
-		$this->_settings                = null;
-		$this->_type                    = '';
-		$this->_cacheHash               = '';
-		$this->_cacheTimestamp          = '';
-
-		return $this;
 	}
 
 	/**
@@ -241,6 +134,21 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Fetch or creates cache.
+	 *
+	 * @return String
+	 */
+	protected function cache()
+	{
+		if( ! $this->cacheExists())
+		{
+			$this->createCache();
+		}
+
+		return $this->getCacheUrl();
+	}
+
+	/**
 	 * Checks if the cache exists.
 	 *
 	 * @return Bool
@@ -272,6 +180,24 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Validate all assets prior to run.
+	 *
+	 * @return this
+	 */
+	protected function checkHeaders()
+	{
+		foreach($this->assets as $asset)
+		{
+			if( ! $asset->exists())
+			{
+				throw new Exception(Craft::t($asset->filenamePath . ' could not be found.'));
+			}
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Creates cache of assets.
 	 *
 	 * @return Void
@@ -291,38 +217,51 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Given an asset, fetches and returns minified contents.
+	 * Perform pre-flight checks to ensure we can run.
 	 *
-	 * @param Minimee_AssetBaseModel $asset
-	 * @return String
+	 * @return this
 	 */
-	protected function minifyAsset($asset)
+	protected function flightcheck()
 	{
-		switch ($asset->type) :
-			
-			case 'js':
+		if ($this->settings === null)
+		{
+			throw new Exception(Craft::t('Not installed.'));
+		}
 
-				craft()->minimee_helper->loadLibrary('jsmin');
-				$contents = \JSMin::minify($asset->contents);
+		if( ! $this->settings->enabled)
+		{
+			throw new Exception(Craft::t('Disabled via settings.'));
+		}
 
-			break;
-			
-			case 'css':
+		if( ! $this->settings->validate())
+		{
+			$exceptionErrors = '';
+			foreach($this->settings->getErrors() as $error)
+			{
+				$exceptionErrors .= implode('. ', $error);
+			}
 
-				craft()->minimee_helper->loadLibrary('css_urirewriter');
+			throw new Exception(Craft::t('Invalid plugin settings: ') . $exceptionErrors);
+		}
+		
+		if($this->settings->useResourceCache())
+		{
+			IOHelper::ensureFolderExists($this->settings->cachePath);
+		}
+		else
+		{
+			if( ! IOHelper::folderExists($this->settings->cachePath))
+			{
+				throw new Exception(Craft::t('Cache folder does not exist: ' . $this->settings->cachePath));
+			}
+		}
 
-				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
+		if( ! IOHelper::isWritable($this->settings->cachePath))
+		{
+			throw new Exception(Craft::t('Cache folder is not writable: ' . $this->settings->cachePath));
+		}
 
-				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
-
-				craft()->minimee_helper->loadLibrary('minify');
-				$contents = \Minify_CSS::minify($contents);
-
-			break;
-
-		endswitch;
-
-		return $contents;
+		return $this;
 	}
 
 	/**
@@ -410,6 +349,67 @@ class MinimeeService extends BaseApplicationComponent
 	protected function getType()
 	{
 		return $this->_type;
+	}
+
+	/**
+	 * Given an asset, fetches and returns minified contents.
+	 *
+	 * @param Minimee_AssetBaseModel $asset
+	 * @return String
+	 */
+	protected function minifyAsset($asset)
+	{
+		switch ($asset->type) :
+			
+			case 'js':
+
+				craft()->minimee_helper->loadLibrary('jsmin');
+				$contents = \JSMin::minify($asset->contents);
+
+			break;
+			
+			case 'css':
+
+				craft()->minimee_helper->loadLibrary('css_urirewriter');
+
+				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
+
+				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
+
+				craft()->minimee_helper->loadLibrary('minify');
+				$contents = \Minify_CSS::minify($contents);
+
+			break;
+
+		endswitch;
+
+		return $contents;
+	}
+
+	/**
+	 * Raise our 'onCreateCache' event
+	 *
+	 * @return Void
+	 */
+	protected function onCreateCache($event)
+	{
+		$this->raiseEvent('onCreateCache', $event);
+	}
+
+	/**
+	 * Safely resets service to prepare for a clean run.
+	 *
+	 * @return this
+	 */
+	protected function reset()
+	{
+		$this->_assets                  = array();
+		$this->_settings                = null;
+		$this->_type                    = '';
+		$this->_cacheHash               = '';
+		$this->_cacheTimestamp          = '';
+
+		return $this;
 	}
 
 	/**

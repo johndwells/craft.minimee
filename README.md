@@ -1,4 +1,4 @@
-## Minimee for Craft - v0.7.1
+## Minimee for Craft - v0.7.2
 
 A [Craft](http://buildwithcraft.com) CMS port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -147,7 +147,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
     {{ getFootHtml() | minimee }}
 
 > **Note that any inline CSS or JS passed via `{% includeJs %}`, `{% includeCss %}` and`{% includeHiResCss %}` is currently not supported.**
-
 
 ## Roadmap - 1.0 release
 
