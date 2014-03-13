@@ -79,7 +79,6 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function defineSettings()
 	{
-		// use our settings model to define settings
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 
 		$settings = new Minimee_SettingsModel();
@@ -117,7 +116,6 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getResourcePath($path)
 	{
-		// Are they requesting a drink image?
 		if (strncmp($path, 'minimee/', 8) === 0)
 		{
 			return craft()->path->getStoragePath().'minimee/'.substr($path, 8);
