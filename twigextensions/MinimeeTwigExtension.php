@@ -46,7 +46,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 	public function minimeeFilter($html, $settings = array())
 	{
 		// we need a type to continue
-		$type = craft()->minimee_helper->detectType($html);
+		$type = $this->detectType($html);
 		if( ! $type)
 		{
 			Craft::log('Could not determine the type of asset to process.', LogLevel::Warning);
@@ -75,4 +75,25 @@ class MinimeeTwigExtension extends \Twig_Extension
 		// return minified tag(s) as Twig Markup
 		return craft()->minimee->returnHtmlAsTwigMarkup($minifiedAsTags);
 	}
+	/**
+	 * Quick string detection to determine type
+	 *
+	 * @param string
+	 * @param bool|string
+	 */
+	protected function detectType($html = '')
+	{
+		if(strpos($html, '<link') !== FALSE)
+		{
+			return 'css';
+		}
+
+		if(strpos($html, '<script') !== FALSE)
+		{
+			return 'js';
+		}
+
+		return FALSE;
+	}
+
 }

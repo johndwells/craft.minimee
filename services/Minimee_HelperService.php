@@ -72,27 +72,6 @@ class Minimee_HelperService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Quick string detection to determine type
-	 *
-	 * @param string
-	 * @param bool|string
-	 */
-	public function detectType($html = '')
-	{
-		if(strpos($html, '<link') !== FALSE)
-		{
-			return 'css';
-		}
-
-		if(strpos($html, '<script') !== FALSE)
-		{
-			return 'js';
-		}
-
-		return FALSE;
-	}
-
-	/**
 	 * Loads our requested library
 	 *
 	 * On first call it will adjust the include_path, for Minify support
