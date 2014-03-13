@@ -16,11 +16,13 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	protected $_assets                  = array();	// array of Minimee_AssetBaseModel
-	protected $_type                    = '';		// css or js
-	protected $_cacheHash       		= '';       // a hash of all asset filenames together
-	protected $_cacheTimestamp  		= '';       // timestamp of cache
-	protected $_settings                = null;		// instance of Minimee_SettingsModel
+	protected $_assets                  = array();  // array of Minimee_AssetBaseModel
+	protected $_type                    = '';       // css or js
+	protected $_cacheHash               = '';       // a hash of all asset filenames together
+	protected $_cacheTimestamp          = '';       // timestamp of cache
+	protected $_settings                = null;     // instance of Minimee_SettingsModel
+
+	protected static $registeredMinifyLoader;       // Internal flag indicating if we've registered the Minify Loader class
 
 
 	/*================= PUBLIC METHODS ================= */
@@ -410,6 +412,65 @@ class MinimeeService extends BaseApplicationComponent
 		// from old _isURL() file from Carabiner Asset Management Library
 		// modified to support leading with double slashes
 		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
+	}
+
+	/**
+	 * Loads our requested library
+	 *
+	 * On first call it will adjust the include_path, for Minify support
+	 *
+	 * @param   string  Name of library to require
+	 * @return  void
+	 */
+	protected function loadLibrary($which)
+	{
+		if( is_null(self::$registeredMinifyLoader))
+		{
+			// try to bump our memory limits for good measure
+			@ini_set('memory_limit', '12M');
+			@ini_set('memory_limit', '16M');
+			@ini_set('memory_limit', '32M');
+			@ini_set('memory_limit', '64M');
+			@ini_set('memory_limit', '128M');
+			@ini_set('memory_limit', '256M');
+
+			require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php');
+			\Minify_Loader::register();
+
+			self::$registeredMinifyLoader = true;
+		}
+
+		switch ($which) :
+
+			case ('minify') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS.php');
+			break;
+
+			case ('cssmin') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/CSSmin.php');
+			break;
+			
+			case ('css_urirewriter') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS/UriRewriter.php');
+			break;
+
+			case ('curl') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/EpiCurl.php');
+			break;
+			
+			case ('jsmin') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMin.php');
+			break;
+			
+			case ('jsminplus') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMinPlus.php');
+			break;
+			
+			case ('html') :
+				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/HTML.php');
+			break;
+
+		endswitch;
 	}
 
 	/**
