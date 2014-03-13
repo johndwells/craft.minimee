@@ -338,7 +338,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getCacheFilename()
 	{
-		if($this->settings->isResourceCache())
+		if($this->settings->useResourceCache())
 		{
 			return sprintf('%s.%s', $this->cacheHash, $this->type);
 		}
@@ -383,7 +383,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getCacheUrl()
 	{
-		if($this->settings->isResourceCache())
+		if($this->settings->useResourceCache())
 		{
 			$path = '/minimee/' . $this->cacheFilename;
 

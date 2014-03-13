@@ -119,7 +119,7 @@ class Minimee_SettingsModel extends BaseModel
 	/**
 	 * @return Bool
 	 */
-	public function isResourceCache()
+	public function useResourceCache()
 	{
 		$cachePath = parent::getAttribute('cachePath');
 		$cacheUrl = parent::getAttribute('cacheUrl');
