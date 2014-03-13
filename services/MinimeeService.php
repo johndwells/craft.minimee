@@ -83,7 +83,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	public function getCacheFilenameUrl()
+	public function getCacheUrl()
 	{
 		if($this->settings->isResourceCache())
 		{
@@ -404,7 +404,7 @@ class MinimeeService extends BaseApplicationComponent
 			$this->createCache();
 		}
 
-		return $this->cacheFilenameUrl;
+		return $this->getCacheUrl();
 	}
 
 	/**
