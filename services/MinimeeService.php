@@ -400,6 +400,19 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Determine if string is valid URL
+	 *
+	 * @param   string  String to test
+	 * @return  bool    TRUE if yes, FALSE if no
+	 */
+	protected function isUrl($string)
+	{
+		// from old _isURL() file from Carabiner Asset Management Library
+		// modified to support leading with double slashes
+		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
+	}
+
+	/**
 	 * Given an asset, fetches and returns minified contents.
 	 *
 	 * @param Minimee_AssetBaseModel $asset
@@ -468,7 +481,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		foreach($assets as $asset)
 		{
-			if (craft()->minimee_helper->isUrl($asset))
+			if ($this->isUrl($asset))
 			{
 				$model = array(
 					'filename' => $asset,

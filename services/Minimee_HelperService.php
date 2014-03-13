@@ -22,19 +22,6 @@ class Minimee_HelperService extends BaseApplicationComponent
 	 * Internal flag indicating if we've registered the Minify Loader class
 	 */
 	public static $registeredMinifyLoader;
-
-	/**
-	 * Determine if string is valid URL
-	 *
-	 * @param   string  String to test
-	 * @return  bool    TRUE if yes, FALSE if no
-	 */
-	public function isUrl($string)
-	{
-		// from old _isURL() file from Carabiner Asset Management Library
-		// modified to support leading with double slashes
-		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
-	}
 	// ------------------------------------------------------
 
 	/**
