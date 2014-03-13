@@ -45,4 +45,30 @@ class Minimee_AssetBaseModel extends BaseModel
 			'type'          => array(AttributeType::Enum, 'values' => "css,js")
 		);
 	}
+
+	/**
+	 * Modified remove_double_slashes()
+	 *
+	 * If the string passed is a URL, it will preserve leading double slashes
+	 *
+	 * @param 	string	String to remove double slashes from
+	 * @param 	boolean	True if string is a URL
+	 * @return 	string	String without double slashes
+	 */
+	protected function removeDoubleSlashes($string, $url = FALSE)
+	{
+		// is our string a URL?
+		if ($url)
+		{
+			// regex pattern removes all double slashes, preserving http:// and '//' at start
+			return preg_replace("#([^:])//+#", "\\1/", $string);
+		}
+		
+		// nope just a path
+		else
+		{
+			// regex pattern removes all double slashes - straight from EE->functions->remove_double_slashes();
+			return preg_replace("#(^|[^:])//+#", "\\1/", $string);
+		}
+	}
 }

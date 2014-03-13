@@ -75,11 +75,11 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	{
 		switch ($name) :
 			case ('filenamePath') :
-				$value = craft()->minimee_helper->removeDoubleSlashes($value, false);
+				$value = $this->removeDoubleSlashes($value, false);
 			break;
 
 			case ('filenameUrl') :
-				$value = craft()->minimee_helper->removeDoubleSlashes($value, true);
+				$value = $this->removeDoubleSlashes($value, true);
 			break;
 		endswitch;
 
