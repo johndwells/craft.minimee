@@ -74,11 +74,11 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	{
 		switch ($name) :
 			case ('filenamePath') :
-				$value = craft()->minimee_helper->removeDoubleSlashes($value, true);
+				$value = $this->removeDoubleSlashes($value, true);
 			break;
 
 			case ('filenameUrl') :
-				$value = craft()->minimee_helper->removeDoubleSlashes($value, true);
+				$value = $this->removeDoubleSlashes($value, true);
 			break;
 		endswitch;
 

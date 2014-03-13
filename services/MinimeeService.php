@@ -485,20 +485,20 @@ class MinimeeService extends BaseApplicationComponent
 			
 			case 'js':
 
-				craft()->minimee_helper->loadLibrary('jsmin');
+				$this->loadLibrary('jsmin');
 				$contents = \JSMin::minify($asset->contents);
 
 			break;
 			
 			case 'css':
 
-				craft()->minimee_helper->loadLibrary('css_urirewriter');
+				$this->loadLibrary('css_urirewriter');
 
 				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 
 				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
 
-				craft()->minimee_helper->loadLibrary('minify');
+				$this->loadLibrary('minify');
 				$contents = \Minify_CSS::minify($contents);
 
 			break;
