@@ -1,4 +1,4 @@
-## Minimee for Craft - v0.6.16
+## Minimee for Craft - v0.7.0
 
 A [Craft](http://buildwithcraft.com) CMS port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -151,7 +151,8 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Roadmap - 1.0 release
 
-* default enabled upon install
+* allow settings via config file
+* ability to separately enable/disable combining, minifying of JS and CSS
 * improve/refactor internal abort()
 * all messages/instructions translatable
 
@@ -163,7 +164,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * additional hooks/events
 * option to return cache filename only
 * run validation while saving settings
-* ability to separately enable/disable combining, minifying of JS and CSS
 * try to resolve URL assets to local assets
 * give CP ability to clear cache
 * unit test?

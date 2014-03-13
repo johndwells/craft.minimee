@@ -62,8 +62,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		}
 
 		// hand off the rest to our service
-		$settings = ( ! is_array($settings)) ? array($settings) : $settings;
-		$minified = craft()->minimee->setSettings($settings)->$type($assets);
+		$minified = craft()->minimee->$type($assets, $settings);
 
 		// false means we failed, so return original markup
 		if( ! $minified)

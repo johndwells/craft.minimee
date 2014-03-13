@@ -50,7 +50,7 @@ class MinimeeVariable
 	 */
 	protected function _run($type, $assets, $settings = array())
 	{
-		$minified = craft()->minimee->setSettings($settings)->$type($assets);
+		$minified = craft()->minimee->$type($assets, $settings);
 
 		if( ! $minified)
 		{

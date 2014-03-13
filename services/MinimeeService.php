@@ -63,11 +63,12 @@ class MinimeeService extends BaseApplicationComponent
 	 * Shorthand function to process CSS
 	 *
 	 * @param Array $assets
+	 * @param Array $settings
 	 * @return String|Bool
 	 */
-	public function css($assets)
+	public function css($assets, $settings = array())
 	{
-		return $this->run('css', $assets);
+		return $this->run('css', $assets, $settings);
 	}
 
 	/**
@@ -154,11 +155,12 @@ class MinimeeService extends BaseApplicationComponent
 	 * Shorthand function to process JS
 	 *
 	 * @param Array $assets
+	 * @param Array $settings
 	 * @return String|Bool
 	 */
-	public function js($assets)
+	public function js($assets, $settings = array())
 	{
-		return $this->run('js', $assets);
+		return $this->run('js', $assets, $settings);
 	}
 
 	/**
@@ -179,6 +181,7 @@ class MinimeeService extends BaseApplicationComponent
 	public function reset()
 	{
 		$this->_assets                  = array();
+		$this->_settings                = null;
 		$this->_type                    = '';
 		$this->_cacheHash               = '';
 		$this->_cacheTimestamp          = '';
@@ -191,15 +194,18 @@ class MinimeeService extends BaseApplicationComponent
 	 *
 	 * @param String $type
 	 * @param Array $assets
+	 * @param Array $settings
 	 * @return String|Bool
 	 */
-	public function run($type, $assets)
+	public function run($type, $assets, $settings = array())
 	{
 		$assets = (is_array($assets)) ? $assets : array($assets);
+		$settings = (is_array($settings)) ? $settings : array($settings);
 
 		try
 		{
 			return $this->reset()
+						->setSettings($settings)
 						->setType($type)
 						->setAssets($assets)
 						->flightcheck()
@@ -210,26 +216,6 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			return $this->abort($e);
 		}
-	}
-
-	/**
-	 * Configure our service based off the settings in plugin,
-	 * allowing plugin settings to be overridden at runtime.
-	 *
-	 * @param Array $settingsOverrides
-	 * @return void
-	 */
-	public function setSettings($settingsOverrides)
-	{
-		$plugin = craft()->plugins->getPlugin('minimee');
-
-		$pluginSettings = $plugin->getSettings()->getAttributes();
-
-		$runtimeSettings = (is_array($settingsOverrides)) ? array_merge($pluginSettings, $settingsOverrides) : $pluginSettings;
-
-		$this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
-
-		return $this;
 	}
 
 
@@ -481,6 +467,26 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$timestamp = $lastTimeModified->getTimestamp();
 		$this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+	}
+
+	/**
+	 * Configure our service based off the settings in plugin,
+	 * allowing plugin settings to be overridden at runtime.
+	 *
+	 * @param Array $settingsOverrides
+	 * @return void
+	 */
+	protected function setSettings($settingsOverrides)
+	{
+		$plugin = craft()->plugins->getPlugin('minimee');
+
+		$pluginSettings = $plugin->getSettings()->getAttributes();
+
+		$runtimeSettings = (is_array($settingsOverrides)) ? array_merge($pluginSettings, $settingsOverrides) : $pluginSettings;
+
+		$this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
+
+		return $this;
 	}
 
 	/**
