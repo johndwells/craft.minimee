@@ -70,7 +70,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 			return craft()->minimee_helper->returnHtmlAsTwigMarkup($html);
 		}
 
-		$minifiedAsTags = craft()->minimee_helper->makeTagsByType($type, $minified);
+		$minifiedAsTags = craft()->minimee->makeTagsByType($type, $minified);
 
 		// return minified tag(s) as Twig Markup
 		return craft()->minimee_helper->returnHtmlAsTwigMarkup($minifiedAsTags);

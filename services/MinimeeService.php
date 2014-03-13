@@ -83,6 +83,40 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Generate the HTML tag based on type
+	 * In future this will be configurable.
+	 *
+	 * @param String $type
+	 * @param Array $assets
+	 * @return String
+	 */
+	public function makeTagsByType($type, $assets = array())
+	{
+		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
+		$tags = '';
+
+		foreach($assets as $asset)
+		{
+			switch ($type)
+			{
+				case ('css') :
+
+					$tags .= sprintf('<link rel="stylesheet" type="text/css" href="%s"/>', $asset);
+
+				break;
+
+				case ('js') :
+
+					$tags .= sprintf('<script type="text/javascript" src="%s"></script>', $asset);
+
+				break;
+			}
+		}
+
+		return $tags;
+	}
+
+	/**
 	 * Main service function that encapsulates an entire Minimee run
 	 *
 	 * @param String $type
