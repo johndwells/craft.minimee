@@ -119,7 +119,7 @@ class MinimeeService extends BaseApplicationComponent
 			throw new Exception(Craft::t('Invalid plugin settings: ') . $exceptionErrors);
 		}
 		
-		if($this->settings->isResourceCache())
+		if($this->settings->useResourceCache())
 		{
 			IOHelper::ensureFolderExists($this->settings->cachePath);
 		}
@@ -258,7 +258,7 @@ class MinimeeService extends BaseApplicationComponent
 			return false;
 		}
 
-		if($this->settings->isResourceCache())
+		if($this->settings->useResourceCache())
 		{
 			$cacheLastTimeModified = IOHelper::getLastTimeModified($this->cacheFilenamePath);
 
