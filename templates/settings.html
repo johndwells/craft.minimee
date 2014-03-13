@@ -25,7 +25,7 @@
 
 {{
 	forms.textField({
-		label: "<strong>Cache Path</strong>:"|t,
+		label: "<strong>Cache Path</strong>*:"|t,
 		id: 'cachePath',
 		name: 'cachePath',
 		placeholder : '/var/www/public/cache/',
@@ -36,7 +36,7 @@
 
 {{
 	forms.textField({
-		label: "<strong>Cache Url</strong>:"|t,
+		label: "<strong>Cache Url</strong>*:"|t,
 		id: 'cacheUrl',
 		name: 'cacheUrl',
 		placeholder : 'http://domain.com/cache/',
@@ -44,3 +44,5 @@
 		value: (settings.cacheUrl is defined ? settings.cacheUrl : null)
 	})
 }}
+
+<p>* <strong>Cache Path</strong> <em>and</em> <strong>Cache URL</strong> <em>must both be either empty or non-empty.</em></p>
