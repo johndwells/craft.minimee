@@ -82,6 +82,8 @@ class Minimee_SettingsModel extends BaseModel
 			'filesystemPath'    => AttributeType::String,
 			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
+			'cssTagTemplate' 	=> AttributeType::String,
+			'jsTagTemplate' 	=> AttributeType::String,
 		);
 	}
 

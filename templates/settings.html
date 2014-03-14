@@ -74,3 +74,27 @@
 }}
 
 <p>* <strong>Cache Path</strong> <em>and</em> <strong>Cache URL</strong> <em>must both be either empty or non-empty.</em></p>
+
+<hr>
+
+{{
+	forms.textField({
+		label: "Tag template for <strong>CSS</strong>:"|t,
+		id: 'cssTagTemplate',
+		name: 'cssTagTemplate',
+		placeholder : '<link rel="stylesheet" href="%s">',
+		instructions : "Default is &lt;link rel=&quot;stylesheet&quot; href=&quot;%s&quot;&gt;."|t,
+		value: settings.cssTagTemplate
+	})
+}}
+
+{{
+	forms.textField({
+		label: "Tag template for <strong>JS</strong>:"|t,
+		id: 'jsTagTemplate',
+		name: 'jsTagTemplate',
+		placeholder : '<script src="%s"></script>',
+		instructions : "Default is &lt;script src=&quot;%s&quot;&gt;&lt;/script&gt;."|t,
+		value: settings.jsTagTemplate
+	})
+}}
