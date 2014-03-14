@@ -109,6 +109,15 @@ class MinimeePlugin extends BasePlugin
 		return new MinimeeTwigExtension();
 	}
 
+	public function prepSettings($settings)
+	{
+		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
+
+		$settingsModel = new Minimee_SettingsModel();
+
+		return $settingsModel->prepSettings($settings);
+	}
+
 	/**
 	 * Enable ability to serve cache assets from resources/minimee folder
 	 *

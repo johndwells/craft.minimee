@@ -24,6 +24,18 @@ class Minimee_SettingsModel extends BaseModel
 		return ($this->enabled) ? '1' : '0';
 	}
 
+	public function prepSettings($settings)
+	{
+		// cast any booleans
+		$settings['enabled'] = (bool) $settings['enabled'];
+		$settings['combineCssEnabled'] = (bool) $settings['combineCssEnabled'];
+		$settings['combineJsEnabled'] = (bool) $settings['combineJsEnabled'];
+		$settings['minifyCssEnabled'] = (bool) $settings['minifyCssEnabled'];
+		$settings['minifyJsEnabled'] = (bool) $settings['minifyJsEnabled'];
+		
+		return $settings;
+	}
+
 	/**
 	 * Add custom validation rules to routine.
 	 *
@@ -66,8 +78,8 @@ class Minimee_SettingsModel extends BaseModel
 		return array(
 			'cachePath'       	=> AttributeType::String,
 			'cacheUrl'       	=> AttributeType::String,
-			'enabled'           => array(AttributeType::Enum, 'values' => 'on', 'default' => 'on'),
-			'filesystemPath'    => AttributeType::String
+			'enabled'           => array(AttributeType::Bool, 'default' => true),
+			'filesystemPath'    => AttributeType::String,
 		);
 	}
 
