@@ -12,6 +12,34 @@
 
 <hr>
 
+<div class="field">
+	<label><strong>{{ "Minify Assets" | t}}</strong></label>
+
+	<div class="instructions">
+		<p>{{ "Specify which types of assets to minify." | t }}</p>
+	</div>
+
+	{{
+		forms.checkbox({
+			label: "CSS"|t,
+			name: "minifyCssEnabled",
+			value : 'on',
+			checked: settings.minifyCssEnabled
+		})
+	}}
+	&nbsp;&nbsp;&nbsp;
+	{{
+		forms.checkbox({
+			label: "JS"|t,
+			name: "minifyJsEnabled",
+			value : 'on',
+			checked: settings.minifyJsEnabled
+		})
+	}}
+
+</div>
+<hr>
+
 {{
 	forms.textField({
 		label: "<strong>File System Path</strong> to your site's index.php:"|t,

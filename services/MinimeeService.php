@@ -485,8 +485,15 @@ class MinimeeService extends BaseApplicationComponent
 			
 			case 'js':
 
-				$this->loadLibrary('jsmin');
-				$contents = \JSMin::minify($asset->contents);
+				if($this->settings->minifyJsEnabled)
+				{
+					$this->loadLibrary('jsmin');
+					$contents = \JSMin::minify($asset->contents);
+				}
+				else
+				{
+					$contents = $asset->contents;
+				}
 
 			break;
 			
@@ -498,8 +505,11 @@ class MinimeeService extends BaseApplicationComponent
 
 				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
 
-				$this->loadLibrary('minify');
-				$contents = \Minify_CSS::minify($contents);
+				if($this->settings->minifyJsEnabled)
+				{
+					$this->loadLibrary('minify');
+					$contents = \Minify_CSS::minify($contents);
+				}
 
 			break;
 

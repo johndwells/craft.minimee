@@ -80,6 +80,8 @@ class Minimee_SettingsModel extends BaseModel
 			'cacheUrl'       	=> AttributeType::String,
 			'enabled'           => array(AttributeType::Bool, 'default' => true),
 			'filesystemPath'    => AttributeType::String,
+			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
+			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
 		);
 	}
 
