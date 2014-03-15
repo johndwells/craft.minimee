@@ -6,14 +6,14 @@ A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://g
 
 Minimize, combine & cache your CSS and JS files. Because size (still) DOES matter.
 
-* [On github](https://github.com/johndwells/Minimee-Craft)
-* [Support](https://github.com/johndwells/Minimee-Craft/issues)
+* [On github](https://github.com/johndwells/craft.minimee)
+* [Support](https://github.com/johndwells/craft.minimee/issues)
 
 ---
 
 ## Installation
 
-1. Download latest copy from [github](https://github.com/johndwells/Minimee-Craft)
+1. Download latest release from [github](https://github.com/johndwells/craft.minimee/releases)
 2. Unzip and rename folder to `minimee`
 3. Copy `minimee` into your `app/plugins` directory
 4. Log into Craft and go to `Settings > Plugins`
