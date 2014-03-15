@@ -38,6 +38,35 @@
 	}}
 
 </div>
+
+<div class="field">
+
+	<label><strong>{{ "Combine Assets" | t}}</strong></label>
+
+	<div class="instructions">
+		<p>{{ "Specify which types of assets to combine." | t }}</p>
+	</div>
+
+	{{
+		forms.checkbox({
+			label: "CSS"|t,
+			name: "combineCssEnabled",
+			value : 'on',
+			checked: settings.combineCssEnabled
+		})
+	}}
+	&nbsp;&nbsp;&nbsp;
+	{{
+		forms.checkbox({
+			label: "JS"|t,
+			name: "combineJsEnabled",
+			value : 'on',
+			checked: settings.combineJsEnabled
+		})
+	}}
+
+</div>
+
 <hr>
 
 {{

@@ -134,35 +134,6 @@ class MinimeeService extends BaseApplicationComponent
 		return new \Twig_Markup($html, $charset);
 	}
 
-	/**
-	 * Main service function that encapsulates an entire Minimee run
-	 *
-	 * @param String $type
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return String|Bool
-	 */
-	public function run($type, $assets, $settings = array())
-	{
-		$assets = (is_array($assets)) ? $assets : array($assets);
-		$settings = (is_array($settings)) ? $settings : array($settings);
-
-		try
-		{
-			return $this->reset()
-						->setSettings($settings)
-						->setType($type)
-						->setAssets($assets)
-						->flightcheck()
-						->checkHeaders()
-						->cache();
-		}
-		catch (Exception $e)
-		{
-			return $this->abort($e);
-		}
-	}
-
 
 	/*================= PROTECTED METHODS ================= */
 
@@ -266,6 +237,25 @@ class MinimeeService extends BaseApplicationComponent
 		IOHelper::writeToFile($this->cacheFilenamePath, $contents);
 
 		$this->onCreateCache(new Event($this));
+	}
+
+	/**
+	 * Return whether we should combine our cache or not
+	 *
+	 * @return Bool
+	 */
+	protected function doCombine()
+	{
+		switch($this->type)
+		{
+			case 'css' :
+				return $this->settings->combineCssEnabled;
+			break;
+
+			case 'js' :
+				return $this->settings->combineJsEnabled;
+			break;
+		}
 	}
 
 	/**
@@ -547,11 +537,60 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Main service function that encapsulates an entire Minimee run
+	 *
+	 * @param String $type
+	 * @param Array $assets
+	 * @param Array $settings
+	 * @return Array|Bool
+	 */
+	protected function run($type, $assets, $settings = array())
+	{
+		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
+		$settings = ( ! is_array($settings)) ? array($settings) : $settings;
+
+		try
+		{
+			$this->reset()
+				 ->setSettings($settings)
+				 ->setType($type)
+				 ->setAssets($assets)
+				 ->flightcheck()
+				 ->checkHeaders();
+
+			$return = array();
+			if($this->doCombine())
+			{
+				$return[] = $this->cache();
+			}
+			else
+			{
+				foreach($assets as $asset)
+				{
+					$return[] = $this->reset()
+									 ->setSettings($settings)
+									 ->setType($type)
+									 ->setAssets($asset)
+									 ->cache();
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			return $this->abort($e);
+		}
+
+		return $return;
+	}
+
+	/**
 	 * @param Array $assets
 	 * @return this
 	 */
 	protected function setAssets($assets)
 	{
+		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
+
 		foreach($assets as $asset)
 		{
 			if ($this->isUrl($asset))
@@ -612,11 +651,13 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function setSettings($settingsOverrides)
 	{
+		$settingsOverrides = ( ! is_array($settingsOverrides)) ? array($settingsOverrides) : $settingsOverrides;
+
 		$plugin = craft()->plugins->getPlugin('minimee');
 
 		$pluginSettings = $plugin->getSettings()->getAttributes();
 
-		$runtimeSettings = (is_array($settingsOverrides)) ? array_merge($pluginSettings, $settingsOverrides) : $pluginSettings;
+		$runtimeSettings = array_merge($pluginSettings, $settingsOverrides);
 
 		$this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
 
