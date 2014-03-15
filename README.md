@@ -1,4 +1,4 @@
-## Minimee for Craft - v0.7.3
+## Minimee for Craft - v0.7.4
 
 A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -157,12 +157,13 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 ## Roadmap - 1.0 release
 
 * allow settings via config file
-* ability to separately enable/disable combining, minifying of JS and CSS
 * improve/refactor internal abort()
 * all messages/instructions translatable
+* unit test?
 
 ## Roadmap - post 1.0 release
 
+* tie the cache hash to settings and/or last date modified of settings/config and/or minimee version?
 * support [includeJs](http://buildwithcraft.com/docs/templating/tags#includeJs), [includeCss](http://buildwithcraft.com/docs/templating/tags#includeCss) and [includeHiResCss](http://buildwithcraft.com/docs/templating/tags#includeHiResCss)?
 * make tag template configurable
 * improved logging
@@ -171,7 +172,13 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * run validation while saving settings
 * try to resolve URL assets to local assets
 * give CP ability to clear cache
-* unit test?
+
+## Unit Test All The Things
+
+### Assert that:
+* a CSS URL is rewritten even when CSS minification is disabled
+* CSS/JS are not combined when combineCssEnabled / combineJsEnabled is off
+* CSS/JS are not minified when minifyCssEnabled / minifyJsEnabled is off
 
 ## License
 
