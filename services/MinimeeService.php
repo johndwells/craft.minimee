@@ -22,6 +22,7 @@ class MinimeeService extends BaseApplicationComponent
 	protected $_cacheTimestamp          = '';       // timestamp of cache
 	protected $_settings                = null;     // instance of Minimee_SettingsModel
 
+	protected static $initSettings;					// static array of settings, a merge of DB and filesystem settings
 	protected static $registeredMinifyLoader;       // Internal flag indicating if we've registered the Minify Loader class
 
 
@@ -61,7 +62,7 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * During startup, fetch settings from our plugin
+	 * During startup, fetch settings from our plugin / config
 	 *
 	 * @return Void
 	 */
@@ -69,7 +70,26 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		parent::init();
 
-		$this->setSettings(array());
+		if(is_null(self::$initSettings))
+		{
+			$plugin = craft()->plugins->getPlugin('minimee');
+
+			$pluginSettings = $plugin->getSettings()->getAttributes();
+
+			self::$initSettings = $pluginSettings;
+
+			// as of v1.4 we can take filesystem configs
+			if(version_compare('1.4', craft()->getVersion(), '<='))
+			{
+				foreach($pluginSettings as $attribute => $value)
+				{
+					if(craft()->config->exists($attribute, 'minimee'))
+					{
+						self::$initSettings[$attribute] = craft()->config->get($attribute, 'minimee');
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -647,11 +667,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$settingsOverrides = ( ! is_array($settingsOverrides)) ? array($settingsOverrides) : $settingsOverrides;
 
-		$plugin = craft()->plugins->getPlugin('minimee');
-
-		$pluginSettings = $plugin->getSettings()->getAttributes();
-
-		$runtimeSettings = array_merge($pluginSettings, $settingsOverrides);
+		$runtimeSettings = array_merge(self::$initSettings, $settingsOverrides);
 
 		$this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
 

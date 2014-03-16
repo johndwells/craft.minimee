@@ -1,5 +1,11 @@
 {% import "_includes/forms" as forms %}
 
+{% if filesystemConfigExists %}
+	<div class="error" style="padding: 1em; border: 1px solid rgb(218,90,71); background-color: rgba(218,90,71,0.1)">
+		<p>{{ "Caution: these settings may be overridden by the contents of <code>`craft/app/config/minimee.php`</code>."|t | raw }}</p>
+	</div>
+{% endif %}
+
 {{
 	forms.lightswitchField({
 		onLabel:	"On",

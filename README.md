@@ -20,7 +20,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 5. Click `install` for Minimee
 6. Visit Minimee plugin settings and optionally configure (see below)
 
-## Configuration
+## Configuration (optional)
 
 ### Step 1: Help Minimee finds your assets
 

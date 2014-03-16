@@ -92,8 +92,12 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getSettingsHtml()
 	{
+		$filesystemConfigPath = CRAFT_CONFIG_PATH . 'minimee.php';
+
 		return craft()->templates->render('minimee/settings', array(
-			'settings' => $this->getSettings()
+			'settings' => $this->getSettings(),
+			'filesystemConfigExists' => IOHelper::fileExists($filesystemConfigPath)
+
 		));
 	}
 
