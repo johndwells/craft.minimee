@@ -418,13 +418,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if( is_null(self::$registeredMinifyLoader))
 		{
-			// try to bump our memory limits for good measure
-			@ini_set('memory_limit', '12M');
-			@ini_set('memory_limit', '16M');
-			@ini_set('memory_limit', '32M');
-			@ini_set('memory_limit', '64M');
-			@ini_set('memory_limit', '128M');
-			@ini_set('memory_limit', '256M');
+			craft()->config->maxPowerCaptain();
 
 			require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php');
 			\Minify_Loader::register();
