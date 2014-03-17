@@ -156,17 +156,15 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Roadmap - 1.0 release
 
-* allow settings via config file
 * improve/refactor internal abort()
 * all messages/instructions translatable
-* unit test?
+* improved logging
+* unit test
 
 ## Roadmap - post 1.0 release
 
 * tie the cache hash to settings and/or last date modified of settings/config and/or minimee version?
 * support [includeJs](http://buildwithcraft.com/docs/templating/tags#includeJs), [includeCss](http://buildwithcraft.com/docs/templating/tags#includeCss) and [includeHiResCss](http://buildwithcraft.com/docs/templating/tags#includeHiResCss)?
-* make tag template configurable
-* improved logging
 * additional hooks/events
 * option to return cache filename only
 * run validation while saving settings
@@ -174,6 +172,8 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * give CP ability to clear cache
 
 ## Unit Test All The Things
+
+__Note to self about what sort of things to cover...__
 
 ### Assert that:
 * a CSS URL is rewritten even when CSS minification is disabled
