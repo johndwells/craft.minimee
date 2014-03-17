@@ -24,13 +24,13 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ### Step 1: Help Minimee finds your assets
 
-![filesystemPath](resources/img/filesystemPath.png)
+![filesystemPath](plugins/minimee/resources/img/filesystemPath.png)
 
 By default, Minimee takes the path to your local asset (e.g. `/asset/css/normalize.css`), and appends this to `$_SERVER['DOCUMENT_ROOT']`. This tends to work for 99% use cases; however if your setup is such that your local assets are not at your webroot, or if your server does not correctly report the value for `DOCUMENT_ROOT`, then you can specify what value it should be.
 
 ### Step 2: Tell Minimee where to generate the cache
 
-![cachePathAndUrl](resources/img/cachePathAndUrl.png)
+![cachePathAndUrl](plugins/minimee/resources/img/cachePathAndUrl.png)
 
 By default, Minimee stores cached assets in Craft's `craft/storage` folder, which likely sits above webroot. The cache is then delivered by Craft itself, via a special "resource" url, e.g. `http://domain.com/resources/minimee/filename.timestamp.ext`.
 
