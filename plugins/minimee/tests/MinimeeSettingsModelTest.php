@@ -18,7 +18,7 @@ class MinimeeSettingsModelTest extends BaseTest
 		$this->_craft = m::mock('Craft\Craft');
 		$this->_craft->shouldReceive('t')->andReturn('anything');
 
-		require_once dirname(__FILE__) . '/../models/Minimee_SettingsModel.php';
+		require_once __DIR__ . '/../models/Minimee_SettingsModel.php';
 	}
 
 	public function testUseResourceCacheWhenBothNonEmpty()
