@@ -45,6 +45,11 @@ class Minimee_SettingsModel extends BaseModel
 	 */
 	public function validate($attributes = null, $clearErrors = true)
 	{
+		if($clearErrors)
+		{
+			$this->clearErrors();
+		}
+
 		$this->validateCachePathAndUrl();
 
 		return parent::validate($attributes, false);
