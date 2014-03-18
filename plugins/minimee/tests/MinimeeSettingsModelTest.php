@@ -5,7 +5,6 @@ use \Mockery as m;
 
 class MinimeeSettingsModelTest extends BaseTest
 {
-	protected $_craft;
 	protected $_model;
 
 	/**
@@ -15,9 +14,6 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
-		$this->_craft = m::mock('Craft\Craft');
-		$this->_craft->shouldReceive('t')->andReturn('anything');
-
 		require_once __DIR__ . '/../models/Minimee_SettingsModel.php';
 	}
 
