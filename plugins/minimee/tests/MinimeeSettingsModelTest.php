@@ -5,6 +5,9 @@ use \Mockery as m;
 
 class MinimeeSettingsModelTest extends BaseTest
 {
+	protected $_craft;
+	protected $_model;
+
 	/**
 	 * Called at the start of each test run; helps bootstrap our tests
 	 *
@@ -12,8 +15,8 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
-		$craft = m::mock('Craft\Craft');
-		$craft->shouldReceive('t')->andReturn('anything');
+		$this->_craft = m::mock('Craft\Craft');
+		$this->_craft->shouldReceive('t')->andReturn('anything');
 
 		require_once dirname(__FILE__) . '/../models/Minimee_SettingsModel.php';
 	}
@@ -25,7 +28,7 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->assertEquals(false, $this->model->useResourceCache());
+		$this->assertEquals(false, $this->_model->useResourceCache());
 	}
 
 	public function testUseResourceCacheWhenOneIsEmpty()
@@ -35,14 +38,14 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->assertEquals(false, $this->model->useResourceCache());
+		$this->assertEquals(false, $this->_model->useResourceCache());
 
 		$this->_populateWith(array(
 			'cachePath' => '/path/to/cache',
 			'cacheUrl' => ''
 		));
 
-		$this->assertEquals(false, $this->model->useResourceCache());
+		$this->assertEquals(false, $this->_model->useResourceCache());
 	}
 
 	public function testUseResourceCacheWhenBothEmpty()
@@ -52,7 +55,7 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => ''
 		));
 
-		$this->assertEquals(true, $this->model->useResourceCache());
+		$this->assertEquals(true, $this->_model->useResourceCache());
 	}
 
 	public function testValidateCachePathAndUrlWhenBothEmpty()
@@ -62,8 +65,8 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => ''
 		));
 
-		$this->model->validateCachePathAndUrl();
-		$this->assertEquals(false, $this->model->hasErrors());
+		$this->_model->validateCachePathAndUrl();
+		$this->assertEquals(false, $this->_model->hasErrors());
 	}
 
 	public function testValidateCachePathAndUrlWhenBothNonEmpty()
@@ -73,8 +76,8 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->model->validateCachePathAndUrl();
-		$this->assertEquals(false, $this->model->hasErrors());
+		$this->_model->validateCachePathAndUrl();
+		$this->assertEquals(false, $this->_model->hasErrors());
 	}
 
 	public function testValidateCachePathAndUrlWhenOneIsEmpty()
@@ -84,16 +87,16 @@ class MinimeeSettingsModelTest extends BaseTest
 			'cacheUrl' => 'http://domain.com/cache'
 		));
 
-		$this->model->validateCachePathAndUrl();
-		$this->assertEquals(true, $this->model->hasErrors());
+		$this->_model->validateCachePathAndUrl();
+		$this->assertEquals(true, $this->_model->hasErrors());
 
 		$this->_populateWith(array(
 			'cachePath' => '/path/to/cache',
 			'cacheUrl' => ''
 		));
 
-		$this->model->validateCachePathAndUrl();
-		$this->assertEquals(true, $this->model->hasErrors());
+		$this->_model->validateCachePathAndUrl();
+		$this->assertEquals(true, $this->_model->hasErrors());
 	}
 
 
@@ -110,6 +113,6 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	protected function _populateWith($attributes)
 	{
-		$this->model = Minimee_SettingsModel::populateModel($attributes);
+		$this->_model = Minimee_SettingsModel::populateModel($attributes);
 	}
 }
