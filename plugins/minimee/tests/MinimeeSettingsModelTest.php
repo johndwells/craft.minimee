@@ -12,6 +12,9 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
+		$craft = m::mock('Craft\Craft');
+		$craft->shouldReceive('t')->andReturn('anything');
+
 		require_once dirname(__FILE__) . '/../models/Minimee_SettingsModel.php';
 	}
 
@@ -74,11 +77,6 @@ class MinimeeSettingsModelTest extends BaseTest
 		$this->assertEquals(false, $this->model->hasErrors());
 	}
 
-/*
-Currently not working because when we encounter a validation error,
-Minimee_SettingsModel uses Craft::t('') when creating the errors array,
-and I haven't figured out how to mock Craft or t().
-
 	public function testValidateCachePathAndUrlWhenOneIsEmpty()
 	{
 		$this->_populateWith(array(
@@ -97,7 +95,7 @@ and I haven't figured out how to mock Craft or t().
 		$this->model->validateCachePathAndUrl();
 		$this->assertEquals(true, $this->model->hasErrors());
 	}
-*/
+
 
 	protected function _inspect($data)
 	{
