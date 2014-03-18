@@ -5,9 +5,6 @@ use \Mockery as m;
 
 class MinimeeSettingsModelTest extends BaseTest
 {
-	protected $config;
-	protected $craft;
-
 	/**
 	 * Called at the start of each test run; helps bootstrap our tests
 	 *
