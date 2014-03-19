@@ -48,7 +48,6 @@ Alternatively, you can specify a cache path & URL which sits _below_ webroot, so
 
 > Note that all settings will parse global [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
 
-
 ## Debugging
 
 When your site is running in [devMode](http://buildwithcraft.com/docs/config-settings#devMode), Minimee will throw an `Exception` containing any messages which indicate where an error may have occurred.
@@ -168,6 +167,7 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 * improve/refactor internal abort()
 * all messages/instructions translatable
+* consistent naming/calling convention (e.g. protected has leading underscore)
 * unit test?
 
 ## Roadmap - post 1.0 release
