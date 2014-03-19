@@ -166,7 +166,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Roadmap - 1.0 release
 
-* allow settings via config file
 * improve/refactor internal abort()
 * all messages/instructions translatable
 * unit test?
