@@ -159,6 +159,11 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * improve/refactor internal abort()
 * all messages/instructions translatable
 * improved logging
+* ensure using best practice for method names
+	* setX, getX
+	* isX
+	* doX
+	* useX
 * unit test
 
 ## Roadmap - post 1.0 release
