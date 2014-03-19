@@ -45,6 +45,8 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	public function deleteExpiredCache()
 	{
+		Craft::t('Minimee is attempting to delete expired caches.');
+
 		$files = IOHelper::getFiles($this->settings->cachePath);
 
 		foreach($files as $file)
@@ -54,6 +56,8 @@ class MinimeeService extends BaseApplicationComponent
 
 			if (strpos($file, $this->cacheHashPath) === 0)
 			{
+				Craft::log(Craft::t('Minimee is attempting to delete file: ') . $file);
+
 				// suppress errors by passing true as second parameter
 				IOHelper::deleteFile($file, true);
 			}
@@ -70,6 +74,8 @@ class MinimeeService extends BaseApplicationComponent
 		parent::init();
 
 		$this->setSettings(array());
+
+		Craft::log(Craft::t('Minimee has been initalised.'));
 	}
 
 	/**

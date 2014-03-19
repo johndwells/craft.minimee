@@ -50,6 +50,8 @@ class MinimeeVariable
 	 */
 	protected function _run($type, $assets, $settings = array())
 	{
+		Craft::log(Craft::t('MinimeeVariable::' . $type . '() is being run now.'));
+
 		$minified = craft()->minimee->$type($assets, $settings);
 
 		if( ! $minified)
