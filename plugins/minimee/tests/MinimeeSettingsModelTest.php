@@ -99,7 +99,6 @@ class MinimeeSettingsModelTest extends BaseTest
 		$this->assertEquals(true, $this->_model->hasErrors());
 	}
 
-
 	protected function _inspect($data)
 	{
 		fwrite(STDERR, print_r($data));
