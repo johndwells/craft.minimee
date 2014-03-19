@@ -147,7 +147,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function abort($e, $level = LogLevel::Error)
 	{
-		Craft::log($e, $level);
+		Craft::log(Craft::t('Minimee is aborting with the message: ') . $e, $level);
 
 		if(craft()->config->get('devMode')
 			&& $this->settings->enabled
