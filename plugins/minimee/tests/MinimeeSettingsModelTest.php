@@ -15,6 +15,10 @@ class MinimeeSettingsModelTest extends BaseTest
 	public function setUp()
 	{
 		require_once __DIR__ . '/../models/Minimee_SettingsModel.php';
+
+		// to avoid?
+		// Notice: Undefined index: SERVER_SOFTWARE in /Users/John/Sites/craft.dev/craft/app/helpers/AppHelper.php on line 31
+        $_SERVER['SERVER_SOFTWARE'] = 'Apache';
 	}
 
 	public function testUseResourceCacheWhenBothNonEmpty()
