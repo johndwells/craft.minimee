@@ -11,6 +11,16 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ---
 
+## Features
+
+* Config settings will parse [Environment Variables](http://buildwithcraft.com/docs/multi-environment-configs#environment-specific-variables)
+* Use as a [Twig Filter](http://twig.sensiolabs.org/doc/tags/filter.html) or [Craft Variable](http://buildwithcraft.com/docs/plugins/variables)
+* Enable/disable minification of CSS & JS
+* Enable/disable combination of CSS & JS
+* When in `devMode`, Minimee will throw `Exception`s if unable to run successfully
+* When in `devMode`, will automatically attempt to clean up what it can determine are expired caches
+* Override CP Settings via filesystem config (requires Craft 1.4)
+
 ## Installation
 
 1. Download latest release from [github](https://github.com/johndwells/craft.minimee/releases)
