@@ -10,7 +10,7 @@
 	forms.lightswitchField({
 		onLabel:	"On",
 		offLabel:	"Off",
-		label: "<strong>Minimee Status</strong>"|t,
+		label: "<strong>Minimee Status</strong>" | t,
 		name:		"enabled",
 		on:			settings.enabled
 	})
@@ -47,7 +47,7 @@
 
 <div class="field">
 
-	<label><strong>{{ "Combine Assets" | t}}</strong></label>
+	<label><strong>{{ "Combine Assets" | t }}</strong></label>
 
 	<div class="instructions">
 		<p>{{ "Specify which types of assets to combine." | t }}</p>
@@ -77,33 +77,33 @@
 
 {{
 	forms.textField({
-		label: "<strong>File System Path</strong> to your site's index.php:"|t,
+		label: "<strong>File System Path</strong> to your site's index.php:" | t,
 		id: 'filesystemPath',
 		name: 'filesystemPath',
 		placeholder : '/var/www/public/',
-		instructions : "If left blank, `$_SERVER['DOCUMENT_ROOT']` will be used."|t,
+		instructions : "If left blank, `$_SERVER['DOCUMENT_ROOT']` will be used." | t,
 		value: (settings.filesystemPath is defined ? settings.filesystemPath : null)
 	})
 }}
 
 {{
 	forms.textField({
-		label: "<strong>Cache Path</strong>*:"|t,
+		label: "<strong>Cache Path</strong>*:" | t,
 		id: 'cachePath',
 		name: 'cachePath',
 		placeholder : '/var/www/public/cache/',
-		instructions : "If left blank, Craft's storage folder will be used."|t,
+		instructions : "If left blank, Craft's storage folder will be used." | t,
 		value: (settings.cachePath is defined ? settings.cachePath : null)
 	})
 }}
 
 {{
 	forms.textField({
-		label: "<strong>Cache Url</strong>*:"|t,
+		label: "<strong>Cache Url</strong>*:" | t,
 		id: 'cacheUrl',
 		name: 'cacheUrl',
 		placeholder : 'http://domain.com/cache/',
-		instructions : "If left blank, Craft's storage folder will be used."|t,
+		instructions : "If left blank, Craft's storage folder will be used." | t,
 		value: (settings.cacheUrl is defined ? settings.cacheUrl : null)
 	})
 }}
