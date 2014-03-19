@@ -142,13 +142,16 @@ class MinimeeService extends BaseApplicationComponent
 	 * Internal function used when aborting due to error
 	 *
 	 * @param String $e
+	 * @param String $level
 	 * @return Bool
 	 */
-	protected function abort($e)
+	protected function abort($e, $level = LogLevel::Error)
 	{
-		Craft::log($e, LogLevel::Warning);
+		Craft::log($e, $level);
 
-		if(craft()->config->get('devMode') && $this->settings->enabled)
+		if(craft()->config->get('devMode')
+			&& $this->settings->enabled
+			&& ($level == LogLevel::Warning || $level == LogLevel::Error))
 		{
 			throw new Exception($e);
 		}
