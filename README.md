@@ -180,6 +180,15 @@ __Note to self about what sort of things to cover...__
 * CSS/JS are not combined when combineCssEnabled / combineJsEnabled is off
 * CSS/JS are not minified when minifyCssEnabled / minifyJsEnabled is off
 
+### Unit Test Questions
+
+* how to test protected/private methods
+* options for IoC or testing static methods (Zit??)
+	* IOHelper::
+
+* how to manually start up our Service - do we call init()?
+* how to mock craft()->plugins->getPlugin('pluginName')?
+
 ## License
 
 [http://opensource.org/licenses/mit-license.php](MIT License)
