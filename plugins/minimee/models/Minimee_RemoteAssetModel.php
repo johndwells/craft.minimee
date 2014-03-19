@@ -36,7 +36,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 			}
 			else
 			{
-				throw new Exception('Could not get remote asset: ' . $this->filenameUrl);
+				throw new Exception('Minimee could not get remote asset: ' . $this->filenameUrl);
 			}
 		}
 

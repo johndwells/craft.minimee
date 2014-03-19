@@ -216,7 +216,7 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			if( ! $asset->exists())
 			{
-				throw new Exception(Craft::t($asset->filenamePath . ' could not be found.'));
+				throw new Exception(Craft::t('Minimee could not find asset ' . $asset->filenamePath . '.'));
 			}
 		}
 
@@ -270,12 +270,12 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if ($this->settings === null)
 		{
-			throw new Exception(Craft::t('Not installed.'));
+			throw new Exception(Craft::t('Minimee is not installed.'));
 		}
 
 		if( ! $this->settings->enabled)
 		{
-			throw new Exception(Craft::t('Disabled via settings.'));
+			throw new Exception(Craft::t('Minimee has been disabled via settings.'));
 		}
 
 		if( ! $this->settings->validate())
@@ -286,7 +286,7 @@ class MinimeeService extends BaseApplicationComponent
 				$exceptionErrors .= implode('. ', $error);
 			}
 
-			throw new Exception(Craft::t('Invalid plugin settings: ') . $exceptionErrors);
+			throw new Exception(Craft::t('Minimee has detected invalid plugin settings: ') . $exceptionErrors);
 		}
 		
 		if($this->settings->useResourceCache())
@@ -297,13 +297,13 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			if( ! IOHelper::folderExists($this->settings->cachePath))
 			{
-				throw new Exception(Craft::t('Cache folder does not exist: ' . $this->settings->cachePath));
+				throw new Exception(Craft::t('Minimee\'s Cache Folder does not exist: ' . $this->settings->cachePath));
 			}
 		}
 
 		if( ! IOHelper::isWritable($this->settings->cachePath))
 		{
-			throw new Exception(Craft::t('Cache folder is not writable: ' . $this->settings->cachePath));
+			throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
 		}
 
 		return $this;

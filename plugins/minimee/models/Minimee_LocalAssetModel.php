@@ -29,7 +29,7 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 
 			if($this->_contents === false)
 			{
-				throw new Exception('Could not get local asset: ' . $this->filenamePath);
+				throw new Exception('Minimee could not get local asset: ' . $this->filenamePath);
 			}
 		}
 
@@ -49,7 +49,7 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 
 			if($this->_lastTimeModified === false)
 			{
-				throw new Exception('Could not determine modification time of local asset: ' . $this->filenamePath);
+				throw new Exception('Minimee could not determine modification time of local asset: ' . $this->filenamePath);
 			}
 		}
 
