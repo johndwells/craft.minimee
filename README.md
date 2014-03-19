@@ -34,13 +34,13 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ### Step 1: Help Minimee finds your assets
 
-![filesystemPath](resources/img/filesystemPath.png)
+![filesystemPath](plugins/minimee/resources/img/filesystemPath.png)
 
 By default, Minimee takes the path to your local asset (e.g. `/asset/css/normalize.css`), and appends this to `$_SERVER['DOCUMENT_ROOT']`. This tends to work for 99% use cases; however if your setup is such that your local assets are not at your webroot, or if your server does not correctly report the value for `DOCUMENT_ROOT`, then you can specify what value it should be.
 
 ### Step 2: Tell Minimee where to generate the cache
 
-![cachePathAndUrl](resources/img/cachePathAndUrl.png)
+![cachePathAndUrl](plugins/minimee/resources/img/cachePathAndUrl.png)
 
 By default, Minimee stores cached assets in Craft's `craft/storage` folder, which likely sits above webroot. The cache is then delivered by Craft itself, via a special "resource" url, e.g. `http://domain.com/resources/minimee/filename.timestamp.ext`.
 
@@ -168,14 +168,13 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * improve/refactor internal abort()
 * all messages/instructions translatable
 * consistent naming/calling convention (e.g. protected has leading underscore)
-* unit test?
+* improved logging
+* unit test
 
 ## Roadmap - post 1.0 release
 
 * tie the cache hash to settings and/or last date modified of settings/config and/or minimee version?
 * support [includeJs](http://buildwithcraft.com/docs/templating/tags#includeJs), [includeCss](http://buildwithcraft.com/docs/templating/tags#includeCss) and [includeHiResCss](http://buildwithcraft.com/docs/templating/tags#includeHiResCss)?
-* make tag template configurable
-* improved logging
 * additional hooks/events
 * option to return cache filename only
 * run validation while saving settings
@@ -183,6 +182,8 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * give CP ability to clear cache
 
 ## Unit Test All The Things
+
+__Note to self about what sort of things to cover...__
 
 ### Assert that:
 * a CSS URL is rewritten even when CSS minification is disabled
