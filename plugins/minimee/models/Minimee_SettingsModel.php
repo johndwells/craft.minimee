@@ -85,6 +85,7 @@ class Minimee_SettingsModel extends BaseModel
 			'cacheUrl'       	=> AttributeType::String,
 			'enabled'           => array(AttributeType::Bool, 'default' => true),
 			'filesystemPath'    => AttributeType::String,
+			'baseUrl'           => AttributeType::String,
 			'combineCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
 			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
@@ -158,7 +159,11 @@ class Minimee_SettingsModel extends BaseModel
 	 */
 	public function getBaseUrl()
 	{
-		return $this->forceTrailingSlash(craft()->getSiteUrl());
+		$value = parent::getAttribute('baseUrl');
+
+		$baseUrl = ($value) ? craft()->config->parseEnvironmentString($value) : craft()->getSiteUrl();
+
+		return $this->forceTrailingSlash($baseUrl);
 	}
 
 	/**
@@ -177,6 +182,10 @@ class Minimee_SettingsModel extends BaseModel
 
 			case('cacheUrl') :
 				return $this->getCacheUrl();			
+			break;
+
+			case('baseUrl') :
+				return $this->getBaseUrl();			
 			break;
 
 			case('filesystemPath') :

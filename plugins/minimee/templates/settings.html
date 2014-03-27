@@ -88,6 +88,17 @@
 
 {{
 	forms.textField({
+		label: "<strong>Base URL</strong> to your site's index.php:" | t,
+		id: 'baseUrl',
+		name: 'baseUrl',
+		placeholder : 'http://domain.com/',
+		instructions : "If left blank, the URL of your site, as defined in Settings > General, will be used." | t,
+		value: (settings.baseUrl is defined ? settings.baseUrl : null)
+	})
+}}
+
+{{
+	forms.textField({
 		label: "<strong>Cache Path</strong>*:" | t,
 		id: 'cachePath',
 		name: 'cachePath',
