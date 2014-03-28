@@ -188,7 +188,27 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Unit Test All The Things
 
-__Note to self about what sort of things to cover...__
+Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts.
+
+### Running Minimee's Tests
+
+To run Minimee, the following assumptions are made:
+
+* you have PHP 5.3+ available to run from CLI
+* optionally xdebug is configured for PHP if you'd like run PHPUnit's **coverage reports**.
+* composer is installed globally (if installed locally, the commands below may have to be adjusted)
+* you have a local copy of Craft running
+
+With the assumptions taken care of, these steps should get you up and running: 
+
+1. Fork, clone or download the `development` branch of Minimee 
+2. In terminal, `cd` to `plugins/minimee/tests`
+3. Run `composer install --dev`
+1. In terminal, run `php vendor/bin/phpunit --bootstrap /Users/John/Sites/craft.dev/craft/app/tests/bootstrap.php`
+
+### Future Tests to Assert
+
+_Notes to self about what sort of things to be sure I'm testing..._
 
 ### Assert that:
 * a CSS URL is rewritten even when CSS minification is disabled
@@ -199,8 +219,6 @@ __Note to self about what sort of things to cover...__
 
 * how to test protected/private methods
 * options for IoC or testing static methods (Zit??)
-	* IOHelper::
-
 * how to manually start up our Service - do we call init()?
 * how to mock craft()->plugins->getPlugin('pluginName')?
 
