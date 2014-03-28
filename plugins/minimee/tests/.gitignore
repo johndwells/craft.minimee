@@ -2,3 +2,4 @@ composer.phar
 composer.lock
 MAMP_php_error_log_MAMP
 /vendor
+/report
