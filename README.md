@@ -204,7 +204,7 @@ With the assumptions taken care of, these steps should get you up and running:
 1. Fork, clone or download the `development` branch of Minimee 
 2. In terminal, `cd` to `plugins/minimee/tests`
 3. Run `composer install --dev`
-1. In terminal, run `php vendor/bin/phpunit --bootstrap /Users/John/Sites/craft.dev/craft/app/tests/bootstrap.php`
+1. In terminal, run `php vendor/bin/phpunit --bootstrap /path/to/your/craft.dev/craft/app/tests/bootstrap.php`
 
 ### Future Tests to Assert
 
