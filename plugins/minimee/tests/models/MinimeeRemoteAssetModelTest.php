@@ -27,7 +27,7 @@ class MinimeeRemoteAssetModelTest extends BaseTest
 			'filename' => 'http://domain.com/assets/style.css'
 		));
 
-		$this->assertEquals('http://domain.com/assets/style.css', $this->_model->filename);
+		$this->assertEquals('http://domain.com/assets/style.css', sprintf($this->_model));
 	}
 
 	public function testSetFilenamePathRemovesDoubleSlashes()

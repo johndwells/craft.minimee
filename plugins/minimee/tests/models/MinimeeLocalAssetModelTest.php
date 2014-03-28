@@ -27,7 +27,7 @@ class MinimeeLocalAssetModelTest extends BaseTest
 			'filename' => '/assets/style.css'
 		));
 
-		$this->assertEquals('/assets/style.css', $this->_model->filename);
+		$this->assertEquals('/assets/style.css', sprintf($this->_model));
 	}
 
 	public function testSetFilenamePathRemovesDoubleSlashes()
