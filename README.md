@@ -190,6 +190,8 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts.
 
+**Switch to Minimee's `development` branch to access tests.**
+
 ### Running Minimee's Tests
 
 To run Minimee, the following assumptions are made:
@@ -204,7 +206,7 @@ With the assumptions taken care of, these steps should get you up and running:
 1. Fork, clone or download the `development` branch of Minimee 
 2. In terminal, `cd` to `plugins/minimee/tests`
 3. Run `composer install --dev`
-1. In terminal, run `php vendor/bin/phpunit --bootstrap /path/to/your/craft.dev/craft/app/tests/bootstrap.php`
+1. Run `php vendor/bin/phpunit --bootstrap /path/to/your/craft.dev/craft/app/tests/bootstrap.php`, taking care to update the path accordingly.
 
 ### Future Tests to Assert
 
