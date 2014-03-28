@@ -1,0 +1,11 @@
+{
+	"autoload" : {
+		"classmap" : [
+			"../models"
+		]
+	},
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "mockery/mockery": "dev-master"
+    }
+}

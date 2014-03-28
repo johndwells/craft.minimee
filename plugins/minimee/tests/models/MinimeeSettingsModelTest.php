@@ -14,7 +14,7 @@ class MinimeeSettingsModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
-		require_once __DIR__ . '/../models/Minimee_SettingsModel.php';
+		require_once __DIR__ . '/../vendor/autoload.php';
 
 		// to avoid?
 		// Notice: Undefined index: SERVER_SOFTWARE in /Users/John/Sites/craft.dev/craft/app/helpers/AppHelper.php on line 31

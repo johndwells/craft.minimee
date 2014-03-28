@@ -3,7 +3,7 @@ namespace Craft;
 
 use \Mockery as m;
 
-class MinimeeLocalAssetModelTest extends BaseTest
+class MinimeeRemoteAssetModelTest extends BaseTest
 {
 	protected $_model;
 
@@ -14,8 +14,7 @@ class MinimeeLocalAssetModelTest extends BaseTest
 	 */
 	public function setUp()
 	{
-		require_once __DIR__ . '/../models/Minimee_AssetBaseModel.php';
-		require_once __DIR__ . '/../models/Minimee_LocalAssetModel.php';
+		require_once __DIR__ . '/../vendor/autoload.php';
 
 		// to avoid?
 		// Notice: Undefined index: SERVER_SOFTWARE in /Users/John/Sites/craft.dev/craft/app/helpers/AppHelper.php on line 31
@@ -26,8 +25,16 @@ class MinimeeLocalAssetModelTest extends BaseTest
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenamePath = '/////path////to////file////';
-		$this->assertEquals('/path/to/file/', $this->_model->filenamePath);
+		$this->_model->filenamePath = 'http://domain.com///cache';
+		$this->assertEquals('http://domain.com/cache', $this->_model->filenamePath);
+	}
+
+	public function testSetFilenamePathRemovesDoubleSlashesProtocolRelative()
+	{
+		$this->_populateWith(array());
+
+		$this->_model->filenameUrl = '//domain.com///cache';
+		$this->assertEquals('//domain.com/cache', $this->_model->filenameUrl);
 	}
 
 	public function testSetFilenameUrlRemovesDoubleSlashes()
@@ -52,13 +59,13 @@ class MinimeeLocalAssetModelTest extends BaseTest
 	}
 
 	/**
-	 * Internal method for shorthand populating our Minimee_LocalAssetModel
+	 * Internal method for shorthand populating our Minimee_RemoteAssetModel
 	 * 
 	 * @param Array $attributes
-	 * @return Minimee_LocalAssetModel
+	 * @return Minimee_RemoteAssetModel
 	 */
 	protected function _populateWith($attributes)
 	{
-		$this->_model = Minimee_LocalAssetModel::populateModel($attributes);
+		$this->_model = Minimee_RemoteAssetModel::populateModel($attributes);
 	}
 }
