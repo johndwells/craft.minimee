@@ -190,6 +190,8 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts.
 
+**Switch to Minimee's `development` branch to access tests.**
+
 ### Running Minimee's Tests
 
 To run Minimee, the following assumptions are made:
