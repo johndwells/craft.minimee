@@ -21,6 +21,15 @@ class MinimeeRemoteAssetModelTest extends BaseTest
         $_SERVER['SERVER_SOFTWARE'] = 'Apache';
 	}
 
+	public function testToStringReturnsFilename()
+	{
+		$this->_populateWith(array(
+			'filename' => 'http://domain.com/assets/style.css'
+		));
+
+		$this->assertEquals('http://domain.com/assets/style.css', $this->_model->filename);
+	}
+
 	public function testSetFilenamePathRemovesDoubleSlashes()
 	{
 		$this->_populateWith(array());
