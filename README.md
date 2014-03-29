@@ -27,11 +27,10 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 ## Installation
 
 1. Download latest release from [github](https://github.com/johndwells/craft.minimee/releases)
-2. Unzip and rename folder to `minimee`
-3. Copy `minimee` into your `app/plugins` directory
-4. Log into Craft and go to `Settings > Plugins`
-5. Click `install` for Minimee
-6. Visit Minimee plugin settings and optionally configure (see below)
+2. Copy `minimee` into your `app/plugins` directory
+3. Log into Craft and go to `Settings > Plugins`
+4. Click `install` for Minimee
+5. Visit Minimee plugin settings and optionally configure (see below)
 
 ---
 
