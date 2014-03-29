@@ -411,6 +411,12 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getSettings()
 	{
+		// if null, then set based on our inits
+		if(is_null($this->_settings))
+		{
+			$this->_settings = Minimee_SettingsModel::populateModel(self::$initSettings);
+		}
+
 		return $this->_settings;
 	}
 

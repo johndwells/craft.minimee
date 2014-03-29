@@ -30,7 +30,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.8.0';
+		return '0.8.1';
 	}
 
 	/**
@@ -133,5 +133,15 @@ class MinimeePlugin extends BasePlugin
 		{
 			return craft()->path->getStoragePath().'minimee/'.substr($path, 8);
 		}
+	}
+
+	/**
+	 * Register our cache path that can then be deleted from CP
+	 */
+	function registerCachePaths()
+	{
+		return array(
+			craft()->minimee->settings->cachePath => Craft::t('Minimee caches')
+		);
 	}
 }
