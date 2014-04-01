@@ -85,7 +85,12 @@ In addition to specifying configuration settings via the CP, you can also pass a
 
 ### Filesystem Config Settings
 
-_Requires Craft 1.4_
+As of Craft 2.0, Minimee supports the ability to override the CP Settings with filesystem configs. Note that this does NOT reduce any processing/DB overheads, but it may suit how you prefer to configure Minimee across multiple environments.
+
+To use this feature, begin by copying the contents of the `minimee/config.php` file into a new file named `minimee.php`, and move it to your `craft/app/config` folder. Then uncomment and set as few or as many settings as you wish.
+
+For more on how multi-environment configs work in Craft, see [http://buildwithcraft.com/docs/multi-environment-configs](http://buildwithcraft.com/docs/multi-environment-configs).
+
 
 ### The Settings "Cascade"
 

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * As of Craft 1.4, Minimee supports the ability to override
+ * As of Craft 2.0, Minimee supports the ability to override
  * the CP Settings with filesystem configs.
  * Note that this does NOT reduce any processing/DB overheads,
  * but it may suit how you prefer to configure Minimee across

@@ -82,8 +82,8 @@ class MinimeeService extends BaseApplicationComponent
 
 			self::$initSettings = $pluginSettings;
 
-			// as of v1.4 we can take filesystem configs
-			if(version_compare('1.4', craft()->getVersion(), '<='))
+			// as of v2.0 we can take filesystem configs
+			if(version_compare('2.0', craft()->getVersion(), '<='))
 			{
 				foreach($pluginSettings as $attribute => $value)
 				{
