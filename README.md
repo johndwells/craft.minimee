@@ -38,7 +38,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 Out of the box and when first installed, Minimee will be automatically enabled and set to combine & minify both your CSS and JS assets. It will use default settings to get you up and running immediately, but you can visit the `Settings` page of the plugin to configure to suit your environment.
 
-![settings](plugins/minimee/resources/img/settings.png)
+![settings](minimee/resources/img/settings.png)
 
 > Note that all settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
 
