@@ -1,4 +1,4 @@
-# Minimee for Craft - v0.8.1
+# Minimee for Craft - v0.8.2
 
 A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -235,9 +235,7 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * support [includeJs](http://buildwithcraft.com/docs/templating/tags#includeJs), [includeCss](http://buildwithcraft.com/docs/templating/tags#includeCss) and [includeHiResCss](http://buildwithcraft.com/docs/templating/tags#includeHiResCss)?
 * additional hooks/events
 * option to return cache filename only
-* run validation while saving settings
 * try to resolve URL assets to local assets
-* give CP ability to clear cache
 
 ---
 
