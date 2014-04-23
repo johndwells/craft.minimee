@@ -16,48 +16,38 @@
  */
 class MinimeeService extends BaseApplicationComponent
 {
-	protected $_assets                  = array();  // array of Minimee_AssetBaseModel
-	protected $_type                    = '';       // css or js
-	protected $_cacheHash               = '';       // a hash of all asset filenames together
-	protected $_cacheTimestamp          = '';       // timestamp of cache
-	protected $_settings                = null;     // instance of Minimee_SettingsModel
+	const TimestampZero         = '0000000000';         // exact string representation of "zero" timestamp
+	const ResourceTrigger       = 'minimee';            // the trigger we use for our own resources
 
-	protected static $initSettings;					// static array of settings, a merge of DB and filesystem settings
-	protected static $registeredMinifyLoader;       // Internal flag indicating if we've registered the Minify Loader class
+	protected $_assets          = array();              // array of Minimee_AssetModelInterface
+	protected $_type            = '';                   // css or js
+	protected $_cacheBase       = '';                   // a concat of all asset filenames together
+	protected $_cacheTimestamp  = self::TimestampZero;  // max timestamp of all assets
+	protected $_settings        = null;                 // instance of Minimee_SettingsModel
+
+	protected static $_pluginSettings	= array();		// static array of settings, a merge of DB and filesystem settings
 
 
 	/*================= PUBLIC METHODS ================= */
 
 
 	/**
-	 * Shorthand function to process CSS
-	 *
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return String|Bool
-	 */
-	public function css($assets, $settings = array())
-	{
-		return $this->run('css', $assets, $settings);
-	}
-
-	/**
-	 * Based on the cache's hash, attemtps to delete any older versions of same hash name.
+	 * Based on the cache's hashed base, attempts to delete any older versions of same name.
 	 */
 	public function deleteExpiredCache()
 	{
-		Craft::t('Minimee is attempting to delete expired caches.');
+		MinimeePlugin::log(Craft::t('Minimee is attempting to delete expired caches.'));
 
 		$files = IOHelper::getFiles($this->settings->cachePath);
 
 		foreach($files as $file)
 		{
 			// skip self
-			if ($file === $this->cacheFilenamePath) continue;
+			if ($file === $this->makePathToCacheFilename()) continue;
 
-			if (strpos($file, $this->cacheHashPath) === 0)
+			if (strpos($file, $this->makePathToHashOfCacheBase()) === 0)
 			{
-				Craft::log(Craft::t('Minimee is attempting to delete file: ') . $file);
+				MinimeePlugin::log(Craft::t('Minimee is attempting to delete file: ') . $file);
 
 				// suppress errors by passing true as second parameter
 				IOHelper::deleteFile($file, true);
@@ -74,40 +64,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		parent::init();
 
-		if(is_null(self::$initSettings))
-		{
-			$plugin = craft()->plugins->getPlugin('minimee');
-
-			$pluginSettings = $plugin->getSettings()->getAttributes();
-
-			self::$initSettings = $pluginSettings;
-
-			// as of v2.0 we can take filesystem configs
-			if(version_compare('2.0', craft()->getVersion(), '<='))
-			{
-				foreach($pluginSettings as $attribute => $value)
-				{
-					if(craft()->config->exists($attribute, 'minimee'))
-					{
-						self::$initSettings[$attribute] = craft()->config->get($attribute, 'minimee');
-					}
-				}
-			}
-		}
-
-		Craft::log(Craft::t('Minimee has been initalised.'));
-	}
-
-	/**
-	 * Shorthand function to process JS
-	 *
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return String|Bool
-	 */
-	public function js($assets, $settings = array())
-	{
-		return $this->run('js', $assets, $settings);
+		$this->initPluginSettings();
 	}
 
 	/**
@@ -127,16 +84,16 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			switch ($type)
 			{
-				case ('css') :
+				case (MinimeeType::Css) :
 
-					$cssTagTemplate = $this->settings->cssTagTemplate ?: '<link rel="stylesheet" href="%s"/>';
+					$cssTagTemplate = $this->settings->cssTagTemplate;
 					$tags .= sprintf($cssTagTemplate, $asset);
 
 				break;
 
-				case ('js') :
+				case (MinimeeType::Js) :
 
-					$jsTagTemplate = $this->settings->jsTagTemplate ?: '<script src="%s"></script>';
+					$jsTagTemplate = $this->settings->jsTagTemplate;
 					$tags .= sprintf($jsTagTemplate, $asset);
 
 				break;
@@ -152,12 +109,61 @@ class MinimeeService extends BaseApplicationComponent
 	 * @param string
 	 * @return Twig_Markup
 	 */
-	public function returnHtmlAsTwigMarkup($html)
+	public function makeTwigMarkupFromHtml($html)
 	{
 		// Prevent having to use the |raw filter when calling variable in template
 		// http://pastie.org/6412894#1
 		$charset = craft()->templates->getTwig()->getCharset();
 		return new \Twig_Markup($html, $charset);
+	}
+
+	/**
+	 * Main service function that encapsulates an entire Minimee run
+	 *
+	 * @param String $type
+	 * @param Array $assets
+	 * @param Array $settings
+	 * @return Array|Bool
+	 */
+	public function run($type, $assets, $settings = array())
+	{
+		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
+		$settings = ( ! is_array($settings)) ? array($settings) : $settings;
+
+		try
+		{
+			$this->reset()
+				 ->setRuntimeSettings($settings)
+				 ->setType($type)
+				 ->setAssets($assets)
+				 ->flightcheck()
+				 ->checkHeaders();
+
+			$return = array();
+			if($this->isCombineEnabled())
+			{
+				$return[] = $this->ensureCacheExists()
+								 ->makeUrlToCacheFilename();
+			}
+			else
+			{
+				foreach($assets as $asset)
+				{
+					$return[] = $this->reset()
+									 ->setRuntimeSettings($settings)
+									 ->setType($type)
+									 ->setAssets($asset)
+									 ->ensureCacheExists()
+									 ->makeUrlToCacheFilename();
+				}
+			}
+		}
+		catch (Exception $e)
+		{
+			return $this->abort($e);
+		}
+
+		return $return;
 	}
 
 
@@ -173,7 +179,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function abort($e, $level = LogLevel::Error)
 	{
-		Craft::log(Craft::t('Minimee is aborting with the message: ') . $e, $level);
+		MinimeePlugin::log(Craft::t('Minimee is aborting with the message: ') . $e, $level);
 
 		if(craft()->config->get('devMode')
 			&& $this->settings->enabled
@@ -186,18 +192,31 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
+	 * Append an asset's name to the cacheBase
+	 * @param String $name
+	 * @return Void
+	 */
+	protected function appendToCacheBase($name)
+	{
+		$this->_cacheBase .= $name;
+	}
+
+	/**
 	 * Fetch or creates cache.
 	 *
 	 * @return String
 	 */
-	protected function cache()
+	protected function ensureCacheExists()
 	{
 		if( ! $this->cacheExists())
 		{
-			$this->createCache();
+			if( ! $this->createCache())
+			{
+				throw new Exception(Craft::t('Minimee could not find asset ' . $asset->filenamePath . '.'));
+			}
 		}
 
-		return $this->getCacheUrl();
+		return $this;
 	}
 
 	/**
@@ -209,18 +228,18 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		foreach ($this->assets as $asset)
 		{
-			$this->cacheTimestamp   = $asset->lastTimeModified;
-			$this->cacheHash        = $asset->filename;
+			$this->setMaxCacheTimestamp($asset->lastTimeModified);
+			$this->appendToCacheBase($asset->filename);
 		}
 
-		if( ! IOHelper::fileExists($this->cacheFilenamePath))
+		if( ! IOHelper::fileExists($this->makePathToCacheFilename()))
 		{
 			return false;
 		}
 
 		if($this->settings->useResourceCache())
 		{
-			$cacheLastTimeModified = IOHelper::getLastTimeModified($this->cacheFilenamePath);
+			$cacheLastTimeModified = IOHelper::getLastTimeModified($this->makePathToCacheFilename());
 
 			if($cacheLastTimeModified->getTimestamp() < $this->cacheTimestamp)
 			{
@@ -260,12 +279,68 @@ class MinimeeService extends BaseApplicationComponent
 		
 		foreach($this->assets as $asset)
 		{
-			$contents .= craft()->minimee->minifyAsset($asset) . "\n";
+			$contents .= $this->minifyAsset($asset) . "\n";
 		}
 
-		IOHelper::writeToFile($this->cacheFilenamePath, $contents);
+		if( ! IOHelper::writeToFile($this->makePathToCacheFilename(), $contents))
+		{
+			return false;
+		}
 
 		$this->onCreateCache(new Event($this));
+
+		return true;
+	}
+
+	/**
+	 * set plugin / config settings
+	 *
+	 * @return Void
+	 */
+	protected function setPluginSettings($settings = array())
+	{
+		self::$_pluginSettings = $settings;
+	}
+
+	/**
+	 * get our plugin / config settings
+	 *
+	 * @return Array
+	 */
+	protected function getPluginSettings()
+	{
+		if( ! self::$_pluginSettings)
+		{
+			$this->initPluginSettings();
+		}
+
+		return self::$_pluginSettings;
+	}
+	
+	/**
+	 * Fetch settings from our plugin / config
+	 *
+	 * @return Void
+	 */
+	protected function initPluginSettings()
+	{
+		$settings = minimee()->plugin->getSettings()->getAttributes();
+
+		// as of v2.0 we can take filesystem configs
+		if(version_compare('2.0', craft()->getVersion(), '<='))
+		{
+			foreach($settings as $attribute => $value)
+			{
+				if(craft()->config->exists($attribute, 'minimee'))
+				{
+					$settings[$attribute] = craft()->config->get($attribute, 'minimee');
+				}
+			}
+		}
+
+		$this->setPluginSettings($settings);
+
+		MinimeePlugin::log(Craft::t('Minimee has been initialised.'));
 	}
 
 	/**
@@ -273,18 +348,32 @@ class MinimeeService extends BaseApplicationComponent
 	 *
 	 * @return Bool
 	 */
-	protected function doCombine()
+	protected function isCombineEnabled()
 	{
-		switch($this->type)
-		{
-			case 'css' :
-				return $this->settings->combineCssEnabled;
+		switch($this->type) :
+			case MinimeeType::Css :
+				$isCombineEnabled = (bool) $this->settings->combineCssEnabled;
 			break;
 
-			case 'js' :
-				return $this->settings->combineJsEnabled;
+			case MinimeeType::Js :
+				$isCombineEnabled = (bool) $this->settings->combineJsEnabled;
 			break;
-		}
+		endswitch;
+
+		return $isCombineEnabled;
+	}
+
+	/**
+	 * Determine if string is valid URL
+	 *
+	 * @param   string  String to test
+	 * @return  bool    TRUE if yes, FALSE if no
+	 */
+	protected function isUrl($string)
+	{
+		// from old _isURL() file from Carabiner Asset Management Library
+		// modified to support leading with double slashes
+		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
 	}
 
 	/**
@@ -294,7 +383,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function flightcheck()
 	{
-		if ($this->settings === null)
+		if ( ! self::$_pluginSettings)
 		{
 			throw new Exception(Craft::t('Minimee is not installed.'));
 		}
@@ -317,7 +406,7 @@ class MinimeeService extends BaseApplicationComponent
 		
 		if($this->settings->useResourceCache())
 		{
-			IOHelper::ensureFolderExists($this->settings->cachePath);
+			IOHelper::ensureFolderExists($this->makePathToStorageFolder());
 		}
 		else
 		{
@@ -325,11 +414,21 @@ class MinimeeService extends BaseApplicationComponent
 			{
 				throw new Exception(Craft::t('Minimee\'s Cache Folder does not exist: ' . $this->settings->cachePath));
 			}
+
+			if( ! IOHelper::isWritable($this->settings->cachePath))
+			{
+				throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
+			}
 		}
 
-		if( ! IOHelper::isWritable($this->settings->cachePath))
+		if( ! $this->assets)
 		{
-			throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
+			throw new Exception(Craft::t('Minimee has no assets to operate upon.'));
+		}
+
+		if( ! $this->type)
+		{
+			throw new Exception(Craft::t('Minimee has no value for `type`.'));
 		}
 
 		return $this;
@@ -344,40 +443,11 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @return String
+	 * @return Array
 	 */
-	protected function getCacheFilename()
+	protected function getCacheBase()
 	{
-		if($this->settings->useResourceCache())
-		{
-			return sprintf('%s.%s', $this->cacheHash, $this->type);
-		}
-
-		return sprintf('%s.%s.%s', $this->cacheHash, $this->cacheTimestamp, $this->type);
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function getCacheFilenamePath()
-	{
-		return $this->settings->cachePath . $this->cacheFilename;
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function getCacheHash()
-	{
-		return sha1($this->_cacheHash);
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function getCacheHashPath()
-	{
-		return $this->settings->cachePath . $this->cacheHash;
+		return $this->_cacheBase;
 	}
 
 	/**
@@ -385,25 +455,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getCacheTimestamp()
 	{
-		return ($this->_cacheTimestamp == 0) ? '0000000000' : $this->_cacheTimestamp;
-	}
-
-	/**
-	 * @return String
-	 */
-	protected function getCacheUrl()
-	{
-		if($this->settings->useResourceCache())
-		{
-			$path = '/minimee/' . $this->cacheFilename;
-
-			$dateParam = craft()->resources->dateParam;
-			$params[$dateParam] = IOHelper::getLastTimeModified($this->cacheFilenamePath)->getTimestamp();
-
-			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
-		}
-		
-		return $this->settings->cacheUrl . $this->cacheFilename;
+		return ($this->_cacheTimestamp) ? $this->_cacheTimestamp : self::TimestampZero;
 	}
 
 	/**
@@ -411,10 +463,10 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getSettings()
 	{
-		// if null, then set based on our inits
+		// if null, then set to an empty array
 		if(is_null($this->_settings))
 		{
-			$this->_settings = Minimee_SettingsModel::populateModel(self::$initSettings);
+			$this->setRuntimeSettings(array());
 		}
 
 		return $this->_settings;
@@ -429,86 +481,102 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Determine if string is valid URL
+	 * Returns a complete cache filename.
+	 * If a "Resource" cache, format is:
+	 *		hashOfCacheBase.type
+	 *		e.g. asdf1234.css
+	 * Otherwise, format is:
+	 *		hashOfCacheBase.timestamp.type
+	 *		e.g. asdf1234.12345678.css
 	 *
-	 * @param   string  String to test
-	 * @return  bool    TRUE if yes, FALSE if no
+	 * @return String
 	 */
-	protected function isUrl($string)
+	protected function makeCacheFilename()
 	{
-		// from old _isURL() file from Carabiner Asset Management Library
-		// modified to support leading with double slashes
-		return (preg_match('@((https?:)?//([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?)@', $string) > 0);
+		if($this->settings->useResourceCache())
+		{
+			return sprintf('%s.%s', $this->makeHashOfCacheBase(), $this->type);
+		}
+
+		return sprintf('%s.%s.%s', $this->makeHashOfCacheBase(), $this->cacheTimestamp, $this->type);
 	}
 
 	/**
-	 * Loads our requested library
-	 *
-	 * On first call it will adjust the include_path, for Minify support
-	 *
-	 * @param   string  Name of library to require
-	 * @return  void
+	 * @return String
 	 */
-	protected function loadLibrary($which)
+	protected function makeHashOfCacheBase()
 	{
-		if( is_null(self::$registeredMinifyLoader))
+		return sha1($this->_cacheBase);
+	}
+
+	/**
+	 * @return String
+	 */
+	protected function makePathToCacheFilename()
+	{
+		if($this->settings->useResourceCache())
 		{
-			craft()->config->maxPowerCaptain();
-
-			require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/Loader.php');
-			\Minify_Loader::register();
-
-			self::$registeredMinifyLoader = true;
+			return craft()->path->getStoragePath() . self::ResourceTrigger . '/' . $this->makeCacheFilename();
 		}
 
-		switch ($which) :
+		return $this->settings->cachePath . $this->makeCacheFilename();
+	}
 
-			case ('minify') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS.php');
-			break;
+	/**
+	 * @return String
+	 */
+	protected function makePathToHashOfCacheBase()
+	{
+		if($this->settings->useResourceCache())
+		{
+			return $this->makePathToStorageFolder() . $this->makeHashOfCacheBase();
+		}
 
-			case ('cssmin') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/CSSmin.php');
-			break;
-			
-			case ('css_urirewriter') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/CSS/UriRewriter.php');
-			break;
+		return $this->settings->cachePath . $this->makeHashOfCacheBase();
+	}
 
-			case ('curl') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/EpiCurl.php');
-			break;
-			
-			case ('jsmin') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMin.php');
-			break;
-			
-			case ('jsminplus') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/JSMinPlus.php');
-			break;
-			
-			case ('html') :
-				require_once(CRAFT_PLUGINS_PATH . 'minimee/libraries/Minify/HTML.php');
-			break;
+	/**
+	 * @return String
+	 */
+	protected function makePathToStorageFolder()
+	{
+		return craft()->path->getStoragePath() . self::ResourceTrigger . '/';
+	}
 
-		endswitch;
+	/**
+	 * @return String
+	 */
+	protected function makeUrlToCacheFilename()
+	{
+		if($this->settings->useResourceCache())
+		{
+			$path = '/' . self::ResourceTrigger . '/' . $this->makeCacheFilename();
+
+			$dateParam = craft()->resources->dateParam;
+			$params[$dateParam] = IOHelper::getLastTimeModified($this->makePathToCacheFilename())->getTimestamp();
+
+			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
+		}
+		
+		return $this->settings->cacheUrl . $this->makeCacheFilename();
 	}
 
 	/**
 	 * Given an asset, fetches and returns minified contents.
 	 *
-	 * @param Minimee_AssetBaseModel $asset
+	 * @param Minimee_BaseAssetModel $asset
 	 * @return String
 	 */
 	protected function minifyAsset($asset)
 	{
-		switch ($asset->type) :
+		craft()->config->maxPowerCaptain();
+
+		switch ($this->type) :
 			
-			case 'js':
+			case MinimeeType::Js:
 
 				if($this->settings->minifyJsEnabled)
 				{
-					$this->loadLibrary('jsmin');
 					$contents = \JSMin::minify($asset->contents);
 				}
 				else
@@ -518,17 +586,14 @@ class MinimeeService extends BaseApplicationComponent
 
 			break;
 			
-			case 'css':
-
-				$this->loadLibrary('css_urirewriter');
+			case MinimeeType::Css:
 
 				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 
 				$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
 
-				if($this->settings->minifyJsEnabled)
+				if($this->settings->minifyCssEnabled)
 				{
-					$this->loadLibrary('minify');
 					$contents = \Minify_CSS::minify($contents);
 				}
 
@@ -557,59 +622,12 @@ class MinimeeService extends BaseApplicationComponent
 	protected function reset()
 	{
 		$this->_assets                  = array();
+		$this->_cacheBase               = '';
+		$this->_cacheTimestamp          = self::TimestampZero;
 		$this->_settings                = null;
 		$this->_type                    = '';
-		$this->_cacheHash               = '';
-		$this->_cacheTimestamp          = '';
 
 		return $this;
-	}
-
-	/**
-	 * Main service function that encapsulates an entire Minimee run
-	 *
-	 * @param String $type
-	 * @param Array $assets
-	 * @param Array $settings
-	 * @return Array|Bool
-	 */
-	protected function run($type, $assets, $settings = array())
-	{
-		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
-		$settings = ( ! is_array($settings)) ? array($settings) : $settings;
-
-		try
-		{
-			$this->reset()
-				 ->setSettings($settings)
-				 ->setType($type)
-				 ->setAssets($assets)
-				 ->flightcheck()
-				 ->checkHeaders();
-
-			$return = array();
-			if($this->doCombine())
-			{
-				$return[] = $this->cache();
-			}
-			else
-			{
-				foreach($assets as $asset)
-				{
-					$return[] = $this->reset()
-									 ->setSettings($settings)
-									 ->setType($type)
-									 ->setAssets($asset)
-									 ->cache();
-				}
-			}
-		}
-		catch (Exception $e)
-		{
-			return $this->abort($e);
-		}
-
-		return $return;
 	}
 
 	/**
@@ -627,22 +645,20 @@ class MinimeeService extends BaseApplicationComponent
 				$model = array(
 					'filename' => $asset,
 					'filenameUrl' => $asset,
-					'filenamePath' => $asset,
-					'type' => $this->type
+					'filenamePath' => $asset
 				);
 
-				$this->_assets[] = Minimee_RemoteAssetModel::populateModel($model);
+				$this->_assets[] = minimee()->makeRemoteAssetModel($model);
 			}
 			else
 			{
 				$model = array(
 					'filename' => $asset,
 					'filenameUrl' => $this->settings->baseUrl . $asset,
-					'filenamePath' => $this->settings->filesystemPath . $asset,
-					'type' => $this->type
+					'filenamePath' => $this->settings->filesystemPath . $asset
 				);
 
-				$this->_assets[] = Minimee_LocalAssetModel::populateModel($model);
+				$this->_assets[] = minimee()->makeLocalAssetModel($model);
 			}
 		}
 
@@ -653,22 +669,34 @@ class MinimeeService extends BaseApplicationComponent
 	 * @param String $name
 	 * @return Void
 	 */
-	protected function setCacheHash($name)
+	protected function setCacheBase($name)
 	{
-		// remove any cache-busting strings so the cache name doesn't change with every edit.
-		// format: .v.1330213450
-		// this is held over from EE. Still a good idea to do something like this, perhaps improve in future.
-		$this->_cacheHash .= preg_replace('/\.v\.(\d+)/i', '', $name);
+		$this->_cacheBase = $name;
+
+		return $this;
+	}
+
+	/**
+	 * @param String $dateTime
+	 * @return Void
+	 */
+	protected function setCacheTimestamp($timestamp)
+	{
+		$this->_cacheTimestamp = $timestamp ?: self::TimestampZero;
+
+		return $this;
 	}
 
 	/**
 	 * @param DateTime $lastTimeModified
 	 * @return Void
 	 */
-	protected function setCacheTimestamp(DateTime $lastTimeModified)
+	protected function setMaxCacheTimestamp(DateTime $lastTimeModified)
 	{
 		$timestamp = $lastTimeModified->getTimestamp();
-		$this->_cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+		$this->cacheTimestamp = max($this->cacheTimestamp, $timestamp);
+
+		return $this;
 	}
 
 	/**
@@ -678,13 +706,26 @@ class MinimeeService extends BaseApplicationComponent
 	 * @param Array $settingsOverrides
 	 * @return void
 	 */
-	protected function setSettings($settingsOverrides)
+	protected function setRuntimeSettings($settingsOverrides)
 	{
 		$settingsOverrides = ( ! is_array($settingsOverrides)) ? array($settingsOverrides) : $settingsOverrides;
 
-		$runtimeSettings = array_merge(self::$initSettings, $settingsOverrides);
+		$runtimeSettings = array_merge($this->getPluginSettings(), $settingsOverrides);
 
-		$this->_settings = Minimee_SettingsModel::populateModel($runtimeSettings);
+		$this->settings = minimee()->makeSettingsModel($runtimeSettings);
+
+		return $this;
+	}
+
+	/**
+	 * Manually pass in an instance of Minimee_ISettingsModel.
+	 *
+	 * @param Craft\Minimee_ISettingsModel $settings
+	 * @return void
+	 */
+	protected function setSettings(Minimee_ISettingsModel $settings)
+	{
+		$this->_settings = $settings;
 
 		return $this;
 	}
@@ -695,7 +736,12 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function setType($type)
 	{
-		$this->type = $type;
+		if($type !== MinimeeType::Css && $type !== MinimeeType::Js)
+		{
+			throw new Exception(Craft::t('Attempting to set an unknown type `' . $type . '`.'));
+		}
+
+		$this->_type = $type;
 
 		return $this;
 	}

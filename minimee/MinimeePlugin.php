@@ -1,5 +1,9 @@
 <?php namespace Craft;
 
+use \Guzzle\Http\Client;
+use \Guzzle\Http\ClientInterface;
+use \SelvinOrtiz\Zit\Zit;
+
 /**
  * Minimee by John D Wells
  *
@@ -58,18 +62,37 @@ class MinimeePlugin extends BasePlugin
 	}
 
 	/**
-	 * Hook & Event binding is done during initialisation
+	 * Autoloading, Dependency Injection, Hook & Event binding
 	 * 
 	 * @return Void
 	 */
 	public function init()
 	{
-		craft()->on('minimee.createCache', function(Event $event) {
-			if(craft()->config->get('devMode'))
-			{
-				craft()->minimee->deleteExpiredCache();
-			}
-		});
+		$this->_autoload();
+
+		$this->_registerMinimeeDI();
+
+		$this->_bindEvents();
+	}
+
+	/**
+	 * Logging any messages to Craft.
+	 * 
+	 * @param String $msg
+	 * @param String $level
+	 * @param Bool $force
+	 * @return Void
+	 */
+	public static function log($msg, $level = LogLevel::Info, $force = false)
+	{
+		if(version_compare('2.0', craft()->getVersion(), '<'))
+		{
+			Craft::log($msg, $level, $force);
+		}
+		else
+		{
+			parent::log($msg, $level, $force);
+		}
 	}
 
 	/**
@@ -79,8 +102,9 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function defineSettings()
 	{
-		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
+		$this->_autoload();
 
+		// we don't use DI here because defineSettings() may get run without first running init()
 		$settings = new Minimee_SettingsModel();
 
 		return $settings->defineAttributes();
@@ -96,7 +120,7 @@ class MinimeePlugin extends BasePlugin
 
 		return craft()->templates->render('minimee/settings', array(
 			'settings' => $this->getSettings(),
-			'filesystemConfigExists' => IOHelper::fileExists($filesystemConfigPath)
+			'filesystemConfigExists' => (bool) IOHelper::fileExists($filesystemConfigPath)
 
 		));
 	}
@@ -115,8 +139,9 @@ class MinimeePlugin extends BasePlugin
 
 	public function prepSettings($settings)
 	{
-		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
+		$this->_autoload();
 
+		// we don't use DI here because prepSettings() may get run without first running init()
 		$settingsModel = new Minimee_SettingsModel();
 
 		return $settingsModel->prepSettings($settings);
@@ -141,7 +166,75 @@ class MinimeePlugin extends BasePlugin
 	function registerCachePaths()
 	{
 		return array(
-			craft()->minimee->settings->cachePath => Craft::t('Minimee caches')
+			minimee()->service->settings->cachePath => Craft::t('Minimee caches')
 		);
+	}
+
+	/**
+	 * Watch for the "createCache" event, and if in devMode, try to 
+	 * clean up any expired caches
+	 *
+	 * @return void
+	 */
+	protected function _bindEvents()
+	{
+		craft()->on('minimee.createCache', function(Event $event) {
+			if(craft()->config->get('devMode'))
+			{
+				minimee()->service->deleteExpiredCache();
+			}
+		});
+	}
+
+	/**
+	 * Require any enums used across Minimee
+	 *
+	 * @return Void
+	 */
+	protected function _autoload()
+	{
+		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
+
+		Craft::import('plugins.minimee.enums.MinimeeType');
+		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
+		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
+	}
+
+	/**
+	 * Registers all Dependency Injection
+	 *
+	 * @return Void
+	 */
+	protected function _registerMinimeeDI()
+	{
+		minimee()->stash('plugin', $this);
+		minimee()->stash('service', craft()->minimee);
+
+		minimee()->extend('makeSettingsModel', function(Zit $zit, $attributes = array()) {
+			return new Minimee_SettingsModel($attributes);
+		});
+
+		minimee()->extend('makeLocalAssetModel', function(Zit $zit, $attributes = array()) {
+			return new Minimee_LocalAssetModel($attributes);
+		});
+
+		minimee()->extend('makeRemoteAssetModel', function(Zit $zit, $attributes = array()) {
+			return new Minimee_RemoteAssetModel($attributes);
+		});
+
+		minimee()->extend('makeClient', function(Zit $zit) {
+			return new Client;
+		});
+	}
+}
+
+/**
+ * A way to grab the dependency container within the Craft namespace
+ */
+if (!function_exists('\\Craft\\minimee'))
+{
+	function minimee()
+	{
+		return Zit::getInstance();
 	}
 }

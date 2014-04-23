@@ -1,7 +1,5 @@
 <?php namespace Craft;
 
-use Guzzle\Http\Client;
-
 /**
  * Minimee by John D Wells
  *
@@ -16,8 +14,22 @@ use Guzzle\Http\Client;
 /**
  * 
  */
-class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
+class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 {
+	const TimestampZero = '0000000000';
+
+	protected $_client;
+
+	public function __construct($attributes = array(), ClientInterface $client = null)
+	{
+		parent::__construct($attributes);
+
+		if($client)
+		{
+			$this->_client = $client;
+		}
+	}
+
 	/**
 	 * Get the contents of the remote asset.
 	 * 
@@ -25,14 +37,14 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	 */
 	public function getContents()
 	{
-		if( ! $this->_contents)
+		if($this->_contents === null)
 		{
-			$client = new Client();
+			$client = $this->_getInstanceOfClient();
 			$request = $client->get($this->filenameUrl);
 			$response = $request->send();
 			if ($response->isSuccessful())
 			{
-				$this->_contents = $response->getBody();
+				$this->_contents = $response->getBody(true);
 			}
 			else
 			{
@@ -50,7 +62,7 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 	 */
 	public function getLastTimeModified()
 	{
-		return DateTime::createFromString('0000000000');
+		return DateTime::createFromString(self::TimestampZero);
 	}
 
 	/**
@@ -83,5 +95,13 @@ class Minimee_RemoteAssetModel extends Minimee_AssetBaseModel
 		endswitch;
 
 		parent::setAttribute($name, $value);
+	}
+
+	/**
+	 * Either create a fresh instance of Guzzle\Http\Client, or pass the instance we were given during instantiation.
+	 */ 
+	protected function _getInstanceOfClient()
+	{
+		return minimee()->makeClient();
 	}
 }

@@ -14,7 +14,7 @@
 /**
  * 
  */
-class Minimee_SettingsModel extends BaseModel
+class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 {
 	/**
 	 * @return string
@@ -70,8 +70,8 @@ class Minimee_SettingsModel extends BaseModel
 
 		if($cachePathEmpty != $cacheUrlEmpty)
 		{
-			$choose = ($cacheUrlEmpty) ? 'cachePath' : 'cacheUrl';
-			$this->addError($choose, Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
+			$this->addError('cachePath', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
+			$this->addError('cacheUrl', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
 		}
 	}
 
@@ -90,8 +90,8 @@ class Minimee_SettingsModel extends BaseModel
 			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
 			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'cssTagTemplate' 	=> AttributeType::String,
-			'jsTagTemplate' 	=> AttributeType::String,
+			'cssTagTemplate' 	=> array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s"/>'),
+			'jsTagTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>')
 		);
 	}
 
@@ -111,31 +111,48 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		$value = parent::getAttribute('filesystemPath');
 
-		$filesystemPath = ($value) ? craft()->config->parseEnvironmentString($value) : $_SERVER['DOCUMENT_ROOT'];
+		if($value)
+		{
+			$filesystemPath = craft()->config->parseEnvironmentString($value);
+		}
+		else
+		{
+			$filesystemPath = $_SERVER['DOCUMENT_ROOT'];
+		}
 
 		return $this->forceTrailingSlash($filesystemPath);
 	}
 
 	/**
-	 * @return String
+	 * @return String|Bool
 	 */
 	public function getCachePath()
 	{
 		$value = parent::getAttribute('cachePath');
 
-		$cachePath = ($value) ? craft()->config->parseEnvironmentString($value) : craft()->path->getStoragePath() . 'minimee/';
+		if( ! $value)
+		{
+			return false;
+		}
+
+		$cachePath = craft()->config->parseEnvironmentString($value);
 
 		return $this->forceTrailingSlash($cachePath);
 	}
 	
 	/**
-	 * @return String
+	 * @return String|Bool
 	 */
 	public function getCacheUrl()
 	{
 		$value = parent::getAttribute('cacheUrl');
 
-		$cacheUrl = ($value) ? craft()->config->parseEnvironmentString($value) : UrlHelper::getResourceUrl('minimee');
+		if( ! $value)
+		{
+			return false;
+		}
+
+		$cacheUrl = craft()->config->parseEnvironmentString($value);
 
 		return $this->forceTrailingSlash($cacheUrl);
 	}
@@ -161,9 +178,42 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		$value = parent::getAttribute('baseUrl');
 
-		$baseUrl = ($value) ? craft()->config->parseEnvironmentString($value) : craft()->getSiteUrl();
+		if($value)
+		{
+			$baseUrl = craft()->config->parseEnvironmentString($value);
+		}
+		else
+		{
+			$baseUrl = craft()->getSiteUrl();
+		}
 
 		return $this->forceTrailingSlash($baseUrl);
+	}
+
+	public function getCssTagTemplate()
+	{
+		$value = parent::getAttribute('cssTagTemplate');
+
+		if( ! $value)
+		{
+			$attributes = $this->defineAttributes();
+			return $attributes['cssTagTemplate']['default'];
+		}
+
+		return $value;
+	}
+
+	public function getJsTagTemplate()
+	{
+		$value = parent::getAttribute('jsTagTemplate');
+
+		if( ! $value)
+		{
+			$attributes = $this->defineAttributes();
+			return $attributes['jsTagTemplate']['default'];
+		}
+
+		return $value;
 	}
 
 	/**
@@ -176,6 +226,10 @@ class Minimee_SettingsModel extends BaseModel
 	{
 		switch($name) :
 
+			case('baseUrl') :
+				return $this->getBaseUrl();			
+			break;
+
 			case('cachePath') :
 				return $this->getCachePath();			
 			break;
@@ -183,25 +237,20 @@ class Minimee_SettingsModel extends BaseModel
 			case('cacheUrl') :
 				return $this->getCacheUrl();			
 			break;
-
-			case('baseUrl') :
-				return $this->getBaseUrl();			
+			case('cssTagTemplate') :
+				return $this->getCssTagTemplate();
 			break;
 
 			case('filesystemPath') :
 				return $this->getFilesystemPath();			
 			break;
 
+			case('jsTagTemplate') :
+				return $this->getJsTagTemplate();
+			break;
+
 		endswitch;
 
 		return parent::getAttribute($name);
-	}
-
-	/**
-	 * @return Bool
-	 */
-	public function exists()
-	{
-		return IOHelper::folderExists($this->cachePath);
 	}
 }

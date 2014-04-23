@@ -1,0 +1,11 @@
+{
+	"autoload": {
+		"psr-0": {
+			"SelvinOrtiz": "src"
+		}
+	},
+	"require": {
+		"selvinortiz/zit": "dev-master",
+		"mrclay/minify" : "dev-master"
+	}
+}

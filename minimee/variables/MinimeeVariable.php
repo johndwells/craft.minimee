@@ -25,7 +25,7 @@ class MinimeeVariable
 	 */
 	public function css($assets, $settings = array())
 	{
-		return $this->_run('css', $assets, $settings);
+		return $this->_run(MinimeeType::Css, $assets, $settings);
 	}
 
 	/**
@@ -37,7 +37,7 @@ class MinimeeVariable
 	 */
 	public function js($assets, $settings = array())
 	{
-		return $this->_run('js', $assets, $settings);
+		return $this->_run(MinimeeType::Js, $assets, $settings);
 	}
 
 	/**
@@ -50,17 +50,17 @@ class MinimeeVariable
 	 */
 	protected function _run($type, $assets, $settings = array())
 	{
-		Craft::log(Craft::t('MinimeeVariable::' . $type . '() is being run now.'));
+		MinimeePlugin::log(Craft::t('MinimeeVariable::' . $type . '() is being run now.'));
 
-		$minified = craft()->minimee->$type($assets, $settings);
+		$minified = minimee()->service->run($type, $assets, $settings);
 
 		if( ! $minified)
 		{
-			$html = craft()->minimee->makeTagsByType($type, $assets);
-			return craft()->minimee->returnHtmlAsTwigMarkup($html);
+			$html = minimee()->service->makeTagsByType($type, $assets);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
-		$html = craft()->minimee->makeTagsByType($type, $minified);
-		return craft()->minimee->returnHtmlAsTwigMarkup($html);
+		$html = minimee()->service->makeTagsByType($type, $minified);
+		return minimee()->service->makeTwigMarkupFromHtml($html);
 	}
 }

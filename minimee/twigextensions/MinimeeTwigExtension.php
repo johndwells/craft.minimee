@@ -49,31 +49,31 @@ class MinimeeTwigExtension extends \Twig_Extension
 		$type = $this->detectType($html);
 		if( ! $type)
 		{
-			Craft::log('Could not determine the type of asset to process.', LogLevel::Warning);
-			return craft()->minimee->returnHtmlAsTwigMarkup($html);
+			MinimeePlugin::log('Could not determine the type of asset to process.', LogLevel::Warning);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
 		// we need to find some assets in the HTML
 		$assets = $this->pregMatchAssetsByType($type, $html);
 		if( ! $assets)
 		{
-			Craft::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
-			return craft()->minimee->returnHtmlAsTwigMarkup($html);
+			MinimeePlugin::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
 		// hand off the rest to our service
-		$minified = craft()->minimee->$type($assets, $settings);
+		$minified = minimee()->service->run($type, $assets, $settings);
 
 		// false means we failed, so return original markup
 		if( ! $minified)
 		{
-			return craft()->minimee->returnHtmlAsTwigMarkup($html);
+			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
 
-		$minifiedAsTags = craft()->minimee->makeTagsByType($type, $minified);
+		$minifiedAsTags = minimee()->service->makeTagsByType($type, $minified);
 
 		// return minified tag(s) as Twig Markup
-		return craft()->minimee->returnHtmlAsTwigMarkup($minifiedAsTags);
+		return minimee()->service->makeTwigMarkupFromHtml($minifiedAsTags);
 	}
 
 	/**
@@ -86,12 +86,12 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		if(strpos($html, '<link') !== FALSE)
 		{
-			return 'css';
+			return MinimeeType::Css;
 		}
 
 		if(strpos($html, '<script') !== FALSE)
 		{
-			return 'js';
+			return MinimeeType::Js;
 		}
 
 		return FALSE;
@@ -109,11 +109,11 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		switch (strtolower($type)) :
 
-			case 'css' :
+			case MinimeeType::Css :
 				$pat = "/<link{1}.*?href=['|\"']{1}(.*?)['|\"]{1}[^>]*>/i";
 			break;
 
-			case 'js' :
+			case MinimeeType::Js :
 				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/i";
 			break;
 

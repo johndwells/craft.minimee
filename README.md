@@ -91,7 +91,6 @@ To use this feature, begin by copying the contents of the `minimee/config.php` f
 
 For more on how multi-environment configs work in Craft, see [http://buildwithcraft.com/docs/multi-environment-configs](http://buildwithcraft.com/docs/multi-environment-configs).
 
-
 ### The Settings "Cascade"
 
 Given all of the ways to configure Minimee, keep in mind the the cascade or inheritance of these methods:
@@ -226,6 +225,7 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 	* useX
 	* protected has leading underscore?	
 * unit test
+* remove use of GLOBALS in preference of pathsService
 
 ### Roadmap - post 1.0 release
 

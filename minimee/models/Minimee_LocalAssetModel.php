@@ -14,16 +14,16 @@
 /**
  * 
  */
-class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
+class Minimee_LocalAssetModel extends Minimee_BaseAssetModel
 {
 	/**
 	 * Set our location based on contents of filename
 	 *
-	 *@ return String
+	 * @return String
 	 */
 	public function getContents()
 	{
-		if( ! $this->_contents)
+		if($this->_contents === null)
 		{
 			$this->_contents = IOHelper::getFileContents($this->filenamePath);
 
@@ -43,7 +43,7 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	 */
 	public function getLastTimeModified()
 	{
-		if( ! $this->_lastTimeModified)
+		if($this->_lastTimeModified === null)
 		{
 			$this->_lastTimeModified = IOHelper::getLastTimeModified($this->filenamePath);
 
@@ -61,7 +61,19 @@ class Minimee_LocalAssetModel extends Minimee_AssetBaseModel
 	 */
 	public function exists()
 	{
-		return IOHelper::fileExists($this->filenamePath);
+		if($this->_exists === null)
+		{
+			$realPath = IOHelper::fileExists($this->filenamePath);
+
+			if($realPath && $realPath !== $this->filenamePath)
+			{
+				$this->filenamePath = $realPath;
+			}
+
+			$this->_exists = (bool) $realPath;
+		}
+
+		return $this->_exists;
 	}
 
 	/**
