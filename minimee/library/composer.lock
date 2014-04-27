@@ -1,0 +1,110 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "3cab57ffe0ae86239e50be3f8d8e8e3f",
+    "packages": [
+        {
+            "name": "mrclay/minify",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrclay/minify.git",
+                "reference": "fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrclay/minify/zipball/fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9",
+                "reference": "fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">=5.2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "min/lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Clay",
+                    "email": "steve@mrclay.org",
+                    "homepage": "http://www.mrclay.org/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
+            "homepage": "http://code.google.com/p/minify/",
+            "time": "2014-04-03 23:53:48"
+        },
+        {
+            "name": "selvinortiz/zit",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/selvinortiz/zit.git",
+                "reference": "3382b3800db783841134106509ccf3e8f8d01e5c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/selvinortiz/zit/zipball/3382b3800db783841134106509ccf3e8f8d01e5c",
+                "reference": "3382b3800db783841134106509ccf3e8f8d01e5c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SelvinOrtiz\\Zit": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Selvin Ortiz",
+                    "email": "selvin@selvin.co",
+                    "homepage": "http://twitter.com/selvinortiz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tiny dependency management library for PHP 5.3",
+            "homepage": "https://github.com/selvinortiz/zit",
+            "keywords": [
+                "dependency",
+                "injection",
+                "zit"
+            ],
+            "time": "2014-03-26 06:18:29"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "selvinortiz/zit": 20,
+        "mrclay/minify": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
