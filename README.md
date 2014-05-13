@@ -11,6 +11,10 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ---
 
+## New in v0.8.2
+
+* Clear Minimee's cache from CP (Settings > Tools > Clear Caches)
+
 ## Features
 
 * Config settings will parse [Environment Variables](http://buildwithcraft.com/docs/multi-environment-configs#environment-specific-variables)
