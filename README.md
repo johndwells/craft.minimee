@@ -141,7 +141,7 @@ Minimee's template variable is attached to Craft's global variable `{{ craft }}`
 	}}
 
 
-##### CSS:
+##### JS:
 
 	{{ craft.minimee.js([
 			'/assets/js/jquery.js',
