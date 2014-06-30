@@ -11,10 +11,6 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ---
 
-## New in v0.8.2
-
-* Clear Minimee's cache from CP (Settings > Tools > Clear Caches)
-
 ## Features
 
 * Config settings will parse [Environment Variables](http://buildwithcraft.com/docs/multi-environment-configs#environment-specific-variables)
@@ -25,6 +21,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 * When in `devMode`, Minimee will throw `Exception`s if unable to run successfully
 * When in `devMode`, will automatically attempt to clean up what it can determine are expired caches
 * Override CP Settings via filesystem config (requires Craft 1.4), or at runtime
+* Clear Minimee's cache from CP (Settings > Tools > Clear Caches)
 
 ---
 
