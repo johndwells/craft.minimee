@@ -584,6 +584,12 @@ class MinimeeService extends BaseApplicationComponent
 					$contents = $asset->contents;
 				}
 
+				// Play nice with others by ensuring a semicolon at eof
+				if(substr($contents, -1) != ';')
+				{
+					$contents .= ';';
+				}
+
 			break;
 			
 			case MinimeeType::Css:
