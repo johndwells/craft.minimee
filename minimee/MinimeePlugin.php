@@ -116,7 +116,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getSettingsHtml()
 	{
-		$filesystemConfigPath = CRAFT_CONFIG_PATH . 'minimee.php';
+		$filesystemConfigPath = craft()->path->getConfigPath() . 'minimee.php';
 
 		return craft()->templates->render('minimee/settings', array(
 			'settings' => $this->getSettings(),
@@ -193,7 +193,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	protected function _autoload()
 	{
-		require_once CRAFT_PLUGINS_PATH . 'minimee/library/vendor/autoload.php';
+		require_once craft()->path->getPluginsPath() . 'minimee/library/vendor/autoload.php';
 
 		Craft::import('plugins.minimee.enums.MinimeeType');
 		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
