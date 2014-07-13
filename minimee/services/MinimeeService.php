@@ -69,7 +69,6 @@ class MinimeeService extends BaseApplicationComponent
 
 	/**
 	 * Generate the HTML tag based on type
-	 * In future this will be configurable.
 	 *
 	 * @param String $type
 	 * @param Array $assets
