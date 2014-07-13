@@ -90,8 +90,9 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
 			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'cssTagTemplate' 	=> array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s"/>'),
-			'jsTagTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>')
+			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s"/>'),
+			'jsReturnTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>'),
+			'returnType'		=> array(AttributeType::String, 'default' => 'url')
 		);
 	}
 
@@ -190,27 +191,40 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		return $this->forceTrailingSlash($baseUrl);
 	}
 
-	public function getCssTagTemplate()
+	public function getCssReturnTemplate()
 	{
-		$value = parent::getAttribute('cssTagTemplate');
+		$value = parent::getAttribute('cssReturnTemplate');
 
 		if( ! $value)
 		{
 			$attributes = $this->defineAttributes();
-			return $attributes['cssTagTemplate']['default'];
+			return $attributes['cssReturnTemplate']['default'];
 		}
 
 		return $value;
 	}
 
-	public function getJsTagTemplate()
+	public function getJsReturnTemplate()
 	{
-		$value = parent::getAttribute('jsTagTemplate');
+		$value = parent::getAttribute('jsReturnTemplate');
 
 		if( ! $value)
 		{
 			$attributes = $this->defineAttributes();
-			return $attributes['jsTagTemplate']['default'];
+			return $attributes['jsReturnTemplate']['default'];
+		}
+
+		return $value;
+	}
+
+	public function getReturnType()
+	{
+		$value = parent::getAttribute('returnType');
+
+		if( ! $value)
+		{
+			$attributes = $this->defineAttributes();
+			return $attributes['returnType']['default'];
 		}
 
 		return $value;
@@ -237,16 +251,21 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 			case('cacheUrl') :
 				return $this->getCacheUrl();			
 			break;
-			case('cssTagTemplate') :
-				return $this->getCssTagTemplate();
+
+			case('cssReturnTemplate') :
+				return $this->getCssReturnTemplate();
 			break;
 
 			case('filesystemPath') :
 				return $this->getFilesystemPath();			
 			break;
 
-			case('jsTagTemplate') :
-				return $this->getJsTagTemplate();
+			case('jsReturnTemplate') :
+				return $this->getJsReturnTemplate();
+			break;
+
+			case('returnType') :
+				return $this->getReturnType();
 			break;
 
 		endswitch;

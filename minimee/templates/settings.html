@@ -125,22 +125,40 @@
 
 {{
 	forms.textField({
-		label: "Tag template for <strong>CSS</strong>:"|t,
-		id: 'cssTagTemplate',
-		name: 'cssTagTemplate',
+		label: "Return template for <strong>CSS</strong>:"|t,
+		id: 'cssReturnTemplate',
+		name: 'cssReturnTemplate',
 		placeholder : '<link rel="stylesheet" href="%s">',
 		instructions : "Default is <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;%s&quot;&gt;</code>."|t,
-		value: settings.cssTagTemplate
+		value: settings.cssReturnTemplate
 	})
 }}
 
 {{
 	forms.textField({
-		label: "Tag template for <strong>JS</strong>:"|t,
-		id: 'jsTagTemplate',
-		name: 'jsTagTemplate',
+		label: "Return template for <strong>JS</strong>:"|t,
+		id: 'jsReturnTemplate',
+		name: 'jsReturnTemplate',
 		placeholder : '<script src="%s"></script>',
 		instructions : "Default is <code>&lt;script src=&quot;%s&quot;&gt;&lt;/script&gt;</code>."|t,
-		value: settings.jsTagTemplate
+		value: settings.jsReturnTemplate
+	})
+}}
+
+{{
+	forms.selectField({
+		label: "What type of response to return to template:"|t,
+		id: 'returnType',
+		name: 'returnType',
+		options : [{
+			'value' : 'url',
+			'label' : 'URL'
+		},
+		{
+			'value' : 'contents',
+			'label' : 'Contents'
+		}],
+		instructions : "Select whether to return the URL to cache or the contents of cache."|t,
+		value: settings.returnType
 	})
 }}

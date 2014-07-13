@@ -54,16 +54,18 @@ return array(
 		// 'minifyJsEnabled' => true,
 
 		/**
-		 * The template to use when embedding the cached CSS tag
+		 * The template to use when returning to the template.
+		 * Prior to 0.9.0 this was "cssTagTemplate"
 		 * default: <link rel="stylesheet" href="%s"/>
 		 */
-		// 'cssTagTemplate' => '',
+		// 'cssReturnTemplate' => '',
 
 		/**
-		 * The template to use when embedding the cached JS tag
+		 * The template to use when returning to the template.
+		 * Prior to 0.9.0 this was "jsTagTemplate"
 		 * default: <script src="%s"></script>
 		 */
-		// 'jsTagTemplate' => '',
+		// 'jsReturnTemplate' => '',
 
 		/**
 		 * The Filesystem Path to your cache folder

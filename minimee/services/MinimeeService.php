@@ -83,13 +83,13 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			case (MinimeeType::Css) :
 
-				$settingsName = 'cssTagTemplate';
+				$settingsName = 'cssReturnTemplate';
 
 			break;
 
 			case (MinimeeType::Js) :
 
-				$settingsName = 'jsTagTemplate';
+				$settingsName = 'jsReturnTemplate';
 
 			break;
 		}
@@ -142,7 +142,7 @@ class MinimeeService extends BaseApplicationComponent
 			if($this->isCombineEnabled())
 			{
 				$return[] = $this->ensureCacheExists()
-								 ->makeUrlToCacheFilename();
+								 ->makeReturn();
 			}
 			else
 			{
@@ -153,7 +153,7 @@ class MinimeeService extends BaseApplicationComponent
 									 ->setType($type)
 									 ->setAssets($asset)
 									 ->ensureCacheExists()
-									 ->makeUrlToCacheFilename();
+									 ->makeReturn();
 				}
 			}
 		}
@@ -328,6 +328,8 @@ class MinimeeService extends BaseApplicationComponent
 		// as of v2.0 we can take filesystem configs
 		if(version_compare('2.0', craft()->getVersion(), '<='))
 		{
+			$settings = $this->supportLegacyNamesFromConfig($settings);
+
 			foreach($settings as $attribute => $value)
 			{
 				if(craft()->config->exists($attribute, 'minimee'))
@@ -545,6 +547,21 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
+	protected function makeReturn()
+	{
+		if($this->settings->getReturnType() == 'contents')
+		{
+			return IOHelper::getFileContents($this->makePathToCacheFilename());
+		}
+		else
+		{
+			return $this->makeUrlToCacheFilename();
+		}
+	}
+
+	/**
+	 * @return String
+	 */
 	protected function makeUrlToCacheFilename()
 	{
 		if($this->settings->useResourceCache())
@@ -715,6 +732,8 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$settingsOverrides = ( ! is_array($settingsOverrides)) ? array($settingsOverrides) : $settingsOverrides;
 
+		$settingsOverrides = $this->supportLegacyNamesAtRuntime($settingsOverrides);
+
 		$runtimeSettings = array_merge($this->getPluginSettings(), $settingsOverrides);
 
 		$this->settings = minimee()->makeSettingsModel($runtimeSettings);
@@ -749,5 +768,54 @@ class MinimeeService extends BaseApplicationComponent
 		$this->_type = $type;
 
 		return $this;
+	}
+
+	/**
+	 * Handle backwards-compat for 'cssTagTemplate' and 'jsTagTemplate' setting names.
+	 * Remove in 1.x release!
+	 *
+	 * @param Array $settings
+	 * @return Array
+	 */
+	protected function supportLegacyNamesFromConfig($settings = array())
+	{
+		$settingNameMap = array(
+			'cssTagTemplate' => 'cssReturnTemplate',
+			'jsTagTemplate' => 'jsReturnTemplate');
+
+		foreach($settingNameMap as $oldAttributeName => $newAttributeName)
+		{
+			if(craft()->config->exists($oldAttributeName, 'minimee'))
+			{
+				$settings[$newAttributeName] = craft()->config->get($oldAttributeName, 'minimee');
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Handle backwards-compat for 'cssTagTemplate' and 'jsTagTemplate' setting names.
+	 * Remove in 1.x release!
+	 *
+	 * @param Array $runtimeSettings
+	 * @return Array
+	 */
+	protected function supportLegacyNamesAtRuntime($runtimeSettings = array())
+	{
+		$settingNameMap = array(
+			'cssTagTemplate' => 'cssReturnTemplate',
+			'jsTagTemplate' => 'jsReturnTemplate');
+
+		foreach($settingNameMap as $oldAttributeName => $newAttributeName)
+		{
+			if(array_key_exists($oldAttributeName, $runtimeSettings))
+			{
+				$runtimeSettings[$newAttributeName] = $runtimeSettings[$oldAttributeName];
+				unset($runtimeSettings[oldAttributeName]);
+			}
+		}
+
+		return $runtimeSettings;
 	}
 }
