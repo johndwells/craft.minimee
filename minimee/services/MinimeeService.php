@@ -79,24 +79,24 @@ class MinimeeService extends BaseApplicationComponent
 		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
 		$tags = '';
 
+		switch ($type)
+		{
+			case (MinimeeType::Css) :
+
+				$settingsName = 'cssTagTemplate';
+
+			break;
+
+			case (MinimeeType::Js) :
+
+				$settingsName = 'jsTagTemplate';
+
+			break;
+		}
+
 		foreach($assets as $asset)
 		{
-			switch ($type)
-			{
-				case (MinimeeType::Css) :
-
-					$cssTagTemplate = $this->settings->cssTagTemplate;
-					$tags .= sprintf($cssTagTemplate, $asset);
-
-				break;
-
-				case (MinimeeType::Js) :
-
-					$jsTagTemplate = $this->settings->jsTagTemplate;
-					$tags .= sprintf($jsTagTemplate, $asset);
-
-				break;
-			}
+			$tags .= sprintf($this->settings->$settingsName, $asset);
 		}
 
 		return $tags;
