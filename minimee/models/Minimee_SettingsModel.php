@@ -90,7 +90,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
 			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
 			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s"/>'),
+			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
 			'jsReturnTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>'),
 			'returnType'		=> array(AttributeType::String, 'default' => 'url')
 		);
