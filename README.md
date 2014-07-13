@@ -1,4 +1,4 @@
-# Minimee for Craft - v0.8.4
+# Minimee for Craft - v0.9.0
 
 A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -8,6 +8,13 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 * [On github](https://github.com/johndwells/craft.minimee)
 * [Support](https://github.com/johndwells/craft.minimee/issues)
+
+---
+
+## New in v0.9.0
+
+* Ability to return contents of the cache to template
+* Settings `cssTagTemplate` and `jsTagTemplate` renamed to `cssReturnTemplate' and `jsReturnTemplate` (old naming is deprecated and support will be removed in 1.x)
 
 ---
 
@@ -22,6 +29,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 * When in `devMode`, will automatically attempt to clean up what it can determine are expired caches
 * Override CP Settings via filesystem config (requires Craft 1.4), or at runtime
 * Clear Minimee's cache from CP (Settings > Tools > Clear Caches)
+* Ability to return contents of the cache to template
 
 ---
 
@@ -80,8 +88,8 @@ In addition to specifying configuration settings via the CP, you can also pass a
 		'baseUrl' : 'http://craft.dev/',
 		'cachePath' : '/var/www/public/cache/',
 		'cacheUrl' : 'http://craft.dev/cache/',
-		'cssTagTemplate' : '<link rel="stylesheet" href="%s">',
-		'jsTagTemplate' : '<script src="%s"></script>'
+		'cssReturnTemplate' : '<link rel="stylesheet" href="%s">',
+		'jsReturnTemplate' : '<script src="%s"></script>'
 	} %}
 
 ### Filesystem Config Settings
