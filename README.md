@@ -234,7 +234,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 	* useX
 	* protected has leading underscore?	
 * unit test
-* remove use of GLOBALS in preference of pathsService
 
 ### Roadmap - post 1.0 release
 
