@@ -23,8 +23,8 @@ class m140713_000000_minimee_ChangeTagToReturnSettingsFieldNames extends BaseMig
         $settings = json_decode($oldSettings['settings'], true);
 
         // Change setting names
-        $settings['cssReturnTemplate'] = $settings['cssTagTemplate'];
-        $settings['jsReturnTemplate'] = $settings['jsTagTemplate'];
+        $settings['cssReturnTemplate'] = array_key_exists('cssTagTemplate', $settings) ? $settings['cssTagTemplate'] : '';
+        $settings['jsReturnTemplate'] = array_key_exists('jsTagTemplate', $settings) ? $settings['jsTagTemplate'] : '';
         unset($settings['cssTagTemplate']);
         unset($settings['jsTagTemplate']);
 
