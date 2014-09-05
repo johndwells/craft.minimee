@@ -1,4 +1,4 @@
-# Minimee for Craft - v0.9.2
+# Minimee for Craft - v0.9.3
 
 A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -11,7 +11,7 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ---
 
-## New in v0.9.0
+## New since v0.9
 
 * Ability to return contents of the cache to template
 * Settings `cssTagTemplate` and `jsTagTemplate` renamed to `cssReturnTemplate' and `jsReturnTemplate` (old naming is deprecated and support will be removed in 1.x)
