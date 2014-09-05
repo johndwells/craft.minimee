@@ -85,7 +85,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public static function log($msg, $level = LogLevel::Info, $force = false)
 	{
-		if(version_compare('2.0', craft()->getVersion(), '<'))
+		if(version_compare('2.0', craft()->getVersion(), '>'))
 		{
 			Craft::log($msg, $level, $force);
 		}
