@@ -539,7 +539,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * @return String
 	 */
-	protected function makePathToStorageFolder()
+	public function makePathToStorageFolder()
 	{
 		return craft()->path->getStoragePath() . self::ResourceTrigger . '/';
 	}

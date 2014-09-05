@@ -165,10 +165,18 @@ class MinimeePlugin extends BasePlugin
 	 */
 	function registerCachePaths()
 	{
-		return array(
-			minimee()->service->settings->cachePath => Craft::t('Minimee caches')
-		);
+		if(minimee()->service->settings->useResourceCache())
+		{
+			return array(
+				minimee()->service->makePathToStorageFolder() => Craft::t('Minimee caches')
+			);
+		}
+		else
+		{
+			return array();
+		}
 	}
+
 
 	/**
 	 * Watch for the "createCache" event, and if in devMode, try to 
