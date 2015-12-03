@@ -16,7 +16,7 @@ use \SelvinOrtiz\Zit\Zit;
  */
 
 /**
- * 
+ *
  */
 class MinimeePlugin extends BasePlugin
 {
@@ -34,7 +34,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.9.3';
+		return '0.9.4';
 	}
 
 	/**
@@ -54,6 +54,30 @@ class MinimeePlugin extends BasePlugin
 	}
 
 	/**
+	 * @return String
+	 */
+	public function getDescription()
+	{
+		return 'Minimize, combine & cache your CSS and JS files.';
+	}
+
+	/**
+	 * @return String
+	 */
+	public function getDocumentationUrl()
+	{
+		return 'https://github.com/johndwells/craft.minimee/blob/master/README.md';
+	}
+
+	/**
+	 * @return String
+	 */
+	public function getReleaseFeedUrl()
+	{
+		return 'https://raw.githubusercontent.com/johndwells/craft.releases/master/minimee.json';
+	}
+
+	/**
 	 * @return Bool
 	 */
 	public function hasCpSection()
@@ -63,7 +87,7 @@ class MinimeePlugin extends BasePlugin
 
 	/**
 	 * Autoloading, Dependency Injection, Hook & Event binding
-	 * 
+	 *
 	 * @return Void
 	 */
 	public function init()
@@ -77,7 +101,7 @@ class MinimeePlugin extends BasePlugin
 
 	/**
 	 * Logging any messages to Craft.
-	 * 
+	 *
 	 * @param String $msg
 	 * @param String $level
 	 * @param Bool $force
@@ -97,7 +121,7 @@ class MinimeePlugin extends BasePlugin
 
 	/**
 	 * We define our setting attributes by way of our own Minimee_SettingsModel.
-	 * 
+	 *
 	 * @return Array
 	 */
 	public function defineSettings()
@@ -179,7 +203,7 @@ class MinimeePlugin extends BasePlugin
 
 
 	/**
-	 * Watch for the "createCache" event, and if in devMode, try to 
+	 * Watch for the "createCache" event, and if in devMode, try to
 	 * clean up any expired caches
 	 *
 	 * @return void
