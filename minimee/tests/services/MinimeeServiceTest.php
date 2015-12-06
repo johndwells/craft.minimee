@@ -755,14 +755,14 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssTagTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssReturnTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
 
 			return $settingsModelMock;
 		});
 
-		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
+		$cssReturnTemplate = minimee()->service->settings->cssReturnTemplate;
 
-		$rendered = sprintf($cssTagTemplate, $css);
+		$rendered = sprintf($cssReturnTemplate, $css);
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $css));
 	}
 
@@ -775,17 +775,17 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssTagTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssReturnTemplate')->andReturn('<link rel="stylesheet" href="%s"/>');
 
 			return $settingsModelMock;
 		});
 
-		$cssTagTemplate = minimee()->service->settings->cssTagTemplate;
+		$cssReturnTemplate = minimee()->service->settings->cssReturnTemplate;
 
 		$rendered = '';
 		foreach($cssArray as $css)
 		{
-			$rendered .= sprintf($cssTagTemplate, $css);
+			$rendered .= sprintf($cssReturnTemplate, $css);
 		}
 
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('css', $cssArray));
@@ -797,14 +797,14 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
-			$settingsModelMock->shouldReceive('getAttribute')->with('jsTagTemplate')->andReturn('<script src="%s"></script>');
+			$settingsModelMock->shouldReceive('getAttribute')->with('jsReturnTemplate')->andReturn('<script src="%s"></script>');
 
 			return $settingsModelMock;
 		});
 
-		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
+		$jsReturnTemplate = minimee()->service->settings->jsReturnTemplate;
 
-		$rendered = sprintf($jsTagTemplate, $js);
+		$rendered = sprintf($jsReturnTemplate, $js);
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $js));
 	}
 
@@ -817,17 +817,17 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
-			$settingsModelMock->shouldReceive('getAttribute')->with('jsTagTemplate')->andReturn('<script src="%s"></script>');
+			$settingsModelMock->shouldReceive('getAttribute')->with('jsReturnTemplate')->andReturn('<script src="%s"></script>');
 
 			return $settingsModelMock;
 		});
 
-		$jsTagTemplate = minimee()->service->settings->jsTagTemplate;
+		$jsReturnTemplate = minimee()->service->settings->jsReturnTemplate;
 
 		$rendered = '';
 		foreach($jsArray as $js)
 		{
-			$rendered .= sprintf($jsTagTemplate, $js);
+			$rendered .= sprintf($jsReturnTemplate, $js);
 		}
 
 		$this->assertEquals($rendered, minimee()->service->makeTagsByType('js', $jsArray));

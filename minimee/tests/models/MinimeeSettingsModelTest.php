@@ -23,26 +23,26 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	public function testGetTagTemplatesWhenEmpty()
 	{
 		$this->_populateWith(array(
-			'cssTagTemplate' => '',
-			'jsTagTemplate' => ''
+			'cssReturnTemplate' => '',
+			'jsReturnTemplate' => ''
 		));
 
-		$defaultCssTagTemplate = $this->_model->defineAttributes()['cssTagTemplate']['default'];
-		$defaultJsTagTemplate = $this->_model->defineAttributes()['jsTagTemplate']['default'];
+		$defaultcssReturnTemplate = $this->_model->defineAttributes()['cssReturnTemplate']['default'];
+		$defaultjsReturnTemplate = $this->_model->defineAttributes()['jsReturnTemplate']['default'];
 
-		$this->assertEquals($defaultCssTagTemplate, $this->_model->cssTagTemplate);
-		$this->assertEquals($defaultJsTagTemplate, $this->_model->jsTagTemplate);
+		$this->assertEquals($defaultcssReturnTemplate, $this->_model->cssReturnTemplate);
+		$this->assertEquals($defaultjsReturnTemplate, $this->_model->jsReturnTemplate);
 	}
 
 	public function testGetTagTemplatesWhenNotEmpty()
 	{
 		$this->_populateWith(array(
-			'cssTagTemplate' => 'cssTagTemplate',
-			'jsTagTemplate' => 'jsTagTemplate'
+			'cssReturnTemplate' => 'cssReturnTemplate',
+			'jsReturnTemplate' => 'jsReturnTemplate'
 		));
 
-		$this->assertEquals('cssTagTemplate', $this->_model->cssTagTemplate);
-		$this->assertEquals('jsTagTemplate', $this->_model->jsTagTemplate);
+		$this->assertEquals('cssReturnTemplate', $this->_model->cssReturnTemplate);
+		$this->assertEquals('jsReturnTemplate', $this->_model->jsReturnTemplate);
 	}
 
 	public function testGetFilesystemPathWithValue()
