@@ -1,0 +1,42 @@
+<phpunit
+	colors = "true"
+	convertErrorsToExceptions = "true"
+	convertNoticesToExceptions = "true"
+	convertWarningsToExceptions = "false"
+	stopOnFailure = "false"
+	syntaxCheck = "true"
+	verbose = "true"
+	strict = "false"
+	bootstrap = "bootstrap.php">
+
+    <testsuites>
+        <testsuite name="MinimeeTests">
+            <directory>models</directory>
+            <directory>services</directory>
+        </testsuite>
+    </testsuites>
+
+	<filter>
+		<whitelist>
+			<directory suffix=".php">../models</directory>
+			<directory suffix=".php">../services</directory>
+		</whitelist>
+	</filter>
+
+	<filter>
+		<blacklist>
+			<directory suffix=".php">../libraries</directory>
+			<directory suffix=".php">bin</directory>
+			<directory suffix=".php">vendor</directory>
+			<directory suffix=".php">mocks</directory>
+			<directory suffix=".php">assets</directory>
+			<directory suffix=".php">report</directory>
+		</blacklist>
+	</filter>
+
+	<logging>
+		<log type="coverage-html" target="report/coverage" charset="UTF-8" yui="true" highlight="false" lowUpperBound="35" highLowerBound="70" />
+		<log type="testdox-html" target="report/testdox.html" />
+		<log type="testdox-text" target="report/testdox.txt" />
+	</logging>
+</phpunit>
