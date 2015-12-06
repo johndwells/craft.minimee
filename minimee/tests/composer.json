@@ -2,8 +2,7 @@
 	"autoload" : {
 		"classmap" : [
 			"../models",
-			"../services",
-			"mocks"
+			"../services"
 		]
 	},
     "require-dev": {
