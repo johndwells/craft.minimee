@@ -117,7 +117,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$checkHeaders = $this->getMethod(minimee()->service, 'checkHeaders');
 		$minimeeService = $checkHeaders->invoke(minimee()->service);
-		$this->assertInstanceOf('\Craft\MinimeeService', $minimeeService); 
+		$this->assertInstanceOf('\Craft\MinimeeService', $minimeeService);
 	}
 
 	public function testAppendToCacheBase()
@@ -416,6 +416,26 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$makeUrlToCacheFilename = $this->getMethod(minimee()->service, 'makeUrlToCacheFilename');
 		$this->assertEquals($assertEquals, $makeUrlToCacheFilename->invoke(minimee()->service));
+	}
+
+	public function testMakeReturnCallsMakePathToCacheFilenameWhenReturnTypeIsUrl()
+	{
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
+			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
+			$settingsModelMock->shouldReceive('getCacheUrl')->andReturn('http://domain.dev/cache/');
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->cacheBase = 'base';
+		minimee()->service->cacheTimestamp = '12345678';
+		minimee()->service->type = MinimeeType::Css;
+
+		$assertEquals = 'http://domain.dev/cache/' . sha1('base') . '.12345678.css';
+
+		$makeReturn = $this->getMethod(minimee()->service, 'makeReturn');
+		$this->assertEquals($assertEquals, $makeReturn->invoke(minimee()->service));
 	}
 
 	public function testMakePathToCacheFilenameWhenUseResourceCacheReturnsFalse()
