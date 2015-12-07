@@ -249,9 +249,7 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Unit Test All The Things
 
-Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts.
-
-**Minimee's Unit Tests can be found on Minimee's [development branch](https://github.com/johndwells/craft.minimee/tree/development).**
+Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts. I'm fairly confident I have no idea what I'm doing, as with most things.
 
 ### Running Minimee's Tests
 
@@ -264,12 +262,14 @@ To run Minimee, the following assumptions are made:
 
 With the assumptions taken care of, these steps should get you up and running: 
 
-1. Fork, clone or download the `development` branch of Minimee
+1. Fork, clone or download the `develop` branch of Minimee
+2. Symlink the `minimee` folder to Craft's `plugin` folder
+3. Update line 7 of `minimee/tests/bootstrap.php` to point to your copy of Craft's boostrap.php file (e.g. `/path/to/your/craft/app/tests/bootstrap.php`)
 2. In terminal, `cd` to `minimee/tests`
 3. Run `composer install --dev`
-1. Run `php vendor/bin/phpunit --bootstrap /path/to/your/craft.dev/craft/app/tests/bootstrap.php`, taking care to update the path accordingly.
+1. Run `php vendor/bin/phpunit`
 
-_Note that for testing, it's not necessary to have Minimee installed, nor even located in your Craft's plugins folder._
+_Note that for testing, it's not necessary to have Minimee installed._
 
 ---
 
