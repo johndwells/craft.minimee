@@ -20,6 +20,26 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 		});
 	}
 
+	public function testGetReturnTypeWhenEmpty()
+	{
+		$this->_populateWith(array(
+			'returnType' => ''
+		));
+
+		$defaultReturnType = $this->_model->defineAttributes()['returnType']['default'];
+
+		$this->assertEquals($defaultReturnType, $this->_model->returnType);
+	}
+
+	public function testGetReturnTypeWhenNotEmpty()
+	{
+		$this->_populateWith(array(
+			'returnType' => 'returnType'
+		));
+
+		$this->assertEquals('returnType', $this->_model->returnType);
+	}
+
 	public function testGetTagTemplatesWhenEmpty()
 	{
 		$this->_populateWith(array(
@@ -366,7 +386,7 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 
 	/**
 	 * Internal method for shorthand populating our Minimee_SettingsModel
-	 * 
+	 *
 	 * @param Array $attributes
 	 * @return Minimee_SettingsModel
 	 */
