@@ -696,7 +696,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	/**
 	 * @dataProvider dataProviderIsEnabledReturnsFalse
 	 */
-	public function testIsCombineEnabledReturnsFalseeWhenTypeIsJs($combineJsEnabled, $combineCssEnabled)
+	public function testIsCombineEnabledReturnsFalseWhenTypeIsJs($combineJsEnabled, $combineCssEnabled)
 	{
 		minimee()->service->type = 'js';
 
