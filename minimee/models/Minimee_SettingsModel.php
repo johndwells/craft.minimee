@@ -12,7 +12,7 @@
  */
 
 /**
- * 
+ *
  */
 class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 {
@@ -32,8 +32,8 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		$settings['combineJsEnabled'] = (bool) $settings['combineJsEnabled'];
 		$settings['minifyCssEnabled'] = (bool) $settings['minifyCssEnabled'];
 		$settings['minifyJsEnabled'] = (bool) $settings['minifyJsEnabled'];
-		$settings['prependUrlEnabled'] = (bool) $settings['prependUrlEnabled'];
-		
+		$settings['cssPrependUrlEnabled'] = (bool) $settings['cssPrependUrlEnabled'];
+
 		return $settings;
 	}
 
@@ -94,7 +94,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
 			'jsReturnTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>'),
 			'returnType'		=> array(AttributeType::String, 'default' => 'url'),
-			'prependUrlEnabled'	=> array(AttributeType::Bool, 'default' => true)
+			'cssPrependUrlEnabled'	=> array(AttributeType::Bool, 'default' => true)
 		);
 	}
 
@@ -142,7 +142,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 
 		return $this->forceTrailingSlash($cachePath);
 	}
-	
+
 	/**
 	 * @return String|Bool
 	 */
@@ -173,7 +173,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 
 		return ($cachePathEmpty && $cacheUrlEmpty);
 	}
-	
+
 	/**
 	 * @return String
 	 */
@@ -243,15 +243,15 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		switch($name) :
 
 			case('baseUrl') :
-				return $this->getBaseUrl();			
+				return $this->getBaseUrl();
 			break;
 
 			case('cachePath') :
-				return $this->getCachePath();			
+				return $this->getCachePath();
 			break;
 
 			case('cacheUrl') :
-				return $this->getCacheUrl();			
+				return $this->getCacheUrl();
 			break;
 
 			case('cssReturnTemplate') :
@@ -259,7 +259,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 			break;
 
 			case('filesystemPath') :
-				return $this->getFilesystemPath();			
+				return $this->getFilesystemPath();
 			break;
 
 			case('jsReturnTemplate') :

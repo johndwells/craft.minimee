@@ -54,10 +54,10 @@ return array(
 		// 'minifyJsEnabled' => true,
 
 		/**
-		 * Prepend Base URL to CSS?
+		 * Prepend URL to relative @import and image paths in CSS?
 		 * default: true
 		 */
-		// 'prependUrlEnabled' => true,
+		// 'cssPrependUrlEnabled' => true,
 
 		/**
 		 * The template to use when returning to the template.

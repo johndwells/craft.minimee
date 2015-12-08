@@ -12,7 +12,7 @@
  */
 
 /**
- * 
+ *
  */
 class MinimeeService extends BaseApplicationComponent
 {
@@ -275,7 +275,7 @@ class MinimeeService extends BaseApplicationComponent
 	protected function createCache()
 	{
 		$contents = '';
-		
+
 		foreach($this->assets as $asset)
 		{
 			$contents .= $this->minifyAsset($asset) . "\n";
@@ -315,7 +315,7 @@ class MinimeeService extends BaseApplicationComponent
 
 		return self::$_pluginSettings;
 	}
-	
+
 	/**
 	 * Fetch settings from our plugin / config
 	 *
@@ -404,7 +404,7 @@ class MinimeeService extends BaseApplicationComponent
 
 			throw new Exception(Craft::t('Minimee has detected invalid plugin settings: ') . $exceptionErrors);
 		}
-		
+
 		if($this->settings->useResourceCache())
 		{
 			IOHelper::ensureFolderExists($this->makePathToStorageFolder());
@@ -573,7 +573,7 @@ class MinimeeService extends BaseApplicationComponent
 
 			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
 		}
-		
+
 		return $this->settings->cacheUrl . $this->makeCacheFilename();
 	}
 
@@ -588,7 +588,7 @@ class MinimeeService extends BaseApplicationComponent
 		craft()->config->maxPowerCaptain();
 
 		switch ($this->type) :
-			
+
 			case MinimeeType::Js:
 
 				if($this->settings->minifyJsEnabled)
@@ -607,12 +607,12 @@ class MinimeeService extends BaseApplicationComponent
 				}
 
 			break;
-			
+
 			case MinimeeType::Css:
 
 				$contents = $asset->contents;
-				
-				if($this->settings->prependUrlEnabled)
+
+				if($this->settings->cssPrependUrlEnabled)
 				{
 					$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 

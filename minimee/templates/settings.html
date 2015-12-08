@@ -73,18 +73,6 @@
 
 </div>
 
-{{
-	forms.lightswitchField({
-		onLabel:	"On",
-		offLabel:	"Off",
-		label: "<strong>Prepend Base URL</strong>" | t,
-		instructions : "Whether or not to prepend the base URL to relative
-     * @import and image paths in CSS." | t,
-		name:		"prependUrlEnabled",
-		on:			settings.prependUrlEnabled
-	})
-}}
-
 <hr>
 
 {{
@@ -175,3 +163,13 @@
 	})
 }}
 
+{{
+	forms.lightswitchField({
+		onLabel:	"On",
+		offLabel:	"Off",
+		label: "<strong>Prepend URLs in CSS?</strong>" | t,
+		instructions : "Whether or not to prepend URLs to <em>relative</em> @import and image paths in CSS." | t,
+		name:		"cssPrependUrlEnabled",
+		on:			settings.cssPrependUrlEnabled
+	})
+}}
