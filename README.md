@@ -91,17 +91,18 @@ In addition to specifying configuration settings via the CP, you can also pass a
 		'cacheUrl' : 'http://craft.dev/cache/',
 		'cssReturnTemplate' : '<link rel="stylesheet" href="%s">',
 		'jsReturnTemplate' : '<script src="%s"></script>',
+		'returnType' : 'url',
 		'cssPrependUrlEnabled' : true,
 		'cssPrependUrl' : ''
 	} %}
 
 ### Filesystem Config Settings
 
-As of Craft 2.0, Minimee supports the ability to override the CP Settings with filesystem configs. Note that this does NOT reduce any processing/DB overheads, but it may suit how you prefer to configure Minimee across multiple environments.
+As of Craft 2.0, Minimee supports the ability to override the CP Settings with filesystem configs. Note that this **does NOT** reduce any processing/DB overheads, but it may suit how you prefer to configure Minimee across multiple environments.
 
 To use this feature, begin by copying the contents of the `minimee/config.php` file into a new file named `minimee.php`, and move it to your `craft/config` folder. Then uncomment and set as few or as many settings as you wish.
 
-For more on how multi-environment configs work in Craft, see [http://buildwithcraft.com/docs/multi-environment-configs](http://buildwithcraft.com/docs/multi-environment-configs).
+For more on how multi-environment configs work in Craft, see [https://craftcms.com/docs/multi-environment-configs](https://craftcms.com/docs/multi-environment-configs).
 
 ### The Settings "Cascade"
 
@@ -268,11 +269,16 @@ With the assumptions taken care of, these steps should get you up and running:
 1. Fork, clone or download the `develop` branch of Minimee
 2. Symlink the `minimee` folder to Craft's `plugin` folder
 3. Update line 7 of `minimee/tests/bootstrap.php` to point to your copy of Craft's boostrap.php file (e.g. `/path/to/your/craft/app/tests/bootstrap.php`)
-2. In terminal, `cd` to `minimee/tests`
-3. Run `composer install --dev`
-1. Run `php vendor/bin/phpunit`
+4. In Terminal, `cd` to `minimee/tests`
+5. Run `composer install --dev`
+6. Run `php vendor/bin/phpunit`
 
 _Note that for testing, it's not necessary to have Minimee installed._
+
+##### Note to self regarding UT
+
+Within MAMP Pro I have downloaded a number of PHP versions to be able to test across; I have modified the `php.ini` file of version 5.5.9 to turn on xdebug, so when wanting to run coverage reports, use this complete command: `/Applications/MAMP/bin/php/php5.5.9/bin/php vendor/bin/phpunit`
+
 
 ---
 
