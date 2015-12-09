@@ -80,6 +80,12 @@ return array(
 		// 'jsReturnTemplate' => '',
 
 		/**
+		 * What type of response to pass through
+		 * the return template.
+		 */
+		// 'returnType' => 'url',
+
+		/**
 		 * The Filesystem Path to your cache folder
 		 * default: $_SERVER['DOCUMENT_ROOT']
 		 */
