@@ -60,6 +60,12 @@ return array(
 		// 'cssPrependUrlEnabled' => true,
 
 		/**
+		 * The URL to use when rewriting CSS
+		 * and prepending
+		 */
+		// 'cssPrependUrl' => '',
+
+		/**
 		 * The template to use when returning to the template.
 		 * Prior to 0.9.0 this was "cssTagTemplate"
 		 * default: <link rel="stylesheet" href="%s">

@@ -82,19 +82,20 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	public function defineAttributes()
 	{
 		return array(
-			'cachePath'       	=> AttributeType::String,
-			'cacheUrl'       	=> AttributeType::String,
-			'enabled'           => array(AttributeType::Bool, 'default' => true),
-			'filesystemPath'    => AttributeType::String,
-			'baseUrl'           => AttributeType::String,
-			'combineCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
-			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
-			'jsReturnTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>'),
-			'returnType'		=> array(AttributeType::String, 'default' => 'url'),
-			'cssPrependUrlEnabled'	=> array(AttributeType::Bool, 'default' => true)
+			'cachePath'       	    => AttributeType::String,
+			'cacheUrl'       	    => AttributeType::String,
+			'enabled'               => array(AttributeType::Bool, 'default' => true),
+			'filesystemPath'        => AttributeType::String,
+			'baseUrl'               => AttributeType::String,
+			'combineCssEnabled'	    => array(AttributeType::Bool, 'default' => true),
+			'combineJsEnabled' 	    => array(AttributeType::Bool, 'default' => true),
+			'minifyCssEnabled'	    => array(AttributeType::Bool, 'default' => true),
+			'minifyJsEnabled'	    => array(AttributeType::Bool, 'default' => true),
+			'cssReturnTemplate'     => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
+			'jsReturnTemplate' 	    => array(AttributeType::String, 'default' => '<script src="%s"></script>'),
+			'returnType'		    => array(AttributeType::String, 'default' => 'url'),
+			'cssPrependUrlEnabled'	=> array(AttributeType::Bool, 'default' => true),
+			'cssPrependUrl'         => array(AttributeType::String, 'default' => '')
 		);
 	}
 
@@ -158,6 +159,23 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		$cacheUrl = craft()->config->parseEnvironmentString($value);
 
 		return $this->forceTrailingSlash($cacheUrl);
+	}
+
+	/**
+	 * @return String|Bool
+	 */
+	public function getCssPrependUrl()
+	{
+		$value = parent::getAttribute('cssPrependUrl');
+
+		if( ! $value)
+		{
+			return false;
+		}
+
+		$cssPrependUrl = craft()->config->parseEnvironmentString($value);
+
+		return $this->forceTrailingSlash($cssPrependUrl);
 	}
 
 	/**
@@ -256,6 +274,10 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 
 			case('cssReturnTemplate') :
 				return $this->getCssReturnTemplate();
+			break;
+
+			case('cssPrependUrl') :
+				return $this->getCssPrependUrl();
 			break;
 
 			case('filesystemPath') :
