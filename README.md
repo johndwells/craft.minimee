@@ -11,13 +11,6 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 ---
 
-## New since v0.9
-
-* Ability to return contents of the cache to template
-* Settings `cssTagTemplate` and `jsTagTemplate` renamed to `cssReturnTemplate' and `jsReturnTemplate` (old naming is deprecated and support will be removed in 1.x)
-
----
-
 ## Features
 
 * Config settings will parse [Environment Variables](http://buildwithcraft.com/docs/multi-environment-configs#environment-specific-variables)
@@ -30,6 +23,8 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 * Override CP Settings via filesystem config (requires Craft 1.4), or at runtime
 * Clear Minimee's cache from CP (Settings > Tools > Clear Caches)
 * Ability to return contents of the cache to template
+
+_Looking to minify your HTML, or minify inline CSS/JS? You should check out [https://github.com/khalwat/minify](https://github.com/khalwat/minify)._
 
 ---
 
@@ -49,7 +44,7 @@ Out of the box and when first installed, Minimee will be automatically enabled a
 
 ![settings](minimee/resources/img/settings.png)
 
-> Note that all settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
+> Note that all string settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
 
 ##### Filesystem Path
 
@@ -68,6 +63,12 @@ Similar to the `Filesystem Path`, this may need to be overriden in certain circu
 By default, Minimee stores cached assets in Craft's `craft/storage` folder, which likely sits above webroot. The cache is then delivered by Craft itself, via a special "resource" url, e.g. `http://domain.com/resources/minimee/filename.timestamp.ext`.
 
 Alternatively, you can specify a cache path & URL which sits _below_ webroot, so that the cached assets are delivered directly by your server. This is the recommended setup for optimal performance gains.
+
+##### CSS Prepend URL
+
+When Minimee processes CSS files, it will by default alter any _relative_ @import and image URIs (e.g. `url("../img/arrow.svg")`) to be a fully-qualified URL, using the asset's URL as the basis. This ensures that the links will remain intact regardless of where your might save the cached files.
+
+You can opt to turn this feature off; additionally you can set the URL to something custom, by using the `cssPrependUrl` setting.  This is particularly useful if you would like to upload your static assets to a CDN, or link to assets through a cookie-less domain.
 
 ### Runtime Settings
 
@@ -89,7 +90,9 @@ In addition to specifying configuration settings via the CP, you can also pass a
 		'cachePath' : '/var/www/public/cache/',
 		'cacheUrl' : 'http://craft.dev/cache/',
 		'cssReturnTemplate' : '<link rel="stylesheet" href="%s">',
-		'jsReturnTemplate' : '<script src="%s"></script>'
+		'jsReturnTemplate' : '<script src="%s"></script>',
+		'cssPrependUrlEnabled' : true,
+		'cssPrependUrl' : ''
 	} %}
 
 ### Filesystem Config Settings
@@ -102,7 +105,7 @@ For more on how multi-environment configs work in Craft, see [http://buildwithcr
 
 ### The Settings "Cascade"
 
-Given all of the ways to configure Minimee, keep in mind the the cascade or inheritance of these methods:
+Given all of the ways to configure Minimee, keep in mind the cascade or inheritance of these methods:
 
 * CP settings are defaults
 * Filesystem settings override CP settings
