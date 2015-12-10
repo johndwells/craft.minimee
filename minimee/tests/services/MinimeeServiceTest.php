@@ -27,6 +27,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		});
 
         $this->config = m::mock('Craft\ConfigService');
+        $this->config->shouldReceive('exists')->andReturn(false);
         $this->config->shouldReceive('getIsInitialized')->andReturn(true);
         $this->config->shouldReceive('getLocalized')->andReturn(true);
         $this->config->shouldReceive('get')->with('usePathInfo')->andReturn(true)->byDefault();
@@ -143,7 +144,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
 			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
 			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
-			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://domain.dev/assets/css/style.2.css');
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://craft.dev/assets/css/style.2.css');
 			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
 
 			return $localAssetModelMock;
@@ -153,9 +154,13 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('validate')->andReturn(true);
 			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled'
+				'minifyCssEnabled',
+				'cssPrependUrlEnabled',
+				'cssPrependUrl'
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
 
 			return $settingsModelMock;
 		});
@@ -167,7 +172,6 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
 		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
-
 	}
 
 	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsFalse()
@@ -178,7 +182,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
 			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
 			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
-			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://domain.dev/assets/css/style.2.css');
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://craft.dev/assets/css/style.2.css');
 			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
 
 			return $localAssetModelMock;
@@ -188,9 +192,13 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('validate')->andReturn(true);
 			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled'
+				'minifyCssEnabled',
+				'cssPrependUrlEnabled',
+				'cssPrependUrl'
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
 
 			return $settingsModelMock;
 		});
@@ -221,9 +229,13 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('validate')->andReturn(true);
 			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled'
+				'minifyCssEnabled',
+				'cssPrependUrlEnabled',
+				'cssPrependUrl'
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
 
 			return $settingsModelMock;
 		});
@@ -324,9 +336,13 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('validate')->andReturn(true);
 			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled'
+				'minifyCssEnabled',
+				'cssPrependUrlEnabled',
+				'cssPrependUrl'
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
 
 			return $settingsModelMock;
 		});
@@ -403,7 +419,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
-			$settingsModelMock->shouldReceive('getCacheUrl')->andReturn('http://domain.dev/cache/');
+			$settingsModelMock->shouldReceive('getCacheUrl')->andReturn('http://craft.dev/cache/');
 
 			return $settingsModelMock;
 		});
@@ -412,7 +428,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->service->cacheTimestamp = '12345678';
 		minimee()->service->type = MinimeeType::Css;
 
-		$assertEquals = 'http://domain.dev/cache/' . sha1('base') . '.12345678.css';
+		$assertEquals = 'http://craft.dev/cache/' . sha1('base') . '.12345678.css';
 
 		$makeUrlToCacheFilename = $this->getMethod(minimee()->service, 'makeUrlToCacheFilename');
 		$this->assertEquals($assertEquals, $makeUrlToCacheFilename->invoke(minimee()->service));
@@ -423,7 +439,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
 			$settingsModelMock->shouldReceive('useResourceCache')->andReturn(false);
-			$settingsModelMock->shouldReceive('getCacheUrl')->andReturn('http://domain.dev/cache/');
+			$settingsModelMock->shouldReceive('getCacheUrl')->andReturn('http://craft.dev/cache/');
 
 			return $settingsModelMock;
 		});
@@ -432,7 +448,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		minimee()->service->cacheTimestamp = '12345678';
 		minimee()->service->type = MinimeeType::Css;
 
-		$assertEquals = 'http://domain.dev/cache/' . sha1('base') . '.12345678.css';
+		$assertEquals = 'http://craft.dev/cache/' . sha1('base') . '.12345678.css';
 
 		$makeReturn = $this->getMethod(minimee()->service, 'makeReturn');
 		$this->assertEquals($assertEquals, $makeReturn->invoke(minimee()->service));
@@ -555,7 +571,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	{
 		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
 		$minimeeService = $setAssets->invokeArgs(minimee()->service, array(
-			'http://domain.dev/assets/css/style.css'
+			'http://craft.dev/assets/css/style.css'
 		));
 
 		$getAssets = minimee()->service->assets;
@@ -568,7 +584,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	{
 		$setAssets = $this->getMethod(minimee()->service, 'setAssets');
 		$minimeeService = $setAssets->invokeArgs(minimee()->service, array(
-			'http://domain.dev/assets/js/app.js'
+			'http://craft.dev/assets/js/app.js'
 		));
 
 		$getAssets = minimee()->service->assets;
@@ -583,7 +599,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		$minimeeService = $setAssets->invokeArgs(minimee()->service, array(
 			array(
 				'/assets/js/jquery.js',
-				'http://domain.dev/assets/js/app.js'
+				'http://craft.dev/assets/js/app.js'
 			)
 		));
 
@@ -600,7 +616,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 		$minimeeService = $setAssets->invokeArgs(minimee()->service, array(
 			array(
 				'/assets/css/normalize.css',
-				'http://domain.dev/assets/css/style.css'
+				'http://craft.dev/assets/css/style.css'
 			)
 		));
 
@@ -771,7 +787,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 	public function testMakeTagsByTypePassingCssString()
 	{
-		$css = 'http://domain.dev/cache/hash.timestamp.css';
+		$css = 'http://craft.dev/cache/hash.timestamp.css';
 
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
@@ -789,8 +805,8 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	public function testMakeTagsByTypePassingCssArray()
 	{
 		$cssArray = array(
-			'http://domain.dev/cache/hash1.timestamp.css',
-			'http://domain.dev/cache/hash2.timestamp.css'
+			'http://craft.dev/cache/hash1.timestamp.css',
+			'http://craft.dev/cache/hash2.timestamp.css'
 		);
 
 		minimee()->extend('makeSettingsModel', function() {
@@ -813,7 +829,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 	public function testMakeTagsByTypePassingJsString()
 	{
-		$js = 'http://domain.dev/cache/hash.timestamp.js';
+		$js = 'http://craft.dev/cache/hash.timestamp.js';
 
 		minimee()->extend('makeSettingsModel', function() {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel')->makePartial();
@@ -831,8 +847,8 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	public function testMakeTagsByTypePassingJsArray()
 	{
 		$jsArray = array(
-			'http://domain.dev/cache/hash1.timestamp.js',
-			'http://domain.dev/cache/hash2.timestamp.js'
+			'http://craft.dev/cache/hash1.timestamp.js',
+			'http://craft.dev/cache/hash2.timestamp.js'
 		);
 
 		minimee()->extend('makeSettingsModel', function() {
@@ -876,8 +892,8 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	public function dataProviderInvalidUrls()
 	{
 		return [
-			['domain.com'],
-			['/domain.com']
+			['craft.dev'],
+			['/craft.dev']
 		];
 	}
 
@@ -893,9 +909,9 @@ class MinimeeServiceTest extends MinimeeBaseTest
 	public function dataProviderValidUrls()
 	{
 		return [
-			['http://domain.com'],
-			['https://domain.com'],
-			['//domain.com']
+			['http://craft.dev'],
+			['https://craft.dev'],
+			['//craft.dev']
 		];
 	}
 

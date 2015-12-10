@@ -62,12 +62,12 @@ class MinimeeRemoteAssetModelTest extends MinimeeBaseTest
 		});
 
 		$remoteAsset = minimee()->makeRemoteAssetModel(array(
-			'filenamePath' => 'http://domain.dev/thisfilewillnotexist'
+			'filenamePath' => 'http://craft.dev/thisfilewillnotexist'
 		));
 
 		$contents = $remoteAsset->contents;
 	}
-	
+
 	public function testGetContentsIfExists()
 	{
 		minimee()->extend('makeClient', function() {
@@ -104,47 +104,47 @@ class MinimeeRemoteAssetModelTest extends MinimeeBaseTest
 	public function testToStringReturnsFilename()
 	{
 		$this->_populateWith(array(
-			'filename' => 'http://domain.com/assets/style.css'
+			'filename' => 'http://craft.dev/assets/style.css'
 		));
 
-		$this->assertEquals('http://domain.com/assets/style.css', sprintf($this->_model));
+		$this->assertEquals('http://craft.dev/assets/style.css', sprintf($this->_model));
 	}
 
 	public function testSetFilenamePathRemovesDoubleSlashes()
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenamePath = 'http://domain.com///cache';
-		$this->assertEquals('http://domain.com/cache', $this->_model->filenamePath);
+		$this->_model->filenamePath = 'http://craft.dev///cache';
+		$this->assertEquals('http://craft.dev/cache', $this->_model->filenamePath);
 	}
 
 	public function testSetFilenamePathRemovesDoubleSlashesProtocolRelative()
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenameUrl = '//domain.com///cache';
-		$this->assertEquals('//domain.com/cache', $this->_model->filenameUrl);
+		$this->_model->filenameUrl = '//craft.dev///cache';
+		$this->assertEquals('//craft.dev/cache', $this->_model->filenameUrl);
 	}
 
 	public function testSetFilenameUrlRemovesDoubleSlashes()
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenameUrl = 'http://domain.com///cache';
-		$this->assertEquals('http://domain.com/cache', $this->_model->filenameUrl);
+		$this->_model->filenameUrl = 'http://craft.dev///cache';
+		$this->assertEquals('http://craft.dev/cache', $this->_model->filenameUrl);
 	}
 
 	public function testSetFilenameUrlRemovesDoubleSlashesProtocolRelative()
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenameUrl = '//domain.com///cache';
-		$this->assertEquals('//domain.com/cache', $this->_model->filenameUrl);
+		$this->_model->filenameUrl = '//craft.dev///cache';
+		$this->assertEquals('//craft.dev/cache', $this->_model->filenameUrl);
 	}
 
 	/**
 	 * Internal method for shorthand populating our Minimee_RemoteAssetModel
-	 * 
+	 *
 	 * @param Array $attributes
 	 * @return Minimee_RemoteAssetModel
 	 */

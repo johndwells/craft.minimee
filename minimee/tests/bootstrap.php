@@ -4,7 +4,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Craft's own bootstrap here
-require_once '/Users/John/Sites/craftx.dev/craft/app/tests/bootstrap.php';
+require_once '/Users/John/Sites/craft.dev/craft/app/tests/bootstrap.php';
 
 // We are unable to autoload this for some reason...
 // I've traced it to the fact that it extends BaseTest

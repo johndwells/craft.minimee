@@ -114,16 +114,16 @@ class MinimeeLocalAssetModelTest extends MinimeeBaseTest
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenameUrl = 'http://domain.com///cache';
-		$this->assertEquals('http://domain.com/cache', $this->_model->filenameUrl);
+		$this->_model->filenameUrl = 'http://craft.dev///cache';
+		$this->assertEquals('http://craft.dev/cache', $this->_model->filenameUrl);
 	}
 
 	public function testSetFilenameUrlRemovesDoubleSlashesProtocolRelative()
 	{
 		$this->_populateWith(array());
 
-		$this->_model->filenameUrl = '//domain.com///cache';
-		$this->assertEquals('//domain.com/cache', $this->_model->filenameUrl);
+		$this->_model->filenameUrl = '//craft.dev///cache';
+		$this->assertEquals('//craft.dev/cache', $this->_model->filenameUrl);
 	}
 
 	/**

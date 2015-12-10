@@ -65,13 +65,57 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 		$this->assertEquals('jsReturnTemplate', $this->_model->jsReturnTemplate);
 	}
 
+	public function testGetCssPrependUrlWithValue()
+	{
+		$this->_populateWith(array(
+			'cssPrependUrl' => 'http://craft.dev/assets/css/'
+		));
+
+		$this->assertEquals('http://craft.dev/assets/css/', $this->_model->cssPrependUrl);
+	}
+
+	public function testGetCssPrependUrlWithoutValue()
+	{
+		$this->_populateWith(array());
+
+		$this->assertEquals(false, $this->_model->cssPrependUrl);
+	}
+
+	public function testGetCssPrependUrlHasTrailingSlash()
+	{
+		$this->_populateWith(array(
+			'cssPrependUrl' => 'http://craft.dev/assets/css/'
+		));
+
+		$this->assertEquals('http://craft.dev/assets/css/', $this->_model->cssPrependUrl);
+
+		$this->_populateWith(array(
+			'cssPrependUrl' => 'http://craft.dev/assets/css'
+		));
+
+		$this->assertEquals('http://craft.dev/assets/css/', $this->_model->cssPrependUrl);
+	}
+
+	public function testGetCssPrependUrlParsesEnvironmentVariable()
+	{
+		$config = m::mock('Craft\ConfigService')->makePartial();
+		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('http://craft.dev/assets/css/');
+		$this->setComponent(craft(), 'config', $config);
+
+		$this->_populateWith(array(
+			'cssPrependUrl' => '{stringToParse}'
+		));
+
+		$this->assertEquals('http://craft.dev/assets/css/', $this->_model->cssPrependUrl);
+	}
+
 	public function testGetFilesystemPathWithValue()
 	{
 		$this->_populateWith(array(
-			'filesystemPath' => '/var/www/public/'
+			'filesystemPath' => '/some/path/to/craft.dev/'
 		));
 
-		$this->assertEquals('/var/www/public/', $this->_model->filesystemPath);
+		$this->assertEquals('/some/path/to/craft.dev/', $this->_model->filesystemPath);
 	}
 
 	public function testGetFilesystemPathWithoutValue()
@@ -84,38 +128,38 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	public function testGetFilesystemPathHasTrailingSlash()
 	{
 		$this->_populateWith(array(
-			'filesystemPath' => '/var/www/public/'
+			'filesystemPath' => '/some/path/to/craft.dev/'
 		));
 
-		$this->assertEquals('/var/www/public/', $this->_model->filesystemPath);
+		$this->assertEquals('/some/path/to/craft.dev/', $this->_model->filesystemPath);
 
 		$this->_populateWith(array(
-			'filesystemPath' => '/var/www/public'
+			'filesystemPath' => '/some/path/to/craft.dev'
 		));
 
-		$this->assertEquals('/var/www/public/', $this->_model->filesystemPath);
+		$this->assertEquals('/some/path/to/craft.dev/', $this->_model->filesystemPath);
 	}
 
 	public function testGetFilesystemPathParsesEnvironmentVariable()
 	{
 		$config = m::mock('Craft\ConfigService')->makePartial();
-		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('/var/www/public/');
+		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('/some/path/to/craft.dev/');
 		$this->setComponent(craft(), 'config', $config);
 
 		$this->_populateWith(array(
 			'filesystemPath' => '{stringToParse}'
 		));
 
-		$this->assertEquals('/var/www/public/', $this->_model->filesystemPath);
+		$this->assertEquals('/some/path/to/craft.dev/', $this->_model->filesystemPath);
 	}
 
 	public function testGetBaseUrlWithValue()
 	{
 		$this->_populateWith(array(
-			'baseUrl' => 'http://domain.com/'
+			'baseUrl' => 'http://craft.dev/'
 		));
 
-		$this->assertEquals('http://domain.com/', $this->_model->baseUrl);
+		$this->assertEquals('http://craft.dev/', $this->_model->baseUrl);
 	}
 
 	public function testGetBaseUrlWithoutValue()
@@ -128,29 +172,29 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	public function testGetBaseUrlHasTrailingSlash()
 	{
 		$this->_populateWith(array(
-			'baseUrl' => 'http://domain.com'
+			'baseUrl' => 'http://craft.dev'
 		));
 
-		$this->assertEquals('http://domain.com/', $this->_model->baseUrl);
+		$this->assertEquals('http://craft.dev/', $this->_model->baseUrl);
 
 		$this->_populateWith(array(
-			'baseUrl' => 'http://domain.com/'
+			'baseUrl' => 'http://craft.dev/'
 		));
 
-		$this->assertEquals('http://domain.com/', $this->_model->baseUrl);
+		$this->assertEquals('http://craft.dev/', $this->_model->baseUrl);
 	}
 
 	public function testGetBaseUrlParsesEnvironmentVariable()
 	{
 		$config = m::mock('Craft\ConfigService')->makePartial();
-		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('http://domain.com/');
+		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('http://craft.dev/');
 		$this->setComponent(craft(), 'config', $config);
 
 		$this->_populateWith(array(
 			'baseUrl' => '{stringToParse}'
 		));
 
-		$this->assertEquals('http://domain.com/', $this->_model->baseUrl);
+		$this->assertEquals('http://craft.dev/', $this->_model->baseUrl);
 	}
 
 	public function testGetCachePathReturnsFalseWithoutValue()
@@ -163,29 +207,29 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	public function testGetCachePathHasTrailingSlash()
 	{
 		$this->_populateWith(array(
-			'cachePath' => '/var/www/public/cache'
+			'cachePath' => '/some/path/to/craft.dev/cache'
 		));
 
-		$this->assertEquals('/var/www/public/cache/', $this->_model->cachePath);
+		$this->assertEquals('/some/path/to/craft.dev/cache/', $this->_model->cachePath);
 
 		$this->_populateWith(array(
-			'cachePath' => '/var/www/public/cache/'
+			'cachePath' => '/some/path/to/craft.dev/cache/'
 		));
 
-		$this->assertEquals('/var/www/public/cache/', $this->_model->cachePath);
+		$this->assertEquals('/some/path/to/craft.dev/cache/', $this->_model->cachePath);
 	}
 
 	public function testGetCachePathParsesEnvironmentVariable()
 	{
 		$config = m::mock('Craft\ConfigService')->makePartial();
-		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('/var/www/public/cache/');
+		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('/some/path/to/craft.dev/cache/');
 		$this->setComponent(craft(), 'config', $config);
 
 		$this->_populateWith(array(
 			'cachePath' => '{stringToParse}'
 		));
 
-		$this->assertEquals('/var/www/public/cache/', $this->_model->cachePath);
+		$this->assertEquals('/some/path/to/craft.dev/cache/', $this->_model->cachePath);
 	}
 
 	public function testGetCacheUrlReturnsFalseWithoutValue()
@@ -197,29 +241,29 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	public function testGetCacheUrlHasTrailingSlash()
 	{
 		$this->_populateWith(array(
-			'cacheUrl' => 'http://domain.com/cache'
+			'cacheUrl' => 'http://craft.dev/cache'
 		));
 
-		$this->assertEquals('http://domain.com/cache/', $this->_model->cacheUrl);
+		$this->assertEquals('http://craft.dev/cache/', $this->_model->cacheUrl);
 
 		$this->_populateWith(array(
-			'cacheUrl' => 'http://domain.com/cache/'
+			'cacheUrl' => 'http://craft.dev/cache/'
 		));
 
-		$this->assertEquals('http://domain.com/cache/', $this->_model->cacheUrl);
+		$this->assertEquals('http://craft.dev/cache/', $this->_model->cacheUrl);
 	}
 
 	public function testGetCacheUrlParsesEnvironmentVariable()
 	{
 		$config = m::mock('Craft\ConfigService')->makePartial();
-		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('http://domain.com/cache/');
+		$config->shouldReceive('parseEnvironmentString')->with('{stringToParse}')->andReturn('http://craft.dev/cache/');
 		$this->setComponent(craft(), 'config', $config);
 
 		$this->_populateWith(array(
 			'cacheUrl' => '{stringToParse}'
 		));
 
-		$this->assertEquals('http://domain.com/cache/', $this->_model->cacheUrl);
+		$this->assertEquals('http://craft.dev/cache/', $this->_model->cacheUrl);
 	}
 
 	public function testGetAttributeAccessors()
@@ -273,7 +317,8 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
         		'combineCssEnabled' => $zeroOne,
         		'combineJsEnabled' => $zeroOne,
         		'minifyCssEnabled' => $zeroOne,
-        		'minifyJsEnabled' => $zeroOne
+        		'minifyJsEnabled' => $zeroOne,
+        		'cssPrependUrlEnabled' => $zeroOne
 			)
 		);
 
@@ -286,6 +331,7 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 		$this->assertSame($bool, $this->_model->combineJsEnabled);
 		$this->assertSame($bool, $this->_model->minifyCssEnabled);
 		$this->assertSame($bool, $this->_model->minifyJsEnabled);
+		$this->assertSame($bool, $this->_model->cssPrependUrlEnabled);
 	}
 
 	public function testToStringReturnsOneOrZero()
@@ -307,7 +353,7 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	{
 		$this->_populateWith(array(
 			'cachePath' => '/path/to/cache',
-			'cacheUrl' => 'http://domain.com/cache'
+			'cacheUrl' => 'http://craft.dev/cache'
 		));
 
 		$this->assertFalse($this->_model->useResourceCache());
@@ -317,7 +363,7 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	{
 		$this->_populateWith(array(
 			'cachePath' => '',
-			'cacheUrl' => 'http://domain.com/cache'
+			'cacheUrl' => 'http://craft.dev/cache'
 		));
 
 		$this->assertFalse($this->_model->useResourceCache());
@@ -354,7 +400,7 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	{
 		$this->_populateWith(array(
 			'cachePath' => '/path/to/cache',
-			'cacheUrl' => 'http://domain.com/cache'
+			'cacheUrl' => 'http://craft.dev/cache'
 		));
 
 		$this->assertTrue($this->_model->validate());
@@ -364,7 +410,7 @@ class MinimeeSettingsModelTest extends MinimeeBaseTest
 	{
 		$this->_populateWith(array(
 			'cachePath' => '',
-			'cacheUrl' => 'http://domain.com/cache'
+			'cacheUrl' => 'http://craft.dev/cache'
 		));
 
 		$this->_model->validateCachePathAndUrl();

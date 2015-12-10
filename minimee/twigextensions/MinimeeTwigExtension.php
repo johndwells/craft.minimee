@@ -12,7 +12,7 @@
  */
 
 /**
- * 
+ *
  */
 class MinimeeTwigExtension extends \Twig_Extension
 {
@@ -38,7 +38,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 
 	/**
 	 * Define our filter
-	 * 
+	 *
 	 * @param String $html
 	 * @param Array $settings
 	 * @return String
@@ -110,11 +110,11 @@ class MinimeeTwigExtension extends \Twig_Extension
 		switch (strtolower($type)) :
 
 			case MinimeeType::Css :
-				$pat = "/<link{1}.*?href=['|\"']{1}(.*?)['|\"]{1}[^>]*>/i";
+				$pat = "/<link{1}.*?href=['|\"]{1}(.*?)['|\"]{1}[^>]*>/is";
 			break;
 
 			case MinimeeType::Js :
-				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/i";
+				$pat = "/<script{1}.*?src=['|\"]{1}(.*?)['|\"]{1}[^>]*>(.*?)<\/script>/is";
 			break;
 
 			default :
@@ -127,7 +127,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		{
 			return FALSE;
 		}
-		
+
 		return $matches[1];
 	}
 }
