@@ -2,7 +2,8 @@
 	"autoload" : {
 		"classmap" : [
 			"../models",
-			"../services"
+			"../services",
+			"../twigextensions"
 		]
 	},
     "require-dev": {
