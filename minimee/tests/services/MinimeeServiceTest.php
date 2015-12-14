@@ -160,7 +160,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
 			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn(false);
 
 			return $settingsModelMock;
 		});
@@ -198,7 +198,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
 			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn(false);
 
 			return $settingsModelMock;
 		});
@@ -235,7 +235,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
 			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn(false);
 
 			return $settingsModelMock;
 		});
@@ -381,7 +381,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 			));
 			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
 			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn(false);
 
 			return $settingsModelMock;
 		});
