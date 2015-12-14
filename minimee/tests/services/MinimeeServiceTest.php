@@ -136,7 +136,7 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 	}
 
-	public function testMinifyAssetWithCssRewritesUrlWhenMinifyCssEnabledIsTrue()
+	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsTrue()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
 		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.min.css');
@@ -170,11 +170,11 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+		$this->assertEquals($assetContentsWrite, $minifyCssAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
-	public function testMinifyAssetWithCssRewritesUrlWhenMinifyCssEnabledIsFalse()
+	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsFalse()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
 		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.css');
@@ -208,11 +208,11 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+		$this->assertEquals($assetContentsWrite, $minifyCssAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
-	public function testMinifyAssetWithCssWhenMinifyCssEnabledIsFalse()
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsFalse()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.1.css');
 
@@ -245,13 +245,13 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+		$this->assertEquals($assetContents, $minifyCssAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
-	public function testMinifyAssetWithCssRewritesUrlWhenCssPrependUrlEnabledIsFalse() {}
+	public function testMinifyCssAssetRewritesUrlWhenCssPrependUrlEnabledIsFalse() {}
 
-	public function testMinifyAssetWithCssRewritesUrlWhenCssPrependUrlEnabledIsTrueAndCssPrependUrlIsNonEmpty() {
+	public function testMinifyCssAssetRewritesUrlWhenCssPrependUrlEnabledIsTrueAndCssPrependUrlIsNonEmpty() {
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
 		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.prepend.min.css');
 
@@ -284,11 +284,11 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+		$this->assertEquals($assetContentsWrite, $minifyCssAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
-	public function testMinifyAssetWithJsWhenMinifyJsEnabledIsFalse()
+	public function testMinifyJsAssetWhenMinifyJsEnabledIsFalse()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/js/script.1.js');
 
@@ -317,11 +317,11 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyJsAsset = $this->getMethod(minimee()->service, 'minifyJsAsset');
+		$this->assertEquals($assetContents, $minifyJsAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
-	public function testMinifyAssetWithJsWhenMinifyJsEnabledIsTrue()
+	public function testMinifyJsAssetWhenMinifyJsEnabledIsTrue()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/js/script.1.js');
 		$assetMinifiedContents = file_get_contents(__DIR__ . '/../assets/js/script.1.min.js');
@@ -352,11 +352,11 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetMinifiedContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyJsAsset = $this->getMethod(minimee()->service, 'minifyJsAsset');
+		$this->assertEquals($assetMinifiedContents, $minifyJsAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
-	public function testMinifyAssetWithCssWhenMinifyCssEnabledIsTrue()
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsTrue()
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.1.css');
 		$assetMinifiedContents = file_get_contents(__DIR__ . '/../assets/css/style.1.min.css');
@@ -391,8 +391,8 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetMinifiedContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+		$this->assertEquals($assetMinifiedContents, $minifyCssAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
 	public function testFlightcheckPasses()
