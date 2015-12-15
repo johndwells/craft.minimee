@@ -12,7 +12,8 @@
 		offLabel:	"Off",
 		label: "<strong>Minimee Status</strong>" | t,
 		name:		"enabled",
-		on:			settings.enabled
+		on:			settings.enabled,
+		first:		true
 	})
 }}
 
@@ -77,10 +78,10 @@
 
 {{
 	forms.textField({
-		label: "<strong>Filesystem Path</strong> to your site's index.php:" | t,
+		label: "<strong>Filesystem Path</strong> to your site's <code>index.php</code>:" | t,
 		id: 'filesystemPath',
 		name: 'filesystemPath',
-		placeholder : '/var/www/public/',
+		placeholder : 'e.g. /var/www/public/',
 		instructions : "If left blank, `$_SERVER['DOCUMENT_ROOT']` will be used." | t,
 		value: (settings.filesystemPath is defined ? settings.filesystemPath : null)
 	})
@@ -88,10 +89,10 @@
 
 {{
 	forms.textField({
-		label: "<strong>Base URL</strong> to your site's index.php:" | t,
+		label: "<strong>Base URL</strong> to your site's <code>index.php</code>:" | t,
 		id: 'baseUrl',
 		name: 'baseUrl',
-		placeholder : 'http://domain.com/',
+		placeholder : 'e.g. http://domain.com/',
 		instructions : "If left blank, the URL of your site, as defined in Settings > General, will be used." | t,
 		value: (settings.baseUrl is defined ? settings.baseUrl : null)
 	})
@@ -102,7 +103,7 @@
 		label: "<strong>Cache Path</strong>*:" | t,
 		id: 'cachePath',
 		name: 'cachePath',
-		placeholder : '/var/www/public/cache/',
+		placeholder : 'e.g. /var/www/public/cache/',
 		instructions : "If left blank, Craft's storage folder will be used." | t,
 		value: (settings.cachePath is defined ? settings.cachePath : null)
 	})
@@ -110,10 +111,10 @@
 
 {{
 	forms.textField({
-		label: "<strong>Cache Url</strong>*:" | t,
+		label: "<strong>Cache URL</strong>*:" | t,
 		id: 'cacheUrl',
 		name: 'cacheUrl',
-		placeholder : 'http://domain.com/cache/',
+		placeholder : 'e.g. http://domain.com/cache/',
 		instructions : "If left blank, Craft's storage folder will be used." | t,
 		value: (settings.cacheUrl is defined ? settings.cacheUrl : null)
 	})
@@ -128,8 +129,8 @@
 		label: "Return template for <strong>CSS</strong>:"|t,
 		id: 'cssReturnTemplate',
 		name: 'cssReturnTemplate',
-		placeholder : '<link rel="stylesheet" href="%s">',
-		instructions : "Default is <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;%s&quot;&gt;</code>."|t,
+		placeholder : 'e.g. <link rel="stylesheet" href="%s">',
+		instructions : 'Default is <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;%s&quot;&gt;</code>. Uses PHP\'s <a href="http://php.net/manual/en/function.sprintf.php" target="_blank"><code>sprintf()</code></a>.' | t,
 		value: settings.cssReturnTemplate
 	})
 }}
@@ -139,15 +140,15 @@
 		label: "Return template for <strong>JS</strong>:"|t,
 		id: 'jsReturnTemplate',
 		name: 'jsReturnTemplate',
-		placeholder : '<script src="%s"></script>',
-		instructions : "Default is <code>&lt;script src=&quot;%s&quot;&gt;&lt;/script&gt;</code>."|t,
+		placeholder : 'e.g. <script src="%s"></script>',
+		instructions : 'Default is <code>&lt;script src=&quot;%s&quot;&gt;&lt;/script&gt;</code>. Uses PHP\'s <a href="http://php.net/manual/en/function.sprintf.php" target="_blank"><code>sprintf()</code></a>.' | t,
 		value: settings.jsReturnTemplate
 	})
 }}
 
 {{
 	forms.selectField({
-		label: "What type of response to return to template:"|t,
+		label: "What type of response to pass through the return template:"|t,
 		id: 'returnType',
 		name: 'returnType',
 		options : [{
@@ -160,5 +161,29 @@
 		}],
 		instructions : "Select whether to return the URL to cache or the contents of cache."|t,
 		value: settings.returnType
+	})
+}}
+
+<hr>
+
+{{
+	forms.lightswitchField({
+		onLabel:	"On",
+		offLabel:	"Off",
+		label: "Prepend URLs in CSS?" | t,
+		instructions : "Enable or disable prepending URLs to <em>relative</em> @import and image paths in CSS." | t,
+		name:		"cssPrependUrlEnabled",
+		on:			settings.cssPrependUrlEnabled
+	})
+}}
+
+{{
+	forms.textField({
+		label: 'Prepend URL override:' | t,
+		id: 'cssPrependUrl',
+		name: 'cssPrependUrl',
+		placeholder : 'e.g. http://cdn.domain.com/assets/css',
+		instructions : 'Default is the URL &amp; path to the asset being minified.' | t,
+		value: settings.cssPrependUrl
 	})
 }}

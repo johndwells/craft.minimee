@@ -54,6 +54,18 @@ return array(
 		// 'minifyJsEnabled' => true,
 
 		/**
+		 * Prepend URL to relative @import and image paths in CSS?
+		 * default: true
+		 */
+		// 'cssPrependUrlEnabled' => true,
+
+		/**
+		 * The URL to use when rewriting CSS
+		 * and prepending
+		 */
+		// 'cssPrependUrl' => '',
+
+		/**
 		 * The template to use when returning to the template.
 		 * Prior to 0.9.0 this was "cssTagTemplate"
 		 * default: <link rel="stylesheet" href="%s">
@@ -66,6 +78,12 @@ return array(
 		 * default: <script src="%s"></script>
 		 */
 		// 'jsReturnTemplate' => '',
+
+		/**
+		 * What type of response to pass through
+		 * the return template.
+		 */
+		// 'returnType' => 'url',
 
 		/**
 		 * The Filesystem Path to your cache folder

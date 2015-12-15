@@ -1,0 +1,13 @@
+{
+	"autoload" : {
+		"classmap" : [
+			"../models",
+			"../services",
+			"../twigextensions"
+		]
+	},
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "mockery/mockery": "dev-master"
+    }
+}

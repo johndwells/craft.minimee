@@ -1,4 +1,4 @@
-# Minimee for Craft - v0.9.4
+# Minimee for Craft - v0.9.5
 
 A [Craft CMS](http://buildwithcraft.com) port of the popular [Minimee](https://github.com/johndwells/Minimee) add-on for ExpressionEngine.
 
@@ -8,13 +8,6 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 
 * [On github](https://github.com/johndwells/craft.minimee)
 * [Support](https://github.com/johndwells/craft.minimee/issues)
-
----
-
-## New since v0.9
-
-* Ability to return contents of the cache to template
-* Settings `cssTagTemplate` and `jsTagTemplate` renamed to `cssReturnTemplate' and `jsReturnTemplate` (old naming is deprecated and support will be removed in 1.x)
 
 ---
 
@@ -30,6 +23,8 @@ Minimize, combine & cache your CSS and JS files. Because size (still) DOES matte
 * Override CP Settings via filesystem config (requires Craft 1.4), or at runtime
 * Clear Minimee's cache from CP (Settings > Tools > Clear Caches)
 * Ability to return contents of the cache to template
+
+_Looking to minify your HTML, or minify inline CSS/JS? You should check out [https://github.com/khalwat/minify](https://github.com/khalwat/minify)._
 
 ---
 
@@ -49,7 +44,7 @@ Out of the box and when first installed, Minimee will be automatically enabled a
 
 ![settings](minimee/resources/img/settings.png)
 
-> Note that all settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
+> Note that all string settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables)
 
 ##### Filesystem Path
 
@@ -68,6 +63,18 @@ Similar to the `Filesystem Path`, this may need to be overriden in certain circu
 By default, Minimee stores cached assets in Craft's `craft/storage` folder, which likely sits above webroot. The cache is then delivered by Craft itself, via a special "resource" url, e.g. `http://domain.com/resources/minimee/filename.timestamp.ext`.
 
 Alternatively, you can specify a cache path & URL which sits _below_ webroot, so that the cached assets are delivered directly by your server. This is the recommended setup for optimal performance gains.
+
+##### Return Templates & Type
+
+By default, Minimee returns the URL to the combined & minified asset. Also by default, if that asset is a CSS file, it is wrapped in a default template (`<link rel="stylesheet" href="%s">`), where the URL replaces `"%s%` using PHP's [sprintf()](http://php.net/manual/en/function.sprintf.php) function.  If that asset is a JS file, the default template is `<script src="%s"></script>`.
+
+You may override this behaviour to do things such as load Javascript asynchronously, or embed CSS inline.  These settings are especially useful being used at runtime (see below).
+
+##### CSS Prepend URL
+
+When Minimee processes CSS files, it will by default alter any _relative_ @import and image URIs (e.g. `url("../img/arrow.svg")`) to be a fully-qualified URL, using the asset's URL as the basis. This ensures that the links will remain intact regardless of where your might save the cached files.
+
+You can opt to turn this feature off; additionally you can override the prepended URL to something custom.  This is particularly useful if you would like to upload your static assets to a CDN, or link to assets through a cookie-less domain.
 
 ### Runtime Settings
 
@@ -89,20 +96,23 @@ In addition to specifying configuration settings via the CP, you can also pass a
 		'cachePath' : '/var/www/public/cache/',
 		'cacheUrl' : 'http://craft.dev/cache/',
 		'cssReturnTemplate' : '<link rel="stylesheet" href="%s">',
-		'jsReturnTemplate' : '<script src="%s"></script>'
+		'jsReturnTemplate' : '<script src="%s"></script>',
+		'returnType' : 'url',
+		'cssPrependUrlEnabled' : true,
+		'cssPrependUrl' : ''
 	} %}
 
 ### Filesystem Config Settings
 
-As of Craft 2.0, Minimee supports the ability to override the CP Settings with filesystem configs. Note that this does NOT reduce any processing/DB overheads, but it may suit how you prefer to configure Minimee across multiple environments.
+As of Craft 2.0, Minimee supports the ability to override the CP Settings with filesystem configs. Note that this **does NOT** reduce any processing/DB overheads, but it may suit how you prefer to configure Minimee across multiple environments.
 
 To use this feature, begin by copying the contents of the `minimee/config.php` file into a new file named `minimee.php`, and move it to your `craft/config` folder. Then uncomment and set as few or as many settings as you wish.
 
-For more on how multi-environment configs work in Craft, see [http://buildwithcraft.com/docs/multi-environment-configs](http://buildwithcraft.com/docs/multi-environment-configs).
+For more on how multi-environment configs work in Craft, see [https://craftcms.com/docs/multi-environment-configs](https://craftcms.com/docs/multi-environment-configs).
 
 ### The Settings "Cascade"
 
-Given all of the ways to configure Minimee, keep in mind the the cascade or inheritance of these methods:
+Given all of the ways to configure Minimee, keep in mind the cascade or inheritance of these methods:
 
 * CP settings are defaults
 * Filesystem settings override CP settings
@@ -249,9 +259,7 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 
 ## Unit Test All The Things
 
-Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts.
-
-**Minimee's Unit Tests can be found on Minimee's [development branch](https://github.com/johndwells/craft.minimee/tree/development).**
+Unit Testing of this plugin is in active, sporatic, trial-and-error development. If you see anything that can improve this process, I'd welcome your thoughts. I'm fairly confident I have no idea what I'm doing, as with most things.
 
 ### Running Minimee's Tests
 
@@ -264,12 +272,19 @@ To run Minimee, the following assumptions are made:
 
 With the assumptions taken care of, these steps should get you up and running: 
 
-1. Fork, clone or download the `development` branch of Minimee
-2. In terminal, `cd` to `minimee/tests`
-3. Run `composer install --dev`
-1. Run `php vendor/bin/phpunit --bootstrap /path/to/your/craft.dev/craft/app/tests/bootstrap.php`, taking care to update the path accordingly.
+1. Fork, clone or download the `develop` branch of Minimee
+2. Symlink the `minimee` folder to Craft's `plugin` folder
+3. Update line 7 of `minimee/tests/bootstrap.php` to point to your copy of Craft's boostrap.php file (e.g. `/path/to/your/craft/app/tests/bootstrap.php`)
+4. In Terminal, `cd` to `minimee/tests`
+5. Run `composer install --dev`
+6. Run `php vendor/bin/phpunit`
 
-_Note that for testing, it's not necessary to have Minimee installed, nor even located in your Craft's plugins folder._
+_Note that for testing, it's not necessary to have Minimee installed._
+
+##### Note to self regarding UT
+
+Within MAMP Pro I have downloaded a number of PHP versions to be able to test across; I have modified the `php.ini` file of version 5.5.9 to turn on xdebug, so when wanting to run coverage reports, use this complete command: `/Applications/MAMP/bin/php/php5.5.9/bin/php vendor/bin/phpunit`
+
 
 ---
 

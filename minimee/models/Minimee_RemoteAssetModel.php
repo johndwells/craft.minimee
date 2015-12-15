@@ -12,7 +12,7 @@
  */
 
 /**
- * 
+ *
  */
 class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 {
@@ -32,16 +32,15 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 
 	/**
 	 * Get the contents of the remote asset.
-	 * 
+	 *
 	 * @return String
 	 */
 	public function getContents()
 	{
 		if($this->_contents === null)
 		{
-			$client = $this->_getInstanceOfClient();
-			$request = $client->get($this->filenameUrl);
-			$response = $request->send();
+			$response = $this->_sendClientRequest();
+
 			if ($response->isSuccessful())
 			{
 				$this->_contents = $response->getBody(true);
@@ -56,8 +55,29 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 	}
 
 	/**
+	 * Returns the filename URL with a valid protocol
+	 *
+	 * cURL can't (yet?) handle protocol relative URLs, so we match the session
+	 * and use a secure or unsecure protocol to fetch the remote URLs contents.
+	 *
+	 * @return String
+	 */
+	public function getFilenameUrlWithProtocol()
+	{
+		if(stripos($this->filenameUrl, 'http') !== 0)
+		{
+			$protocol = craft()->request->isSecureConnection() ? 'https:' : 'http:';
+			return $protocol . $this->filenameUrl;
+		}
+		else
+		{
+			return $this->filenameUrl;
+		}
+	}
+
+	/**
 	 * Return a very old DateTime, since it is too expensive to fetch a remote file's headers
-	 * 
+	 *
 	 * @return DateTime
 	 */
 	public function getLastTimeModified()
@@ -67,7 +87,7 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 
 	/**
 	 * Always will return true, since it is too expensive to fetch a remote file
-	 * 
+	 *
 	 * @return Bool
 	 */
 	public function exists()
@@ -99,9 +119,21 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 
 	/**
 	 * Either create a fresh instance of Guzzle\Http\Client, or pass the instance we were given during instantiation.
-	 */ 
+	 */
 	protected function _getInstanceOfClient()
 	{
 		return minimee()->makeClient();
+	}
+
+	/**
+	 * Prepare & return response from sending a client request
+	 */
+	protected function _sendClientRequest()
+	{
+		$client = $this->_getInstanceOfClient();
+
+		$request = $client->get($this->getFilenameUrlWithProtocol());
+
+		return $request->send();
 	}
 }

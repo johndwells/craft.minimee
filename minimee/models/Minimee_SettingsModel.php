@@ -12,7 +12,7 @@
  */
 
 /**
- * 
+ *
  */
 class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 {
@@ -32,7 +32,8 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		$settings['combineJsEnabled'] = (bool) $settings['combineJsEnabled'];
 		$settings['minifyCssEnabled'] = (bool) $settings['minifyCssEnabled'];
 		$settings['minifyJsEnabled'] = (bool) $settings['minifyJsEnabled'];
-		
+		$settings['cssPrependUrlEnabled'] = (bool) $settings['cssPrependUrlEnabled'];
+
 		return $settings;
 	}
 
@@ -81,18 +82,20 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	public function defineAttributes()
 	{
 		return array(
-			'cachePath'       	=> AttributeType::String,
-			'cacheUrl'       	=> AttributeType::String,
-			'enabled'           => array(AttributeType::Bool, 'default' => true),
-			'filesystemPath'    => AttributeType::String,
-			'baseUrl'           => AttributeType::String,
-			'combineCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'combineJsEnabled' 	=> array(AttributeType::Bool, 'default' => true),
-			'minifyCssEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'minifyJsEnabled'	=> array(AttributeType::Bool, 'default' => true),
-			'cssReturnTemplate' => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
-			'jsReturnTemplate' 	=> array(AttributeType::String, 'default' => '<script src="%s"></script>'),
-			'returnType'		=> array(AttributeType::String, 'default' => 'url')
+			'cachePath'       	    => AttributeType::String,
+			'cacheUrl'       	    => AttributeType::String,
+			'enabled'               => array(AttributeType::Bool, 'default' => true),
+			'filesystemPath'        => AttributeType::String,
+			'baseUrl'               => AttributeType::String,
+			'combineCssEnabled'	    => array(AttributeType::Bool, 'default' => true),
+			'combineJsEnabled' 	    => array(AttributeType::Bool, 'default' => true),
+			'minifyCssEnabled'	    => array(AttributeType::Bool, 'default' => true),
+			'minifyJsEnabled'	    => array(AttributeType::Bool, 'default' => true),
+			'cssReturnTemplate'     => array(AttributeType::String, 'default' => '<link rel="stylesheet" href="%s">'),
+			'jsReturnTemplate' 	    => array(AttributeType::String, 'default' => '<script src="%s"></script>'),
+			'returnType'		    => array(AttributeType::String, 'default' => 'url'),
+			'cssPrependUrlEnabled'	=> array(AttributeType::Bool, 'default' => true),
+			'cssPrependUrl'         => array(AttributeType::String, 'default' => '')
 		);
 	}
 
@@ -140,7 +143,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 
 		return $this->forceTrailingSlash($cachePath);
 	}
-	
+
 	/**
 	 * @return String|Bool
 	 */
@@ -159,6 +162,23 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
+	 * @return String|Bool
+	 */
+	public function getCssPrependUrl()
+	{
+		$value = parent::getAttribute('cssPrependUrl');
+
+		if( ! $value)
+		{
+			return false;
+		}
+
+		$cssPrependUrl = craft()->config->parseEnvironmentString($value);
+
+		return $this->forceTrailingSlash($cssPrependUrl);
+	}
+
+	/**
 	 * @return Bool
 	 */
 	public function useResourceCache()
@@ -171,7 +191,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 
 		return ($cachePathEmpty && $cacheUrlEmpty);
 	}
-	
+
 	/**
 	 * @return String
 	 */
@@ -241,23 +261,27 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		switch($name) :
 
 			case('baseUrl') :
-				return $this->getBaseUrl();			
+				return $this->getBaseUrl();
 			break;
 
 			case('cachePath') :
-				return $this->getCachePath();			
+				return $this->getCachePath();
 			break;
 
 			case('cacheUrl') :
-				return $this->getCacheUrl();			
+				return $this->getCacheUrl();
 			break;
 
 			case('cssReturnTemplate') :
 				return $this->getCssReturnTemplate();
 			break;
 
+			case('cssPrependUrl') :
+				return $this->getCssPrependUrl();
+			break;
+
 			case('filesystemPath') :
-				return $this->getFilesystemPath();			
+				return $this->getFilesystemPath();
 			break;
 
 			case('jsReturnTemplate') :
