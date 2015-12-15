@@ -16,48 +16,45 @@ class MinimeeTwigExtensionTest extends MinimeeBaseTest
 
 	public function testPregMatchAssetsByTypeAsCssSingleDoubleQuotes()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href="/assets/css/style.css">
 EOF;
-		$this->assertEquals(array('/assets/css/style.css'), $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals(array('/assets/css/style.css'), $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssSingleDoubleQuotesWithTrailingSlash()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href="/assets/css/style.css" />
 EOF;
-		$this->assertEquals(array('/assets/css/style.css'), $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals(array('/assets/css/style.css'), $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssSingleSingleQuotes()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href='/assets/css/style.css'>
 EOF;
-		$this->assertEquals(array('/assets/css/style.css'), $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals(array('/assets/css/style.css'), $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssSingleSingleQuotesWithTrailingSlash()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href='/assets/css/style.css' />
 EOF;
-		$this->assertEquals(array('/assets/css/style.css'), $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals(array('/assets/css/style.css'), $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleDoubleQuotes()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href="/assets/css/style.1.css">
 <link href="/assets/css/style.2.css">
@@ -67,13 +64,13 @@ EOF;
 			'/assets/css/style.1.css',
 			'/assets/css/style.2.css'
 		);
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleDoubleQuotesWithTrailingSlash()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href="/assets/css/style.1.css" />
 <link href="/assets/css/style.2.css" />
@@ -83,13 +80,13 @@ EOF;
 			'/assets/css/style.1.css',
 			'/assets/css/style.2.css'
 		);
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleSingleQuotes()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href='/assets/css/style.1.css'>
 <link href='/assets/css/style.2.css'>
@@ -99,13 +96,13 @@ EOF;
 			'/assets/css/style.1.css',
 			'/assets/css/style.2.css'
 		);
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleSingleQuotesWithTrailingSlash()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link href='/assets/css/style.1.css' />
 <link href='/assets/css/style.2.css' />
@@ -115,13 +112,13 @@ EOF;
 			'/assets/css/style.1.css',
 			'/assets/css/style.2.css'
 		);
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleWithLinkBreaksDoubleQuotes()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link
 rel="stylesheet" href="/assets/css/style.1.css"><link
@@ -132,13 +129,12 @@ EOF;
 			'/assets/css/style.2.css'
 		);
 
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleWithLinkBreaksDoubleQuotesWithTrailingSlash()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link
 rel="stylesheet" href="/assets/css/style.1.css" /><link
@@ -149,13 +145,12 @@ EOF;
 			'/assets/css/style.2.css'
 		);
 
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleWithLinkBreaksSingleQuotes()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link
 rel="stylesheet" href='/assets/css/style.1.css'><link
@@ -166,13 +161,12 @@ EOF;
 			'/assets/css/style.2.css'
 		);
 
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
 	}
 
 	public function testPregMatchAssetsByTypeAsCssMultipleWithLinkBreaksSingleQuotesWithTrailingSlash()
 	{
-		$twigExtension = new MinimeeTwigExtension();
-
 		$html =<<<EOF
 <link
 rel="stylesheet" href='/assets/css/style.1.css' /><link
@@ -183,7 +177,15 @@ EOF;
 			'/assets/css/style.2.css'
 		);
 
-		$this->assertEquals($equals, $twigExtension->testPregMatchAssetsByType(MinimeeType::Css, $html));
+		$result = $this->invokePregMatchAssetsByType(MinimeeType::Css, $html);
+		$this->assertEquals($equals, $result);
+	}
+
+	protected function invokePregMatchAssetsByType($type, $html)
+	{
+		$twigExtension = new MinimeeTwigExtension();
+		$pregMatchAssetsByType = $this->getMethod($twigExtension, 'pregMatchAssetsByType');
+		return $pregMatchAssetsByType->invokeArgs($twigExtension, array(MinimeeType::Css, $html));
 	}
 
 	protected function _autoload()

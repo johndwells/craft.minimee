@@ -1,2 +1,3 @@
 /minimee/tests export-ignore
 .gitignore export-ignore
+.editorconfig export-ignore

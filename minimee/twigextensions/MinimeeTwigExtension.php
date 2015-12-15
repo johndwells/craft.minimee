@@ -97,12 +97,6 @@ class MinimeeTwigExtension extends \Twig_Extension
 		return FALSE;
 	}
 
-	// exposing a protected method to our tests
-	public function testPregMatchAssetsByType($type, $haystack)
-	{
-		return $this->pregMatchAssetsByType($type, $haystack);
-	}
-
 	/**
 	 * Helper function to parse content looking for CSS and JS tags.
 	 * Returns array of links found.

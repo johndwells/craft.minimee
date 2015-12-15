@@ -587,51 +587,77 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		craft()->config->maxPowerCaptain();
 
+		$contents = $asset->contents;
+
 		switch ($this->type) :
 
 			case MinimeeType::Js:
 
-				if($this->settings->minifyJsEnabled)
-				{
-					$contents = \JSMin::minify($asset->contents);
-				}
-				else
-				{
-					$contents = $asset->contents;
-				}
-
-				// Play nice with others by ensuring a semicolon at eof
-				if(substr($contents, -1) != ';')
-				{
-					$contents .= ';';
-				}
+				$contents = $this->minifyJsAsset($asset);
 
 			break;
 
 			case MinimeeType::Css:
 
-				$contents = $asset->contents;
-
-				if($this->settings->cssPrependUrlEnabled)
-				{
-					$cssPrependUrl = $this->settings->cssPrependUrl;
-
-					if( ! $cssPrependUrl)
-					{
-						$cssPrependUrl = dirname($asset->filenameUrl) . '/';
-					}
-
-					$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
-				}
-
-				if($this->settings->minifyCssEnabled)
-				{
-					$contents = \Minify_CSS::minify($contents);
-				}
+				$contents = $this->minifyCssAsset($asset);
 
 			break;
 
 		endswitch;
+
+		return $contents;
+	}
+
+	/**
+	 * Method to (maybe) minify CSS asset
+	 *
+	 * @param Array $asset
+	 * @return String
+	 */
+	protected function minifyCssAsset($asset)
+	{
+		$contents = $asset->contents;
+
+		if($this->settings->cssPrependUrlEnabled)
+		{
+			$cssPrependUrl = $this->settings->cssPrependUrl;
+
+			if( ! $cssPrependUrl)
+			{
+				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
+			}
+
+			$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
+		}
+
+		if($this->settings->minifyCssEnabled)
+		{
+			$contents = \Minify_CSS::minify($contents);
+		}
+
+		return $contents;
+	}
+
+	/**
+	 * Method to (maybe) minify JS asset
+	 *
+	 * @param $asset
+	 * @return String
+	 */
+	protected function minifyJsAsset($asset)
+	{
+		$contents = $asset->contents;
+
+		if($this->settings->minifyJsEnabled)
+		{
+			$contents = \JSMin::minify($asset->contents);
+		}
+
+		// Play nice with others by ensuring a semicolon at eof
+		if(substr($contents, -1) != ';')
+		{
+			$contents .= ';';
+		}
 
 		return $contents;
 	}

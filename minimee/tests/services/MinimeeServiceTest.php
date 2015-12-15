@@ -136,21 +136,21 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 	}
 
-	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsTrue()
+	protected function _invokeMinifyCssAsset($minifyCssEnabled, $cssPrependUrlEnabled, $cssPrependUrl)
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
-		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.min.css');
+		$assetFilenameUrl = 'http://craft.dev/assets/css/style.2.css';
 
-		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
+		minimee()->extend('makeLocalAssetModel', function() use ($assetContents, $assetFilenameUrl) {
 			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
 			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
-			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://craft.dev/assets/css/style.2.css');
+			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn($assetFilenameUrl);
 			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
 
 			return $localAssetModelMock;
 		});
 
-		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
+		minimee()->extend('makeSettingsModel', function() use ($minifyCssEnabled, $cssPrependUrlEnabled, $cssPrependUrl) {
 			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
 			$settingsModelMock->shouldReceive('validate')->andReturn(true);
 			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
@@ -158,9 +158,10 @@ class MinimeeServiceTest extends MinimeeBaseTest
 				'cssPrependUrlEnabled',
 				'cssPrependUrl'
 			));
-			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
+
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn($minifyCssEnabled);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn($cssPrependUrlEnabled);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn($cssPrependUrl);
 
 			return $settingsModelMock;
 		});
@@ -170,83 +171,111 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+
+		return $minifyCssAsset->invokeArgs(minimee()->service, array($asset));
 	}
 
-	public function testMinifyCssAssetRewritesUrlWhenMinifyCssEnabledIsFalse()
+	// minifyCssEnabled == false && cssPrependUrlEnabled == false
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsFalseAndCssPrependUrlEnabledIsFalse()
 	{
-		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
-		$assetContentsWrite = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.css');
+		$minifyCssEnabled = false;
+		$cssPrependUrlEnabled = false;
+		$cssPrependUrl = false; // does not matter but we set to false
 
-		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
-			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
-			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
-			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('http://craft.dev/assets/css/style.2.css');
-			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
+		$result = $this->_invokeMinifyCssAsset(
+			$minifyCssEnabled,
+			$cssPrependUrlEnabled,
+			$cssPrependUrl
+		);
 
-			return $localAssetModelMock;
-		});
-
-		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
-			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
-			$settingsModelMock->shouldReceive('validate')->andReturn(true);
-			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled',
-				'cssPrependUrlEnabled',
-				'cssPrependUrl'
-			));
-			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
-
-			return $settingsModelMock;
-		});
-
-		minimee()->service->settings = minimee()->makeSettingsModel();
-		minimee()->service->type = MinimeeType::Css;
-
-		$asset = minimee()->makeLocalAssetModel();
-
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContentsWrite, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
+		$this->assertEquals($assertEquals, $result);
 	}
 
-	public function testMinifyCssAssetWhenMinifyCssEnabledIsFalse()
+	// minifyCssEnabled == true && cssPrependUrlEnabled == false
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsTrueAndCssPrependUrlEnabledIsFalse()
 	{
-		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.1.css');
+		$minifyCssEnabled = true;
+		$cssPrependUrlEnabled = false;
+		$cssPrependUrl = false; // does not matter but we set to false
 
-		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
-			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
-			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
-			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('');
-			$localAssetModelMock->shouldReceive('getContents')->andReturn($assetContents);
+		$result = $this->_invokeMinifyCssAsset(
+			$minifyCssEnabled,
+			$cssPrependUrlEnabled,
+			$cssPrependUrl
+		);
 
-			return $localAssetModelMock;
-		});
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.2.prepend.false.css');
+		$this->assertEquals($assertEquals, $result);
+	}
 
-		minimee()->extend('makeSettingsModel', function() use ($assetContents) {
-			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
-			$settingsModelMock->shouldReceive('validate')->andReturn(true);
-			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled',
-				'cssPrependUrlEnabled',
-				'cssPrependUrl'
-			));
-			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(false);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
+	// minifyCssEnabled == true && cssPrependUrlEnabled == true && cssPrependUrl == false
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsTrueAndCssPrependUrlEnabledIsTrueAndCssPrependUrlIsFalse()
+	{
+		$minifyCssEnabled = true;
+		$cssPrependUrlEnabled = true;
+		$cssPrependUrl = false;
 
-			return $settingsModelMock;
-		});
+		$result = $this->_invokeMinifyCssAsset(
+			$minifyCssEnabled,
+			$cssPrependUrlEnabled,
+			$cssPrependUrl
+		);
 
-		minimee()->service->settings = minimee()->makeSettingsModel();
-		minimee()->service->type = MinimeeType::Css;
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.2.min.css');
+		$this->assertEquals($assertEquals, $result);
+	}
 
-		$asset = minimee()->makeLocalAssetModel();
+	// minifyCssEnabled == true && cssPrependUrlEnabled == true && cssPrependUrl == 'http://craft2.dev/assets/css'
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsTrueAndCssPrependUrlEnabledIsTrueAndCssPrependUrlIsNotEmpty()
+	{
+		$minifyCssEnabled = true;
+		$cssPrependUrlEnabled = true;
+		$cssPrependUrl = 'http://craft2.dev/assets/css/';
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$result = $this->_invokeMinifyCssAsset(
+			$minifyCssEnabled,
+			$cssPrependUrlEnabled,
+			$cssPrependUrl
+		);
+
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.2.prepend.min.css');
+		$this->assertEquals($assertEquals, $result);
+	}
+
+	// minifyCssEnabled == false && cssPrependUrlEnabled == true && cssPrependUrl == false
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsFalseAndCssPrependUrlEnabledIsTrueAndCssPrependUrlIsFalse()
+	{
+		$minifyCssEnabled = false;
+		$cssPrependUrlEnabled = true;
+		$cssPrependUrl = false;
+
+		$result = $this->_invokeMinifyCssAsset(
+			$minifyCssEnabled,
+			$cssPrependUrlEnabled,
+			$cssPrependUrl
+		);
+
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.2.rewrite.css');
+		$this->assertEquals($assertEquals, $result);
+	}
+
+	// minifyCssEnabled == false && cssPrependUrlEnabled == true && cssPrependUrl == 'http://craft2.dev/assets/css'
+	public function testMinifyCssAssetWhenMinifyCssEnabledIsFalseAndCssPrependUrlEnabledIsTrueAndCssPrependUrlIsNotEmpty()
+	{
+		$minifyCssEnabled = false;
+		$cssPrependUrlEnabled = true;
+		$cssPrependUrl = 'http://craft2.dev/assets/css/';
+
+		$result = $this->_invokeMinifyCssAsset(
+			$minifyCssEnabled,
+			$cssPrependUrlEnabled,
+			$cssPrependUrl
+		);
+
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.2.prepend.css');
+		$this->assertEquals($assertEquals, $result);
 	}
 
 	public function testMinifyJsAssetWhenMinifyJsEnabledIsFalse()
@@ -278,8 +307,8 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyJsAsset = $this->getMethod(minimee()->service, 'minifyJsAsset');
+		$this->assertEquals($assetContents, $minifyJsAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
 	public function testMinifyJsAssetWhenMinifyJsEnabledIsTrue()
@@ -313,47 +342,8 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 		$asset = minimee()->makeLocalAssetModel();
 
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetMinifiedContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
-	}
-
-	public function testMinifyCssAssetWhenMinifyCssEnabledIsTrue()
-	{
-		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.1.css');
-		$assetMinifiedContents = file_get_contents(__DIR__ . '/../assets/css/style.1.min.css');
-
-		minimee()->extend('makeLocalAssetModel', function() use ($assetContents) {
-			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
-			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
-			$localAssetModelMock->shouldReceive('getAttribute')->with('filenameUrl')->andReturn('');
-			$contents = $assetContents;
-			$localAssetModelMock->shouldReceive('getContents')->andReturn($contents);
-
-			return $localAssetModelMock;
-		});
-
-		minimee()->extend('makeSettingsModel', function() {
-			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
-			$settingsModelMock->shouldReceive('validate')->andReturn(true);
-			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
-				'minifyCssEnabled',
-				'cssPrependUrlEnabled',
-				'cssPrependUrl'
-			));
-			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
-			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('');
-
-			return $settingsModelMock;
-		});
-
-		minimee()->service->settings = minimee()->makeSettingsModel();
-		minimee()->service->type = MinimeeType::Css;
-
-		$asset = minimee()->makeLocalAssetModel();
-
-		$minifyAsset = $this->getMethod(minimee()->service, 'minifyAsset');
-		$this->assertEquals($assetMinifiedContents, $minifyAsset->invokeArgs(minimee()->service, array($asset)));
+		$minifyJsAsset = $this->getMethod(minimee()->service, 'minifyJsAsset');
+		$this->assertEquals($assetMinifiedContents, $minifyJsAsset->invokeArgs(minimee()->service, array($asset)));
 	}
 
 	public function testFlightcheckPasses()
