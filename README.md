@@ -44,7 +44,7 @@ Out of the box and when first installed, Minimee will be automatically enabled a
 
 ![settings](minimee/resources/img/settings.png)
 
-> Note that all string settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables).
+> Note that all string settings will parse Craft's [Environment Variables](http://buildwithcraft.com/docs/config-settings#environmentVariables)
 
 ##### Filesystem Path
 
@@ -64,11 +64,17 @@ By default, Minimee stores cached assets in Craft's `craft/storage` folder, whic
 
 Alternatively, you can specify a cache path & URL which sits _below_ webroot, so that the cached assets are delivered directly by your server. This is the recommended setup for optimal performance gains.
 
+##### Return Templates & Type
+
+By default, Minimee returns the URL to the combined & minified asset. Also by default, if that asset is a CSS file, it is wrapped in a default template (`<link rel="stylesheet" href="%s">`), where the URL replaces `"%s%` using PHP's [sprintf()](http://php.net/manual/en/function.sprintf.php) function.  If that asset is a JS file, the default template is `<script src="%s"></script>`.
+
+You may override this behaviour to do things such as load Javascript asynchronously, or embed CSS inline.  These settings are especially useful being used at runtime (see below).
+
 ##### CSS Prepend URL
 
 When Minimee processes CSS files, it will by default alter any _relative_ @import and image URIs (e.g. `url("../img/arrow.svg")`) to be a fully-qualified URL, using the asset's URL as the basis. This ensures that the links will remain intact regardless of where your might save the cached files.
 
-You can opt to turn this feature off; additionally you can set the URL to something custom, by using the `cssPrependUrl` setting.  This is particularly useful if you would like to upload your static assets to a CDN, or link to assets through a cookie-less domain.
+You can opt to turn this feature off; additionally you can override the prepended URL to something custom.  This is particularly useful if you would like to upload your static assets to a CDN, or link to assets through a cookie-less domain.
 
 ### Runtime Settings
 
