@@ -32,7 +32,7 @@ class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 	 */
 	public function __toString()
 	{
-		return (string) $this->filename;
+		return (string)$this->filename;
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 	 */
 	public function getContents()
 	{
-		if($this->_contents === null)
+		if ($this->_contents === null)
 		{
 			$this->_contents = '';
 		}
@@ -65,7 +65,7 @@ class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 	 */
 	public function getLastTimeModified()
 	{
-		if($this->_lastTimeModified === null)
+		if ($this->_lastTimeModified === null)
 		{
 			$this->_lastTimeModified = DateTime::createFromString(self::TimestampZero);
 		}
@@ -78,7 +78,7 @@ class Minimee_BaseAssetModel extends BaseModel implements Minimee_IAssetModel
 	 */
 	public function exists()
 	{
-		if($this->_exists === null)
+		if ($this->_exists === null)
 		{
 			$this->_exists = false;
 		}

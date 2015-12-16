@@ -118,7 +118,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public static function log($msg, $level = LogLevel::Info, $force = false)
 	{
-		if(version_compare('2.0', craft()->getVersion(), '>'))
+		if (version_compare('2.0', craft()->getVersion(), '>'))
 		{
 			Craft::log($msg, $level, $force);
 		}
@@ -153,7 +153,7 @@ class MinimeePlugin extends BasePlugin
 
 		return craft()->templates->render('minimee/settings', array(
 			'settings' => $this->getSettings(),
-			'filesystemConfigExists' => (bool) IOHelper::fileExists($filesystemConfigPath)
+			'filesystemConfigExists' => (bool)IOHelper::fileExists($filesystemConfigPath)
 
 		));
 	}
@@ -189,7 +189,7 @@ class MinimeePlugin extends BasePlugin
 	{
 		if (strncmp($path, 'minimee/', 8) === 0)
 		{
-			return craft()->path->getStoragePath().'minimee/'.substr($path, 8);
+			return craft()->path->getStoragePath() . 'minimee/' . substr($path, 8);
 		}
 	}
 
@@ -198,7 +198,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function registerCachePaths()
 	{
-		if(minimee()->service->settings->useResourceCache())
+		if (minimee()->service->settings->useResourceCache())
 		{
 			return array(
 				minimee()->service->makePathToStorageFolder() => Craft::t('Minimee caches')
