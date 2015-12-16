@@ -27,12 +27,12 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	public function prepSettings($settings)
 	{
 		// cast any booleans
-		$settings['enabled'] = (bool) $settings['enabled'];
-		$settings['combineCssEnabled'] = (bool) $settings['combineCssEnabled'];
-		$settings['combineJsEnabled'] = (bool) $settings['combineJsEnabled'];
-		$settings['minifyCssEnabled'] = (bool) $settings['minifyCssEnabled'];
-		$settings['minifyJsEnabled'] = (bool) $settings['minifyJsEnabled'];
-		$settings['cssPrependUrlEnabled'] = (bool) $settings['cssPrependUrlEnabled'];
+		$settings['enabled'] = (bool)$settings['enabled'];
+		$settings['combineCssEnabled'] = (bool)$settings['combineCssEnabled'];
+		$settings['combineJsEnabled'] = (bool)$settings['combineJsEnabled'];
+		$settings['minifyCssEnabled'] = (bool)$settings['minifyCssEnabled'];
+		$settings['minifyJsEnabled'] = (bool)$settings['minifyJsEnabled'];
+		$settings['cssPrependUrlEnabled'] = (bool)$settings['cssPrependUrlEnabled'];
 
 		return $settings;
 	}
@@ -46,7 +46,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 */
 	public function validate($attributes = null, $clearErrors = true)
 	{
-		if($clearErrors)
+		if ($clearErrors)
 		{
 			$this->clearErrors();
 		}
@@ -69,7 +69,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 		$cachePathEmpty = empty($cachePath);
 		$cacheUrlEmpty = empty($cacheUrl);
 
-		if($cachePathEmpty != $cacheUrlEmpty)
+		if ($cachePathEmpty != $cacheUrlEmpty)
 		{
 			$this->addError('cachePath', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
 			$this->addError('cacheUrl', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
@@ -115,7 +115,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('filesystemPath');
 
-		if($value)
+		if ($value)
 		{
 			$filesystemPath = craft()->config->parseEnvironmentString($value);
 		}
@@ -134,7 +134,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('cachePath');
 
-		if( ! $value)
+		if (!$value)
 		{
 			return false;
 		}
@@ -151,7 +151,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('cacheUrl');
 
-		if( ! $value)
+		if (!$value)
 		{
 			return false;
 		}
@@ -168,7 +168,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('cssPrependUrl');
 
-		if( ! $value)
+		if (!$value)
 		{
 			return false;
 		}
@@ -199,7 +199,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('baseUrl');
 
-		if($value)
+		if ($value)
 		{
 			$baseUrl = craft()->config->parseEnvironmentString($value);
 		}
@@ -215,7 +215,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('cssReturnTemplate');
 
-		if( ! $value)
+		if (!$value)
 		{
 			$attributes = $this->defineAttributes();
 			return $attributes['cssReturnTemplate']['default'];
@@ -228,7 +228,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('jsReturnTemplate');
 
-		if( ! $value)
+		if (!$value)
 		{
 			$attributes = $this->defineAttributes();
 			return $attributes['jsReturnTemplate']['default'];
@@ -241,7 +241,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('returnType');
 
-		if( ! $value)
+		if (!$value)
 		{
 			$attributes = $this->defineAttributes();
 			return $attributes['returnType']['default'];
@@ -258,7 +258,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 */
 	public function getAttribute($name)
 	{
-		switch($name) :
+		switch ($name) :
 
 			case('baseUrl') :
 				return $this->getBaseUrl();

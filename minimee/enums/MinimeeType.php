@@ -3,6 +3,6 @@ namespace Craft;
 
 class MinimeeType
 {
-	const Css	= 'css';
-	const Js	= 'js';
+	const Css = 'css';
+	const Js = 'js';
 }
