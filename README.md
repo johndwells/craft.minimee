@@ -252,7 +252,6 @@ The `filter` will also work in conjunction with Craft's [getFootHtml](http://bui
 * tie the cache hash to settings and/or last date modified of settings/config and/or minimee version?
 * support [includeJs](http://buildwithcraft.com/docs/templating/tags#includeJs), [includeCss](http://buildwithcraft.com/docs/templating/tags#includeCss) and [includeHiResCss](http://buildwithcraft.com/docs/templating/tags#includeHiResCss)?
 * additional hooks/events
-* option to return cache filename only
 * try to resolve URL assets to local assets
 
 ---
