@@ -33,6 +33,8 @@ class MinimeeService extends BaseApplicationComponent
 
 	/**
 	 * Based on the cache's hashed base, attempts to delete any older versions of same name.
+	 *
+	 * @return void
 	 */
 	public function deleteExpiredCache()
 	{
@@ -60,7 +62,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * During startup, fetch settings from our plugin / config
 	 *
-	 * @return Void
+	 * @return void
 	 */
 	public function init()
 	{
