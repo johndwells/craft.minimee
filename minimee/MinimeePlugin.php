@@ -34,7 +34,16 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.9.5';
+		return '0.9.6';
+	}
+
+	/**
+	 * @since Minimee 0.9.5
+	 * @return String
+	 */
+	public function getSchemaVersion()
+	{
+		return '1.0.0';
 	}
 
 	/**
