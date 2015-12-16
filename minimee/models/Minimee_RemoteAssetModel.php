@@ -44,8 +44,7 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 			if ($response->isSuccessful())
 			{
 				$this->_contents = $response->getBody(true);
-			}
-			else
+			} else
 			{
 				throw new Exception('Minimee could not get remote asset: ' . $this->filenameUrl);
 			}
@@ -68,8 +67,7 @@ class Minimee_RemoteAssetModel extends Minimee_BaseAssetModel
 		{
 			$protocol = craft()->request->isSecureConnection() ? 'https:' : 'http:';
 			return $protocol . $this->filenameUrl;
-		}
-		else
+		} else
 		{
 			return $this->filenameUrl;
 		}

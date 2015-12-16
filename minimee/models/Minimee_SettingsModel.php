@@ -59,7 +59,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	/**
 	 * Validate that cachePath and cacheUrl are both empty or non-empty.
 	 *
-	 * @return Bool
+	 * @return boolean|null
 	 */
 	public function validateCachePathAndUrl()
 	{
@@ -128,7 +128,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String|Bool
+	 * @return false|string
 	 */
 	public function getCachePath()
 	{
@@ -145,7 +145,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String|Bool
+	 * @return false|string
 	 */
 	public function getCacheUrl()
 	{
@@ -162,7 +162,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String|Bool
+	 * @return false|string
 	 */
 	public function getCssPrependUrl()
 	{

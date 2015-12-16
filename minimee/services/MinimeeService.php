@@ -43,7 +43,9 @@ class MinimeeService extends BaseApplicationComponent
 		foreach($files as $file)
 		{
 			// skip self
-			if ($file === $this->makePathToCacheFilename()) continue;
+			if ($file === $this->makePathToCacheFilename()) {
+			    continue;
+			}
 
 			if (strpos($file, $this->makePathToHashOfCacheBase()) === 0)
 			{
@@ -144,8 +146,7 @@ class MinimeeService extends BaseApplicationComponent
 			{
 				$return[] = $this->ensureCacheExists()
 								 ->makeReturn();
-			}
-			else
+			} else
 			{
 				foreach($assets as $asset)
 				{
@@ -157,8 +158,7 @@ class MinimeeService extends BaseApplicationComponent
 									 ->makeReturn();
 				}
 			}
-		}
-		catch (Exception $e)
+		} catch (Exception $e)
 		{
 			return $this->abort($e);
 		}
@@ -204,7 +204,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Fetch or creates cache.
 	 *
-	 * @return String
+	 * @return MinimeeService
 	 */
 	protected function ensureCacheExists()
 	{
@@ -271,7 +271,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Creates cache of assets.
 	 *
-	 * @return Void
+	 * @return boolean
 	 */
 	protected function createCache()
 	{
@@ -348,7 +348,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Return whether we should combine our cache or not
 	 *
-	 * @return Bool
+	 * @return boolean|null
 	 */
 	protected function isCombineEnabled()
 	{
@@ -407,8 +407,7 @@ class MinimeeService extends BaseApplicationComponent
 		if($this->settings->useResourceCache())
 		{
 			IOHelper::ensureFolderExists($this->makePathToStorageFolder());
-		}
-		else
+		} else
 		{
 			if( ! IOHelper::folderExists($this->settings->cachePath))
 			{
@@ -443,7 +442,7 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @return Array
+	 * @return string
 	 */
 	protected function getCacheBase()
 	{
@@ -551,8 +550,7 @@ class MinimeeService extends BaseApplicationComponent
 		if($this->settings->getReturnType() == 'contents')
 		{
 			return IOHelper::getFileContents($this->makePathToCacheFilename());
-		}
-		else
+		} else
 		{
 			return $this->makeUrlToCacheFilename();
 		}
@@ -611,7 +609,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Method to (maybe) minify CSS asset
 	 *
-	 * @param Array $asset
+	 * @param Minimee_BaseAssetModel $asset
 	 * @return String
 	 */
 	protected function minifyCssAsset($asset)
@@ -641,7 +639,7 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Method to (maybe) minify JS asset
 	 *
-	 * @param $asset
+	 * @param Minimee_BaseAssetModel $asset
 	 * @return String
 	 */
 	protected function minifyJsAsset($asset)
@@ -707,8 +705,7 @@ class MinimeeService extends BaseApplicationComponent
 				);
 
 				$this->_assets[] = minimee()->makeRemoteAssetModel($model);
-			}
-			else
+			} else
 			{
 				$model = array(
 					'filename' => $asset,
@@ -725,7 +722,7 @@ class MinimeeService extends BaseApplicationComponent
 
 	/**
 	 * @param String $name
-	 * @return Void
+	 * @return MinimeeService
 	 */
 	protected function setCacheBase($name)
 	{
@@ -736,7 +733,7 @@ class MinimeeService extends BaseApplicationComponent
 
 	/**
 	 * @param String $timestamp
-	 * @return Void
+	 * @return MinimeeService
 	 */
 	protected function setCacheTimestamp($timestamp)
 	{
@@ -747,7 +744,7 @@ class MinimeeService extends BaseApplicationComponent
 
 	/**
 	 * @param DateTime $lastTimeModified
-	 * @return Void
+	 * @return MinimeeService
 	 */
 	protected function setMaxCacheTimestamp(DateTime $lastTimeModified)
 	{
@@ -762,7 +759,7 @@ class MinimeeService extends BaseApplicationComponent
 	 * allowing plugin settings to be overridden at runtime.
 	 *
 	 * @param Array $settingsOverrides
-	 * @return void
+	 * @return MinimeeService
 	 */
 	protected function setRuntimeSettings($settingsOverrides)
 	{
@@ -780,8 +777,8 @@ class MinimeeService extends BaseApplicationComponent
 	/**
 	 * Manually pass in an instance of Minimee_ISettingsModel.
 	 *
-	 * @param Craft\Minimee_ISettingsModel $settings
-	 * @return void
+	 * @param Minimee_ISettingsModel $settings
+	 * @return MinimeeService
 	 */
 	protected function setSettings(Minimee_ISettingsModel $settings)
 	{
