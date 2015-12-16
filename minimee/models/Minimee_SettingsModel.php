@@ -63,11 +63,11 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 */
 	public function validateCachePathAndUrl()
 	{
-		$cachePath = parent::getAttribute('cachePath');
-		$cacheUrl = parent::getAttribute('cacheUrl');
+		$cachePath = $this->getCachePath();
+		$cacheUrl = $this->getCacheUrl();
 
-		$cachePathEmpty = ! $cachePath;
-		$cacheUrlEmpty = ! $cacheUrl;
+		$cachePathEmpty = empty($cachePath);
+		$cacheUrlEmpty = empty($cacheUrl);
 
 		if($cachePathEmpty != $cacheUrlEmpty)
 		{
@@ -183,11 +183,11 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 */
 	public function useResourceCache()
 	{
-		$cachePath = parent::getAttribute('cachePath');
-		$cacheUrl = parent::getAttribute('cacheUrl');
+		$cachePath = $this->getCachePath();
+		$cacheUrl = $this->getCacheUrl();
 
-		$cachePathEmpty = ! $cachePath;
-		$cacheUrlEmpty = ! $cacheUrl;
+		$cachePathEmpty = empty($cachePath);
+		$cacheUrlEmpty = empty($cacheUrl);
 
 		return ($cachePathEmpty && $cacheUrlEmpty);
 	}
@@ -253,8 +253,8 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	/**
 	 * Inject our model attribute accessors.
 	 *
-	 * @param String $string
-	 * @return String
+	 * @param String $name
+	 * @return String|Bool
 	 */
 	public function getAttribute($name)
 	{
@@ -262,38 +262,31 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 
 			case('baseUrl') :
 				return $this->getBaseUrl();
-			break;
 
 			case('cachePath') :
 				return $this->getCachePath();
-			break;
 
 			case('cacheUrl') :
 				return $this->getCacheUrl();
-			break;
 
 			case('cssReturnTemplate') :
 				return $this->getCssReturnTemplate();
-			break;
 
 			case('cssPrependUrl') :
 				return $this->getCssPrependUrl();
-			break;
 
 			case('filesystemPath') :
 				return $this->getFilesystemPath();
-			break;
 
 			case('jsReturnTemplate') :
 				return $this->getJsReturnTemplate();
-			break;
 
 			case('returnType') :
 				return $this->getReturnType();
-			break;
+
+			default :
+				return parent::getAttribute($name);
 
 		endswitch;
-
-		return parent::getAttribute($name);
 	}
 }

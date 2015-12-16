@@ -119,7 +119,6 @@ class MinimeeTwigExtension extends \Twig_Extension
 
 			default :
 				return FALSE;
-			break;
 
 		endswitch;
 

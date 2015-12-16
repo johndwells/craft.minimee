@@ -196,7 +196,7 @@ class MinimeePlugin extends BasePlugin
 	/**
 	 * Register our cache path that can then be deleted from CP
 	 */
-	function registerCachePaths()
+	public function registerCachePaths()
 	{
 		if(minimee()->service->settings->useResourceCache())
 		{
@@ -219,7 +219,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	protected function _bindEvents()
 	{
-		craft()->on('minimee.createCache', function(Event $event) {
+		craft()->on('minimee.createCache', function() {
 			if(craft()->config->get('devMode'))
 			{
 				minimee()->service->deleteExpiredCache();
@@ -263,7 +263,7 @@ class MinimeePlugin extends BasePlugin
 			return new Minimee_RemoteAssetModel($attributes);
 		});
 
-		minimee()->extend('makeClient', function(Zit $zit) {
+		minimee()->extend('makeClient', function() {
 			return new Client;
 		});
 	}

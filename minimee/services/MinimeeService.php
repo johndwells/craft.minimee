@@ -78,6 +78,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$assets = ( ! is_array($assets)) ? array($assets) : $assets;
 		$tags = '';
+		$settingsName = '';
 
 		switch ($type)
 		{
@@ -308,7 +309,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function getPluginSettings()
 	{
-		if( ! self::$_pluginSettings)
+		if(empty(self::$_pluginSettings))
 		{
 			$this->initPluginSettings();
 		}
@@ -352,16 +353,14 @@ class MinimeeService extends BaseApplicationComponent
 	protected function isCombineEnabled()
 	{
 		switch($this->type) :
+
 			case MinimeeType::Css :
-				$isCombineEnabled = (bool) $this->settings->combineCssEnabled;
-			break;
+				return (bool) $this->settings->combineCssEnabled;
 
 			case MinimeeType::Js :
-				$isCombineEnabled = (bool) $this->settings->combineJsEnabled;
-			break;
-		endswitch;
+				return (bool) $this->settings->combineJsEnabled;
 
-		return $isCombineEnabled;
+		endswitch;
 	}
 
 	/**
@@ -384,7 +383,7 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function flightcheck()
 	{
-		if ( ! self::$_pluginSettings)
+		if(empty(self::$_pluginSettings))
 		{
 			throw new Exception(Craft::t('Minimee is not installed.'));
 		}
@@ -569,6 +568,7 @@ class MinimeeService extends BaseApplicationComponent
 			$path = '/' . self::ResourceTrigger . '/' . $this->makeCacheFilename();
 
 			$dateParam = craft()->resources->dateParam;
+			$params = array();
 			$params[$dateParam] = IOHelper::getLastTimeModified($this->makePathToCacheFilename())->getTimestamp();
 
 			return UrlHelper::getUrl(craft()->config->getResourceTrigger() . $path, $params);
@@ -735,7 +735,7 @@ class MinimeeService extends BaseApplicationComponent
 	}
 
 	/**
-	 * @param String $dateTime
+	 * @param String $timestamp
 	 * @return Void
 	 */
 	protected function setCacheTimestamp($timestamp)
