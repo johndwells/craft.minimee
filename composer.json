@@ -1,0 +1,14 @@
+{
+  "name": "johndwells/craft.minimee",
+  "description": "A Craft CMS port of the popular Minimee add-on for ExpressionEngine.",
+  "authors": [
+    {
+      "name": "John D Wells",
+      "email": "hello@johndwells.com"
+    }
+  ],
+  "type": "craft-plugin",
+  "require": {
+    "composer/installers": "~1.0"
+  }
+}
