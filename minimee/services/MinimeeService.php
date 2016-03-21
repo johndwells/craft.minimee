@@ -160,7 +160,24 @@ class MinimeeService extends BaseApplicationComponent
 									 ->makeReturn();
 				}
 			}
-		} catch (Exception $e)
+		}
+		catch (Minimee_InfoException $e)
+		{
+			return $this->abort($e, LogLevel::Info);
+		}
+		catch (Minimee_WarningException $e)
+		{
+			return $this->abort($e, LogLevel::Warning);
+		}
+		catch (Minimee_ErrorException $e)
+		{
+			return $this->abort($e, LogLevel::Error);
+		}
+		catch (Minimee_Exception $e)
+		{
+			return $this->abort($e);
+		}
+		catch (Exception $e)
 		{
 			return $this->abort($e);
 		}
