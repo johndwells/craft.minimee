@@ -204,7 +204,7 @@ class MinimeeService extends BaseApplicationComponent
 			&& $this->settings->enabled
 			&& ($level == LogLevel::Warning || $level == LogLevel::Error))
 		{
-			throw new Exception($e);
+			throw $e;
 		}
 
 		return false;
