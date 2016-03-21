@@ -34,7 +34,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.9.6';
+		return '0.9.7';
 	}
 
 	/**
@@ -236,7 +236,13 @@ class MinimeePlugin extends BasePlugin
 	{
 		require_once craft()->path->getPluginsPath() . 'minimee/library/vendor/autoload.php';
 
+		Craft::import('plugins.minimee.components.Minimee_Exception');
+		Craft::import('plugins.minimee.components.Minimee_InfoException');
+		Craft::import('plugins.minimee.components.Minimee_WarningException');
+		Craft::import('plugins.minimee.components.Minimee_ErrorException');
+
 		Craft::import('plugins.minimee.enums.MinimeeType');
+
 		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 	}

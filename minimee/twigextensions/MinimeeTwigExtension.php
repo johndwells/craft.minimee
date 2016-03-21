@@ -37,6 +37,18 @@ class MinimeeTwigExtension extends \Twig_Extension
 	}
 
 	/**
+	 * Inject into the template scope a read-only copy of Minimee's runtime settings
+	 *
+	 * @return Array
+	 */
+	public function getGlobals()
+	{
+		return array(
+			'minimee' => minimee()->service->pluginSettings
+		);
+	}
+
+	/**
 	 * Define our filter
 	 *
 	 * @param String $html

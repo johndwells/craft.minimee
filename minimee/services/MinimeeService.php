@@ -27,6 +27,11 @@ class MinimeeService extends BaseApplicationComponent
 
 	protected static $_pluginSettings	= array();		// static array of settings, a merge of DB and filesystem settings
 
+	protected $_deprecatedSettingsMap = array(          // map of old-to-new configuration setting names
+		'cssTagTemplate' => 'cssReturnTemplate',
+		'jsTagTemplate' => 'jsReturnTemplate');
+
+
 
 	/*================= PUBLIC METHODS ================= */
 
@@ -160,7 +165,24 @@ class MinimeeService extends BaseApplicationComponent
 									 ->makeReturn();
 				}
 			}
-		} catch (Exception $e)
+		}
+		catch (Minimee_InfoException $e)
+		{
+			return $this->abort($e, LogLevel::Info);
+		}
+		catch (Minimee_WarningException $e)
+		{
+			return $this->abort($e, LogLevel::Warning);
+		}
+		catch (Minimee_ErrorException $e)
+		{
+			return $this->abort($e, LogLevel::Error);
+		}
+		catch (Minimee_Exception $e)
+		{
+			return $this->abort($e);
+		}
+		catch (Exception $e)
 		{
 			return $this->abort($e);
 		}
@@ -187,7 +209,7 @@ class MinimeeService extends BaseApplicationComponent
 			&& $this->settings->enabled
 			&& ($level == LogLevel::Warning || $level == LogLevel::Error))
 		{
-			throw new Exception($e);
+			throw $e;
 		}
 
 		return false;
@@ -214,7 +236,7 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			if( ! $this->createCache())
 			{
-				throw new Exception(Craft::t('Minimee could not find asset ' . $asset->filenamePath . '.'));
+				throw new Minimee_ErrorException(Craft::t('Minimee could not write to cache ' . $this->makePathToCacheFilename() . '.'));
 			}
 		}
 
@@ -263,7 +285,7 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			if( ! $asset->exists())
 			{
-				throw new Exception(Craft::t('Minimee could not find asset ' . $asset->filenamePath . '.'));
+				throw new Minimee_ErrorException(Craft::t('Minimee could not find asset ' . $asset->filenamePath . '.'));
 			}
 		}
 
@@ -384,15 +406,15 @@ class MinimeeService extends BaseApplicationComponent
 	 * @return this
 	 */
 	protected function flightcheck()
-	{
+	{		
 		if(empty(self::$_pluginSettings))
 		{
-			throw new Exception(Craft::t('Minimee is not installed.'));
+			throw new Minimee_InfoException(Craft::t('Minimee is not installed.'));
 		}
 
 		if( ! $this->settings->enabled)
 		{
-			throw new Exception(Craft::t('Minimee has been disabled via settings.'));
+			throw new Minimee_InfoException(Craft::t('Minimee has been disabled via settings.'));
 		}
 
 		if( ! $this->settings->validate())
@@ -403,7 +425,7 @@ class MinimeeService extends BaseApplicationComponent
 				$exceptionErrors .= implode('. ', $error);
 			}
 
-			throw new Exception(Craft::t('Minimee has detected invalid plugin settings: ') . $exceptionErrors);
+			throw new Minimee_WarningException(Craft::t('Minimee has detected invalid plugin settings: ') . $exceptionErrors);
 		}
 
 		if($this->settings->useResourceCache())
@@ -413,23 +435,23 @@ class MinimeeService extends BaseApplicationComponent
 		{
 			if( ! IOHelper::folderExists($this->settings->cachePath))
 			{
-				throw new Exception(Craft::t('Minimee\'s Cache Folder does not exist: ' . $this->settings->cachePath));
+				throw new Minimee_WarningException(Craft::t('Minimee\'s Cache Folder does not exist: ' . $this->settings->cachePath));
 			}
 
 			if( ! IOHelper::isWritable($this->settings->cachePath))
 			{
-				throw new Exception(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
+				throw new Minimee_WarningException(Craft::t('Minimee\'s Cache Folder is not writable: ' . $this->settings->cachePath));
 			}
 		}
 
 		if( ! $this->assets)
 		{
-			throw new Exception(Craft::t('Minimee has no assets to operate upon.'));
+			throw new Minimee_InfoException(Craft::t('Minimee has no assets to operate upon.'));
 		}
 
 		if( ! $this->type)
 		{
-			throw new Exception(Craft::t('Minimee has no value for `type`.'));
+			throw new Minimee_WarningException(Craft::t('Minimee has no value for `type`.'));
 		}
 
 		return $this;
@@ -797,7 +819,7 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		if($type !== MinimeeType::Css && $type !== MinimeeType::Js)
 		{
-			throw new Exception(Craft::t('Attempting to set an unknown type `' . $type . '`.'));
+			throw new Minimee_WarningException(Craft::t('Attempting to set an unknown type `' . $type . '`.'));
 		}
 
 		$this->_type = $type;
@@ -814,15 +836,20 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function supportLegacyNamesFromConfig($settings = array())
 	{
-		$settingNameMap = array(
-			'cssTagTemplate' => 'cssReturnTemplate',
-			'jsTagTemplate' => 'jsReturnTemplate');
-
-		foreach($settingNameMap as $oldAttributeName => $newAttributeName)
+		foreach($this->_deprecatedSettingsMap as $oldAttributeName => $newAttributeName)
 		{
 			if(craft()->config->exists($oldAttributeName, 'minimee'))
 			{
+				$message = Craft::t('Deprecated configuration setting name: change {oldAttributeName} to {newAttributeName}.',
+										array(
+											'oldAttributeName' => $oldAttributeName,
+											'newAttributeName' => $newAttributeName));
+
+				MinimeePlugin::log($message, LogLevel::Info);
+
 				$settings[$newAttributeName] = craft()->config->get($oldAttributeName, 'minimee');
+
+				unset($settings[$oldAttributeName]);
 			}
 		}
 
@@ -838,16 +865,20 @@ class MinimeeService extends BaseApplicationComponent
 	 */
 	protected function supportLegacyNamesAtRuntime($runtimeSettings = array())
 	{
-		$settingNameMap = array(
-			'cssTagTemplate' => 'cssReturnTemplate',
-			'jsTagTemplate' => 'jsReturnTemplate');
-
-		foreach($settingNameMap as $oldAttributeName => $newAttributeName)
+		foreach($this->_deprecatedSettingsMap as $oldAttributeName => $newAttributeName)
 		{
 			if(array_key_exists($oldAttributeName, $runtimeSettings))
 			{
+				$message = Craft::t('Deprecated runtime setting name: change {oldAttributeName} to {runtimeSettings}.',
+										array(
+											'oldAttributeName' => $oldAttributeName,
+											'runtimeSettings' => $runtimeSettings));
+
+				MinimeePlugin::log($message, LogLevel::Info);
+
 				$runtimeSettings[$newAttributeName] = $runtimeSettings[$oldAttributeName];
-				unset($runtimeSettings[oldAttributeName]);
+
+				unset($runtimeSettings[$oldAttributeName]);
 			}
 		}
 
