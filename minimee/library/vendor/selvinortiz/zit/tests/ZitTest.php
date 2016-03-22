@@ -52,4 +52,17 @@ class ZitTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue( $zit->myCallable() === 12345 );
 		$this->assertTrue( Zit::myCallable() === 12345 );
 	}
+
+	public function testStashWithSameIdAsProtectedProperty()
+	{
+		$zit = Zit::getInstance();
+
+		$instance = new \stdClass;
+		$instance->id = 'testServices';
+
+		$zit->stash('services', $instance);
+
+		$this->assertTrue($zit->services instanceof \stdClass);
+		$this->assertSame('testServices', $zit->services->id);
+	}
 }

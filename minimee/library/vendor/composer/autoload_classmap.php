@@ -30,6 +30,7 @@ return array(
     'Minify_Cache_APC' => $vendorDir . '/mrclay/minify/min/lib/Minify/Cache/APC.php',
     'Minify_Cache_File' => $vendorDir . '/mrclay/minify/min/lib/Minify/Cache/File.php',
     'Minify_Cache_Memcache' => $vendorDir . '/mrclay/minify/min/lib/Minify/Cache/Memcache.php',
+    'Minify_Cache_WinCache' => $vendorDir . '/mrclay/minify/min/lib/Minify/Cache/WinCache.php',
     'Minify_Cache_XCache' => $vendorDir . '/mrclay/minify/min/lib/Minify/Cache/XCache.php',
     'Minify_Cache_ZendPlatform' => $vendorDir . '/mrclay/minify/min/lib/Minify/Cache/ZendPlatform.php',
     'Minify_ClosureCompiler' => $vendorDir . '/mrclay/minify/min/lib/Minify/ClosureCompiler.php',

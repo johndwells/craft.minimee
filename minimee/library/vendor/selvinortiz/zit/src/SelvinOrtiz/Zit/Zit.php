@@ -2,15 +2,15 @@
 namespace SelvinOrtiz\Zit;
 
 /**
- * @=SelvinOrtiz\Zit
- *
  * Tiny dependency management library for PHP 5.3
  *
- * @author		Selvin Ortiz <selvin@selvinortiz.com>
- * @package		Zit
- * @version		0.5.0
- * @category	DI, IoC (PHP)
- * @copyright	2014 Selvin Ortiz
+ * Class Zit
+ *
+ * @author    Selvin Ortiz - http://selv.in
+ * @package   SelvinOrtiz\Zit
+ * @version   0.5.2
+ * @category  DI, IoC (PHP)
+ * @copyright 2014-2015 Selvin Ortiz
  */
 
 class Zit implements IZit
@@ -20,7 +20,7 @@ class Zit implements IZit
 	protected $services		= array();
 	protected $callables	= array();
 
-	protected function __construct() 	{}
+	protected function __construct()	{}
 	protected function __clone()		{}
 
 	/**
@@ -108,14 +108,7 @@ class Zit implements IZit
 
 	public function __get($id)
 	{
-		if (property_exists($this, $id))
-		{
-			return $this->{$id};
-		}
-		else
-		{
-			return $this->pop($id);
-		}
+		return $this->pop($id);
 	}
 
 	public function __call($id, $args=array())

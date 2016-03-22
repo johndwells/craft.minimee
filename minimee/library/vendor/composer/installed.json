@@ -1,28 +1,32 @@
 [
     {
-        "name": "selvinortiz/zit",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "name": "mrclay/jsmin-php",
+        "version": "2.3.2",
+        "version_normalized": "2.3.2.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/selvinortiz/zit.git",
-            "reference": "3382b3800db783841134106509ccf3e8f8d01e5c"
+            "url": "https://github.com/mrclay/jsmin-php.git",
+            "reference": "932c9633c35b390beb2cfdea69a41ea7dbc8d759"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/selvinortiz/zit/zipball/3382b3800db783841134106509ccf3e8f8d01e5c",
-            "reference": "3382b3800db783841134106509ccf3e8f8d01e5c",
+            "url": "https://api.github.com/repos/mrclay/jsmin-php/zipball/932c9633c35b390beb2cfdea69a41ea7dbc8d759",
+            "reference": "932c9633c35b390beb2cfdea69a41ea7dbc8d759",
             "shasum": ""
         },
         "require": {
-            "php": ">=5.3.2"
+            "ext-pcre": "*",
+            "php": ">=5.3.0"
         },
-        "time": "2014-03-26 06:18:29",
+        "require-dev": {
+            "phpunit/phpunit": "4.2"
+        },
+        "time": "2015-03-30 15:04:42",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
-                "SelvinOrtiz\\Zit": "src"
+                "JSMin\\": "src/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -31,42 +35,52 @@
         ],
         "authors": [
             {
-                "name": "Selvin Ortiz",
-                "email": "selvin@selvin.co",
-                "homepage": "http://twitter.com/selvinortiz",
+                "name": "Stephen Clay",
+                "email": "steve@mrclay.org",
+                "role": "Developer"
+            },
+            {
+                "name": "Ryan Grove",
+                "email": "ryan@wonko.com",
                 "role": "Developer"
             }
         ],
-        "description": "Tiny dependency management library for PHP 5.3",
-        "homepage": "https://github.com/selvinortiz/zit",
+        "description": "Provides a modified port of Douglas Crockford's jsmin.c, which removes unnecessary whitespace from JavaScript files.",
+        "homepage": "https://github.com/mrclay/jsmin-php/",
         "keywords": [
-            "dependency",
-            "injection",
-            "zit"
+            "compress",
+            "jsmin",
+            "minify"
         ]
     },
     {
         "name": "mrclay/minify",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
+        "version": "2.3.0",
+        "version_normalized": "2.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/mrclay/minify.git",
-            "reference": "fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9"
+            "reference": "f4cb31135d288f951bb0af1f23a03d4c00ba9446"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/mrclay/minify/zipball/fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9",
-            "reference": "fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9",
+            "url": "https://api.github.com/repos/mrclay/minify/zipball/f4cb31135d288f951bb0af1f23a03d4c00ba9446",
+            "reference": "f4cb31135d288f951bb0af1f23a03d4c00ba9446",
             "shasum": ""
         },
         "require": {
             "ext-pcre": "*",
             "php": ">=5.2.1"
         },
-        "time": "2014-04-03 23:53:48",
+        "require-dev": {
+            "tubalmartin/cssmin": "~2.4.8"
+        },
+        "suggest": {
+            "tubalmartin/cssmin": "Support minify with CSSMin (YUI PHP port)"
+        },
+        "time": "2016-03-08 11:49:57",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "classmap": [
                 "min/lib/"
@@ -80,11 +94,56 @@
             {
                 "name": "Stephen Clay",
                 "email": "steve@mrclay.org",
-                "homepage": "http://www.mrclay.org/",
                 "role": "Developer"
             }
         ],
         "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
         "homepage": "http://code.google.com/p/minify/"
+    },
+    {
+        "name": "selvinortiz/zit",
+        "version": "v0.5.2",
+        "version_normalized": "0.5.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/selvinortiz/zit.git",
+            "reference": "352382b74ecc82b39e3e7e16511d009c795ab918"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/selvinortiz/zit/zipball/352382b74ecc82b39e3e7e16511d009c795ab918",
+            "reference": "352382b74ecc82b39e3e7e16511d009c795ab918",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "time": "2015-02-21 18:52:11",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "SelvinOrtiz\\Zit": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Selvin Ortiz",
+                "email": "selvin@selvin.co",
+                "homepage": "http://selv.in",
+                "role": "Developer"
+            }
+        ],
+        "description": "Tiny dependency management library for PHP 5.3",
+        "homepage": "https://github.com/selvinortiz/zit",
+        "keywords": [
+            "dependency",
+            "injection",
+            "zit"
+        ]
     }
 ]
