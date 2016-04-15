@@ -642,7 +642,8 @@ class MinimeeService extends BaseApplicationComponent
 
 		if($this->settings->minifyCssEnabled)
 		{
-			$contents = \Minify_CSS::minify($contents);
+			$compressor = new \CSSmin();
+			$contents = $compressor->run($contents);
 		}
 
 		if($this->settings->cssPrependUrlEnabled)
