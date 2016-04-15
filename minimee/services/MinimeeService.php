@@ -406,7 +406,7 @@ class MinimeeService extends BaseApplicationComponent
 	 * @return this
 	 */
 	protected function flightcheck()
-	{		
+	{
 		if(empty(self::$_pluginSettings))
 		{
 			throw new Minimee_InfoException(Craft::t('Minimee is not installed.'));
