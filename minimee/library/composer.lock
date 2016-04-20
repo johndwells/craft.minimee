@@ -1,27 +1,87 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "3cab57ffe0ae86239e50be3f8d8e8e3f",
+    "hash": "673b62552d017c69f8a574c7f3dc3ee8",
+    "content-hash": "fd8ce211ce33af5cd6cbfde69238fc90",
     "packages": [
         {
-            "name": "mrclay/minify",
-            "version": "dev-master",
+            "name": "mrclay/jsmin-php",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mrclay/minify.git",
-                "reference": "fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9"
+                "url": "https://github.com/mrclay/jsmin-php.git",
+                "reference": "932c9633c35b390beb2cfdea69a41ea7dbc8d759"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrclay/minify/zipball/fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9",
-                "reference": "fb3931f8cd54a637b2a42170c3a9a1c4da9e69a9",
+                "url": "https://api.github.com/repos/mrclay/jsmin-php/zipball/932c9633c35b390beb2cfdea69a41ea7dbc8d759",
+                "reference": "932c9633c35b390beb2cfdea69a41ea7dbc8d759",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JSMin\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Clay",
+                    "email": "steve@mrclay.org",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Ryan Grove",
+                    "email": "ryan@wonko.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provides a modified port of Douglas Crockford's jsmin.c, which removes unnecessary whitespace from JavaScript files.",
+            "homepage": "https://github.com/mrclay/jsmin-php/",
+            "keywords": [
+                "compress",
+                "jsmin",
+                "minify"
+            ],
+            "time": "2015-03-30 15:04:42"
+        },
+        {
+            "name": "mrclay/minify",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrclay/minify.git",
+                "reference": "f4cb31135d288f951bb0af1f23a03d4c00ba9446"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrclay/minify/zipball/f4cb31135d288f951bb0af1f23a03d4c00ba9446",
+                "reference": "f4cb31135d288f951bb0af1f23a03d4c00ba9446",
                 "shasum": ""
             },
             "require": {
                 "ext-pcre": "*",
                 "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "tubalmartin/cssmin": "~2.4.8"
+            },
+            "suggest": {
+                "tubalmartin/cssmin": "Support minify with CSSMin (YUI PHP port)"
             },
             "type": "library",
             "autoload": {
@@ -37,26 +97,25 @@
                 {
                     "name": "Stephen Clay",
                     "email": "steve@mrclay.org",
-                    "homepage": "http://www.mrclay.org/",
                     "role": "Developer"
                 }
             ],
             "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
             "homepage": "http://code.google.com/p/minify/",
-            "time": "2014-04-03 23:53:48"
+            "time": "2016-03-08 11:49:57"
         },
         {
             "name": "selvinortiz/zit",
-            "version": "dev-master",
+            "version": "v0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/selvinortiz/zit.git",
-                "reference": "3382b3800db783841134106509ccf3e8f8d01e5c"
+                "reference": "352382b74ecc82b39e3e7e16511d009c795ab918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/selvinortiz/zit/zipball/3382b3800db783841134106509ccf3e8f8d01e5c",
-                "reference": "3382b3800db783841134106509ccf3e8f8d01e5c",
+                "url": "https://api.github.com/repos/selvinortiz/zit/zipball/352382b74ecc82b39e3e7e16511d009c795ab918",
+                "reference": "352382b74ecc82b39e3e7e16511d009c795ab918",
                 "shasum": ""
             },
             "require": {
@@ -76,7 +135,7 @@
                 {
                     "name": "Selvin Ortiz",
                     "email": "selvin@selvin.co",
-                    "homepage": "http://twitter.com/selvinortiz",
+                    "homepage": "http://selv.in",
                     "role": "Developer"
                 }
             ],
@@ -87,24 +146,15 @@
                 "injection",
                 "zit"
             ],
-            "time": "2014-03-26 06:18:29"
+            "time": "2015-02-21 18:52:11"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "selvinortiz/zit": 20,
-        "mrclay/minify": 20
-    },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
 }

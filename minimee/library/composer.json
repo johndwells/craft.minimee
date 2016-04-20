@@ -5,7 +5,8 @@
 		}
 	},
 	"require": {
-		"selvinortiz/zit": "dev-master",
-		"mrclay/minify" : "dev-master"
+		"mrclay/jsmin-php": "^2.3",
+		"mrclay/minify": "^2.3",
+		"selvinortiz/zit": "^0.5.2"
 	}
 }

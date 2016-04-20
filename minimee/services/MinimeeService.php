@@ -406,7 +406,7 @@ class MinimeeService extends BaseApplicationComponent
 	 * @return this
 	 */
 	protected function flightcheck()
-	{		
+	{
 		if(empty(self::$_pluginSettings))
 		{
 			throw new Minimee_InfoException(Craft::t('Minimee is not installed.'));
@@ -640,6 +640,12 @@ class MinimeeService extends BaseApplicationComponent
 	{
 		$contents = $asset->contents;
 
+		if($this->settings->minifyCssEnabled)
+		{
+			$compressor = new \CSSmin();
+			$contents = $compressor->run($contents);
+		}
+
 		if($this->settings->cssPrependUrlEnabled)
 		{
 			$cssPrependUrl = $this->settings->cssPrependUrl;
@@ -649,12 +655,7 @@ class MinimeeService extends BaseApplicationComponent
 				$cssPrependUrl = dirname($asset->filenameUrl) . '/';
 			}
 
-			$contents = \Minify_CSS_UriRewriter::prepend($asset->contents, $cssPrependUrl);
-		}
-
-		if($this->settings->minifyCssEnabled)
-		{
-			$contents = \Minify_CSS::minify($contents);
+			$contents = \Minify_CSS_UriRewriter::prepend($contents, $cssPrependUrl);
 		}
 
 		return $contents;

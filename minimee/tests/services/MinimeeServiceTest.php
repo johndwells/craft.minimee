@@ -136,6 +136,45 @@ class MinimeeServiceTest extends MinimeeBaseTest
 
 	}
 
+	public function testSpacesInCalcPreserved() {
+
+		minimee()->extend('makeLocalAssetModel', function() {
+			$localAssetModelMock = m::mock('Craft\Minimee_LocalAssetModel')->makePartial();
+			$localAssetModelMock->shouldReceive('exists')->andReturn(true);
+			$localAssetModelMock->shouldReceive('getContents')->andReturn(file_get_contents(__DIR__ . '/../assets/css/style.3.css'));
+
+			return $localAssetModelMock;
+		});
+
+		minimee()->extend('makeSettingsModel', function() {
+			$settingsModelMock = m::mock('Craft\Minimee_SettingsModel');
+			$settingsModelMock->shouldReceive('validate')->andReturn(true);
+			$settingsModelMock->shouldReceive('attributeNames')->andreturn(array(
+				'minifyCssEnabled',
+				'cssPrependUrlEnabled',
+				'cssPrependUrl'
+			));
+
+			$settingsModelMock->shouldReceive('getAttribute')->with('minifyCssEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrlEnabled')->andreturn(true);
+			$settingsModelMock->shouldReceive('getAttribute')->with('cssPrependUrl')->andreturn('/path/to/cache/');
+
+			return $settingsModelMock;
+		});
+
+		minimee()->service->settings = minimee()->makeSettingsModel();
+		minimee()->service->type = MinimeeType::Css;
+
+		$asset = minimee()->makeLocalAssetModel();
+
+		$minifyCssAsset = $this->getMethod(minimee()->service, 'minifyCssAsset');
+
+		$result = $minifyCssAsset->invokeArgs(minimee()->service, array($asset));
+
+		$assertEquals = file_get_contents(__DIR__ . '/../assets/css/style.3.min.css');
+		$this->assertEquals($assertEquals, $result);
+	}
+
 	protected function _invokeMinifyCssAsset($minifyCssEnabled, $cssPrependUrlEnabled, $cssPrependUrl)
 	{
 		$assetContents = file_get_contents(__DIR__ . '/../assets/css/style.2.css');
