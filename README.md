@@ -36,6 +36,31 @@ _Looking to minify your HTML, or minify inline CSS/JS? You should check out [htt
 4. Click `install` for Minimee
 5. Visit Minimee plugin settings and optionally configure (see below)
 
+### Install via Composer
+
+Minimee can now be installed via [composer](https://getcomposer.org/), and is also registered on [Packagist](https://packagist.org/packages/johndwells/craft.minimee).
+
+Note that due to the current folder structure (where the actual plugin files are not at the package root, but inside the folder `minimee`) you will need to make some adjustments to your own composer file. Composer has a `post-install-cmd` feature which is run immediately after the `composer install` command, allowing you to run additional tasks. An example of your composer file may be:
+
+	{
+	  "repositories": [
+	    {
+	      "type": "vcs",
+	      "url": "https://github.com/johndwells/craft.minimee.git"
+	    },
+	  ],
+	  "require": {
+	    "johndwells/craft.minimee": "v0.9.8"
+	  },
+	  "scripts": {
+	    "post-install-cmd": [
+	      "/bin/bash -c 'pushd craft/plugins && test -d minimee/minimee && mv minimee/minimee/* minimee && popd'"
+	    ]
+	  }
+	}
+
+_Big thanks to [@jackmcpickle](https://github.com/jackmcpickle) for the pull request and subsequent assistance in documentation._
+
 ---
 
 ## Settings
