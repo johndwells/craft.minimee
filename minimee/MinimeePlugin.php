@@ -34,7 +34,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public function getVersion()
 	{
-		return '0.9.6';
+		return '0.9.7';
 	}
 
 	/**
@@ -118,7 +118,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	public static function log($msg, $level = LogLevel::Info, $force = false)
 	{
-		if(version_compare('2.0', craft()->getVersion(), '>'))
+		if (version_compare('2.0', craft()->getVersion(), '>'))
 		{
 			Craft::log($msg, $level, $force);
 		}
@@ -153,7 +153,7 @@ class MinimeePlugin extends BasePlugin
 
 		return craft()->templates->render('minimee/settings', array(
 			'settings' => $this->getSettings(),
-			'filesystemConfigExists' => (bool) IOHelper::fileExists($filesystemConfigPath)
+			'filesystemConfigExists' => (bool)IOHelper::fileExists($filesystemConfigPath)
 
 		));
 	}
@@ -189,16 +189,16 @@ class MinimeePlugin extends BasePlugin
 	{
 		if (strncmp($path, 'minimee/', 8) === 0)
 		{
-			return craft()->path->getStoragePath().'minimee/'.substr($path, 8);
+			return craft()->path->getStoragePath() . 'minimee/' . substr($path, 8);
 		}
 	}
 
 	/**
 	 * Register our cache path that can then be deleted from CP
 	 */
-	function registerCachePaths()
+	public function registerCachePaths()
 	{
-		if(minimee()->service->settings->useResourceCache())
+		if (minimee()->service->settings->useResourceCache())
 		{
 			return array(
 				minimee()->service->makePathToStorageFolder() => Craft::t('Minimee caches')
@@ -219,7 +219,7 @@ class MinimeePlugin extends BasePlugin
 	 */
 	protected function _bindEvents()
 	{
-		craft()->on('minimee.createCache', function(Event $event) {
+		craft()->on('minimee.createCache', function() {
 			if(craft()->config->get('devMode'))
 			{
 				minimee()->service->deleteExpiredCache();
@@ -236,7 +236,13 @@ class MinimeePlugin extends BasePlugin
 	{
 		require_once craft()->path->getPluginsPath() . 'minimee/library/vendor/autoload.php';
 
+		Craft::import('plugins.minimee.components.Minimee_Exception');
+		Craft::import('plugins.minimee.components.Minimee_InfoException');
+		Craft::import('plugins.minimee.components.Minimee_WarningException');
+		Craft::import('plugins.minimee.components.Minimee_ErrorException');
+
 		Craft::import('plugins.minimee.enums.MinimeeType');
+
 		Craft::import('plugins.minimee.models.Minimee_ISettingsModel');
 		Craft::import('plugins.minimee.models.Minimee_SettingsModel');
 	}
@@ -263,7 +269,7 @@ class MinimeePlugin extends BasePlugin
 			return new Minimee_RemoteAssetModel($attributes);
 		});
 
-		minimee()->extend('makeClient', function(Zit $zit) {
+		minimee()->extend('makeClient', function() {
 			return new Client;
 		});
 	}

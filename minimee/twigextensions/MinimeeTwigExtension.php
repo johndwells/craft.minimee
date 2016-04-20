@@ -37,6 +37,18 @@ class MinimeeTwigExtension extends \Twig_Extension
 	}
 
 	/**
+	 * Inject into the template scope a read-only copy of Minimee's runtime settings
+	 *
+	 * @return Array
+	 */
+	public function getGlobals()
+	{
+		return array(
+			'minimee' => minimee()->service->pluginSettings
+		);
+	}
+
+	/**
 	 * Define our filter
 	 *
 	 * @param String $html
@@ -47,7 +59,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 	{
 		// we need a type to continue
 		$type = $this->detectType($html);
-		if( ! $type)
+		if (!$type)
 		{
 			MinimeePlugin::log('Could not determine the type of asset to process.', LogLevel::Warning);
 			return minimee()->service->makeTwigMarkupFromHtml($html);
@@ -55,7 +67,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 
 		// we need to find some assets in the HTML
 		$assets = $this->pregMatchAssetsByType($type, $html);
-		if( ! $assets)
+		if (!$assets)
 		{
 			MinimeePlugin::log('No assets of type ' . $type . ' could be found.', LogLevel::Warning);
 			return minimee()->service->makeTwigMarkupFromHtml($html);
@@ -65,7 +77,7 @@ class MinimeeTwigExtension extends \Twig_Extension
 		$minified = minimee()->service->run($type, $assets, $settings);
 
 		// false means we failed, so return original markup
-		if( ! $minified)
+		if (!$minified)
 		{
 			return minimee()->service->makeTwigMarkupFromHtml($html);
 		}
@@ -84,12 +96,12 @@ class MinimeeTwigExtension extends \Twig_Extension
 	 */
 	protected function detectType($html = '')
 	{
-		if(strpos($html, '<link') !== FALSE)
+		if (strpos($html, '<link') !== FALSE)
 		{
 			return MinimeeType::Css;
 		}
 
-		if(strpos($html, '<script') !== FALSE)
+		if (strpos($html, '<script') !== FALSE)
 		{
 			return MinimeeType::Js;
 		}
@@ -119,11 +131,10 @@ class MinimeeTwigExtension extends \Twig_Extension
 
 			default :
 				return FALSE;
-			break;
 
 		endswitch;
 
-		if ( ! preg_match_all($pat, $haystack, $matches, PREG_PATTERN_ORDER))
+		if (!preg_match_all($pat, $haystack, $matches, PREG_PATTERN_ORDER))
 		{
 			return FALSE;
 		}

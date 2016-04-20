@@ -15,6 +15,11 @@ Tiny dependency management library for **PHP 5.3** *by* [Selvin Ortiz](http://tw
 ### Changelog
 
 ----
+#### 0.5.2
+- Adds changes from pull request #1
+- Updates some composer properties
+
+----
 #### 0.5.1
 - Adds `static::$instances`
 - Adds `multiton` implementation

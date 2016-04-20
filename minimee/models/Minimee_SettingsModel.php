@@ -27,12 +27,12 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	public function prepSettings($settings)
 	{
 		// cast any booleans
-		$settings['enabled'] = (bool) $settings['enabled'];
-		$settings['combineCssEnabled'] = (bool) $settings['combineCssEnabled'];
-		$settings['combineJsEnabled'] = (bool) $settings['combineJsEnabled'];
-		$settings['minifyCssEnabled'] = (bool) $settings['minifyCssEnabled'];
-		$settings['minifyJsEnabled'] = (bool) $settings['minifyJsEnabled'];
-		$settings['cssPrependUrlEnabled'] = (bool) $settings['cssPrependUrlEnabled'];
+		$settings['enabled'] = (bool)$settings['enabled'];
+		$settings['combineCssEnabled'] = (bool)$settings['combineCssEnabled'];
+		$settings['combineJsEnabled'] = (bool)$settings['combineJsEnabled'];
+		$settings['minifyCssEnabled'] = (bool)$settings['minifyCssEnabled'];
+		$settings['minifyJsEnabled'] = (bool)$settings['minifyJsEnabled'];
+		$settings['cssPrependUrlEnabled'] = (bool)$settings['cssPrependUrlEnabled'];
 
 		return $settings;
 	}
@@ -46,7 +46,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 */
 	public function validate($attributes = null, $clearErrors = true)
 	{
-		if($clearErrors)
+		if ($clearErrors)
 		{
 			$this->clearErrors();
 		}
@@ -59,17 +59,17 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	/**
 	 * Validate that cachePath and cacheUrl are both empty or non-empty.
 	 *
-	 * @return Bool
+	 * @return boolean|null
 	 */
 	public function validateCachePathAndUrl()
 	{
-		$cachePath = parent::getAttribute('cachePath');
-		$cacheUrl = parent::getAttribute('cacheUrl');
+		$cachePath = $this->getCachePath();
+		$cacheUrl = $this->getCacheUrl();
 
-		$cachePathEmpty = ! $cachePath;
-		$cacheUrlEmpty = ! $cacheUrl;
+		$cachePathEmpty = empty($cachePath);
+		$cacheUrlEmpty = empty($cacheUrl);
 
-		if($cachePathEmpty != $cacheUrlEmpty)
+		if ($cachePathEmpty != $cacheUrlEmpty)
 		{
 			$this->addError('cachePath', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
 			$this->addError('cacheUrl', Craft::t('Minimee\'s cachePath and cacheUrl must both either be empty or non-empty.'));
@@ -115,7 +115,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('filesystemPath');
 
-		if($value)
+		if ($value)
 		{
 			$filesystemPath = craft()->config->parseEnvironmentString($value);
 		}
@@ -128,13 +128,13 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String|Bool
+	 * @return false|string
 	 */
 	public function getCachePath()
 	{
 		$value = parent::getAttribute('cachePath');
 
-		if( ! $value)
+		if (!$value)
 		{
 			return false;
 		}
@@ -145,13 +145,13 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String|Bool
+	 * @return false|string
 	 */
 	public function getCacheUrl()
 	{
 		$value = parent::getAttribute('cacheUrl');
 
-		if( ! $value)
+		if (!$value)
 		{
 			return false;
 		}
@@ -162,13 +162,13 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	}
 
 	/**
-	 * @return String|Bool
+	 * @return false|string
 	 */
 	public function getCssPrependUrl()
 	{
 		$value = parent::getAttribute('cssPrependUrl');
 
-		if( ! $value)
+		if (!$value)
 		{
 			return false;
 		}
@@ -183,11 +183,11 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 */
 	public function useResourceCache()
 	{
-		$cachePath = parent::getAttribute('cachePath');
-		$cacheUrl = parent::getAttribute('cacheUrl');
+		$cachePath = $this->getCachePath();
+		$cacheUrl = $this->getCacheUrl();
 
-		$cachePathEmpty = ! $cachePath;
-		$cacheUrlEmpty = ! $cacheUrl;
+		$cachePathEmpty = empty($cachePath);
+		$cacheUrlEmpty = empty($cacheUrl);
 
 		return ($cachePathEmpty && $cacheUrlEmpty);
 	}
@@ -199,7 +199,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('baseUrl');
 
-		if($value)
+		if ($value)
 		{
 			$baseUrl = craft()->config->parseEnvironmentString($value);
 		}
@@ -215,7 +215,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('cssReturnTemplate');
 
-		if( ! $value)
+		if (!$value)
 		{
 			$attributes = $this->defineAttributes();
 			return $attributes['cssReturnTemplate']['default'];
@@ -228,7 +228,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('jsReturnTemplate');
 
-		if( ! $value)
+		if (!$value)
 		{
 			$attributes = $this->defineAttributes();
 			return $attributes['jsReturnTemplate']['default'];
@@ -241,7 +241,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	{
 		$value = parent::getAttribute('returnType');
 
-		if( ! $value)
+		if (!$value)
 		{
 			$attributes = $this->defineAttributes();
 			return $attributes['returnType']['default'];
@@ -253,47 +253,40 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	/**
 	 * Inject our model attribute accessors.
 	 *
-	 * @param String $string
-	 * @return String
+	 * @param String $name
+	 * @return String|Bool
 	 */
 	public function getAttribute($name)
 	{
-		switch($name) :
+		switch ($name) :
 
 			case('baseUrl') :
 				return $this->getBaseUrl();
-			break;
 
 			case('cachePath') :
 				return $this->getCachePath();
-			break;
 
 			case('cacheUrl') :
 				return $this->getCacheUrl();
-			break;
 
 			case('cssReturnTemplate') :
 				return $this->getCssReturnTemplate();
-			break;
 
 			case('cssPrependUrl') :
 				return $this->getCssPrependUrl();
-			break;
 
 			case('filesystemPath') :
 				return $this->getFilesystemPath();
-			break;
 
 			case('jsReturnTemplate') :
 				return $this->getJsReturnTemplate();
-			break;
 
 			case('returnType') :
 				return $this->getReturnType();
-			break;
+
+			default :
+				return parent::getAttribute($name);
 
 		endswitch;
-
-		return parent::getAttribute($name);
 	}
 }
