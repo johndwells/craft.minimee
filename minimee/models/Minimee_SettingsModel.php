@@ -254,9 +254,10 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 	 * Inject our model attribute accessors.
 	 *
 	 * @param String $name
+	 * @param Bool $flattenValue
 	 * @return String|Bool
 	 */
-	public function getAttribute($name)
+	public function getAttribute($name, $flattenValue = false)
 	{
 		switch ($name) :
 
@@ -285,7 +286,7 @@ class Minimee_SettingsModel extends BaseModel implements Minimee_ISettingsModel
 				return $this->getReturnType();
 
 			default :
-				return parent::getAttribute($name);
+				return parent::getAttribute($name, $flattenValue);
 
 		endswitch;
 	}
