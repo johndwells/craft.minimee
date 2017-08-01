@@ -7,7 +7,7 @@ By default, Minify uses [Minify\_Cache\_File](http://code.google.com/p/minify/so
 ### APC
 
 ```
-require 'lib/Minify/Cache/APC.php';
+require "$min_libPath/Minify/Cache/APC.php";
 $min_cachePath = new Minify_Cache_APC();
 ```
 
@@ -15,7 +15,7 @@ $min_cachePath = new Minify_Cache_APC();
 
 You must create and connect your Memcache object then pass it to `Minify_Cache_Memcache`'s constructor.
 ```
-require 'lib/Minify/Cache/Memcache.php';
+require "$min_libPath/Minify/Cache/Memcache.php";
 $memcache = new Memcache;
 $memcache->connect('localhost', 11211);
 $min_cachePath = new Minify_Cache_Memcache($memcache);
@@ -66,24 +66,6 @@ $min_serveOptions['minifiers']['text/css'] = 'yuiCss';
 ### CSSmin PHP port
 
 Minify has added Túbal Martín's [PHP port](https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port/blob/master/cssmin.php) of the YUI Compressor's CSSmin. While it is not completely integrated yet, you may try it out:
-
-```
-function yuiCssPort($css, $options) {
-    $compressor = new CSSmin();
-    $css = $compressor->run($css, 9999999);
-    
-    $css = Minify_CSS_UriRewriter::rewrite(
-        $css,
-        $options['currentDir'],
-        isset($options['docRoot']) ? $options['docRoot'] : $_SERVER['DOCUMENT_ROOT'],
-        isset($options['symlinks']) ? $options['symlinks'] : array()
-    );
-    return $css;
-}
-$min_serveOptions['minifiers']['text/css'] = 'yuiCssPort';
-```
-
-As of commit [218f37](https://github.com/mrclay/minify/commit/218f37fb44f9be2ea138cf9efb8b7f6dc84bad7f), this is easier:
 
 ```
 $min_serveOptions['minifiers']['text/css'] = array('Minify_CSSmin', 'minify');
